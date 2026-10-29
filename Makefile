@@ -1,0 +1,19 @@
+SANDBOX := scripts/sandbox.sh
+SANDBOX_DIR := .sandbox
+WORKER_DIR := api/cmd/worker
+WORKER_SOCKET := $(SANDBOX_DIR)/worker.sock
+
+.PHONY: sandbox-shell sandbox-test sandbox-worker
+
+sandbox-shell:
+	$(SANDBOX) bash
+
+sandbox-test:
+	cd api && ../$(SANDBOX) go test -tags integration ./...
+
+sandbox-worker:
+	@if [ -d $(WORKER_DIR) ]; then \
+		mkdir -p -m 0700 $(SANDBOX_DIR) && cd api && NETLAB_WORKER_SOCKET=../$(WORKER_SOCKET) ../$(SANDBOX) go run ./cmd/worker; \
+	else \
+		echo "worker not built yet (NL-032)"; \
+	fi
