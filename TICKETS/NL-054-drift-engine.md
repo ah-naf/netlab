@@ -9,3 +9,6 @@
 
 ## Acceptance
 Unit tests for each kind, including "inspection error yields unknown, not ok". Sandbox test: deploy, change an address by hand inside the sandbox, drift reports exactly that difference.
+
+## Naming (decision 5)
+A rename of a deployed lab reports as drift (old resource unexpected, new resource missing) until the lab is redeployed.

@@ -11,3 +11,6 @@ Pure function `validate(doc): Issue[]` with severity, code, resource id, message
 ## Acceptance
 - Vitest runs every vector file and matches expected issue codes.
 - Clicking an issue selects the offending node or link.
+
+## Naming (decision 5)
+Name rules run on every edit, not only on Validate: length, allowed characters, uniqueness within its scope, and that the derived Linux name still fits the 15-character limit without collision.

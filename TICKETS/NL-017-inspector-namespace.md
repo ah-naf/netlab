@@ -11,3 +11,6 @@ Form for a selected namespace node: name, role (host or router), interface list 
 - Editing a field updates the store and the node on the canvas.
 - Invalid CIDR shows an error and does not mark the document valid.
 - Vitest tests for add/remove address, add/remove route.
+
+## Naming (decision 5)
+Every name shown in this panel is editable: namespace name, each interface name, and the lab name. Each field validates as the user types and shows the error next to the field.

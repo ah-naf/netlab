@@ -13,3 +13,6 @@
 
 ## Acceptance
 Unit tests: the bridge lab plan has the exact expected order, the plan is deterministic across runs, and a topology with a router and a route produces AddRoute after both addresses. Golden file test `testdata/plans/bridge-lab.json`.
+
+## Naming (decision 5)
+Names are read from the topology as the user typed them. The plan builder derives Linux names again on every plan, so a rename produces a plan that deletes the old resources and creates the new ones.

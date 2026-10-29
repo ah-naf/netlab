@@ -14,3 +14,6 @@
 ## Acceptance
 - Round-trip test: save then load yields an identical document.
 - Loading a corrupted file shows an error and keeps the old document.
+
+## Naming (decision 5)
+The project name is editable from the toolbar and saved in the document.
