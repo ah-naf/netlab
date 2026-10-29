@@ -84,3 +84,6 @@ export const REGION = {
     hint: "Settings for the selected device or link will show here.",
   },
 } as const;
+
+export const DRAWER_LABEL = "Bottom drawer";
+export const RAIL_SIZE = 6;

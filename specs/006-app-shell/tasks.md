@@ -51,10 +51,10 @@ All paths are under `web/` unless stated otherwise.
 
 **Independent Test**: quickstart.md check 1 (1280x720 and 1920x1080, five regions visible, no page scrollbar, center takes extra space).
 
-- [ ] T009 [P] [US1] Create `src/components/SidePanel.tsx`: labeled region (`aria-label` from props) with a 24 px header strip (name, 12 px weight 500, `border-b border-rule`) and a `NotAvailable` body with the hint; `bg-panel`, no radius, `overflow-hidden` (FR-010). Center area passes a faint 20 px dot-grid background (`radial-gradient` using `--rule` at 60%) via a prop or class
-- [ ] T010 [P] [US1] Create `src/components/BottomDrawer.tsx` (first version): `<section aria-label="Bottom drawer">` with a header strip and a body filled by `NotAvailable`; `bg-panel`. Tabs and collapse are added in US3 and US4
-- [ ] T011 [US1] Create `src/components/AppShell.tsx`: root `h-screen` CSS grid with `min-width: APP_MIN_WIDTH`; rows `auto | 1fr | drawer height`, columns `left | 1fr | right` read from `useLayoutStore`; `bg-chassis` with 6 px gaps (the rails) between inset panels; toolbar row spans all columns; drawer row spans all columns; regions use `<aside aria-label="Components">`, `<main aria-label="Canvas">`, `<aside aria-label="Inspector">`; every panel has `min-h-0 min-w-0 overflow-hidden`. Toolbar slot renders a temporary `<header>` with "NetLab" until US2
-- [ ] T012 [US1] Replace `src/App.tsx` so it renders only `<AppShell />` and remove the old header markup
+- [X] T009 [P] [US1] Create `src/components/SidePanel.tsx`: labeled region (`aria-label` from props) with a 24 px header strip (name, 12 px weight 500, `border-b border-rule`) and a `NotAvailable` body with the hint; `bg-panel`, no radius, `overflow-hidden` (FR-010). Center area passes a faint 20 px dot-grid background (`radial-gradient` using `--rule` at 60%) via a prop or class
+- [X] T010 [P] [US1] Create `src/components/BottomDrawer.tsx` (first version): `<section aria-label="Bottom drawer">` with a header strip and a body filled by `NotAvailable`; `bg-panel`. Tabs and collapse are added in US3 and US4
+- [X] T011 [US1] Create `src/components/AppShell.tsx`: root `h-screen` CSS grid with `min-width: APP_MIN_WIDTH`; rows `auto | 1fr | drawer height`, columns `left | 1fr | right` read from `useLayoutStore`; `bg-chassis` with 6 px gaps (the rails) between inset panels; toolbar row spans all columns; drawer row spans all columns; regions use `<aside aria-label="Components">`, `<main aria-label="Canvas">`, `<aside aria-label="Inspector">`; every panel has `min-h-0 min-w-0 overflow-hidden`. Toolbar slot renders a temporary `<header>` with "NetLab" until US2
+- [X] T012 [US1] Replace `src/App.tsx` so it renders only `<AppShell />` and remove the old header markup
 - [ ] T013 [US1] Manual check: run `npm run dev`, do quickstart.md check 1 at both sizes, fix overflow or scrollbar problems
 
 **Checkpoint**: Layout frame works.
@@ -67,10 +67,10 @@ All paths are under `web/` unless stated otherwise.
 
 **Independent Test**: quickstart.md check 2.
 
-- [ ] T014 [P] [US2] Create `src/components/DisabledButton.tsx`: props `label`, `reason`; renders `<span title={reason}>` wrapping `<button disabled>`; 28 px tall, 4 px radius, 13 px weight 500, `text-ink-muted`, `cursor-not-allowed`, no hover change, flat with a 1 px `border-rule` border. Include a prop-free path for a later enabled state (when `enabled` is true render a normal button with a `signal`-tinted hover) (FR-003)
-- [ ] T015 [US2] Update `src/components/ConnectionIndicator.tsx`: replace `bg-gray-400`, `bg-green-500`, `bg-amber-500`, `bg-red-500` with `bg-led-off`, `bg-led-ok`, `bg-led-warn`, `bg-led-fault`; keep `CONNECTION_LABELS` and behavior unchanged; make the dot a 10 px LED with a 1 px inner ring so it reads as a lamp (FR-004)
-- [ ] T016 [US2] Create `src/components/Toolbar.tsx`: `<header>` 44 px, `bg-panel`, bottom `border-rule`; left: "NetLab" wordmark (18 px, weight 600, tracking -0.01em), thin vertical rule, project name `DEFAULT_PROJECT_NAME` in `text-ink-muted` 15 px; middle: the two button groups from `TOOLBAR_ACTIONS` split by a thin rule; right: `ConnectionIndicator`. Map actions to `DisabledButton`
-- [ ] T017 [US2] Replace the temporary header in `src/components/AppShell.tsx` with `<Toolbar />`
+- [X] T014 [P] [US2] Create `src/components/DisabledButton.tsx`: props `label`, `reason`; renders `<span title={reason}>` wrapping `<button disabled>`; 28 px tall, 4 px radius, 13 px weight 500, `text-ink-muted`, `cursor-not-allowed`, no hover change, flat with a 1 px `border-rule` border. Include a prop-free path for a later enabled state (when `enabled` is true render a normal button with a `signal`-tinted hover) (FR-003)
+- [X] T015 [US2] Update `src/components/ConnectionIndicator.tsx`: replace `bg-gray-400`, `bg-green-500`, `bg-amber-500`, `bg-red-500` with `bg-led-off`, `bg-led-ok`, `bg-led-warn`, `bg-led-fault`; keep `CONNECTION_LABELS` and behavior unchanged; make the dot a 10 px LED with a 1 px inner ring so it reads as a lamp (FR-004)
+- [X] T016 [US2] Create `src/components/Toolbar.tsx`: `<header>` 44 px, `bg-panel`, bottom `border-rule`; left: "NetLab" wordmark (18 px, weight 600, tracking -0.01em), thin vertical rule, project name `DEFAULT_PROJECT_NAME` in `text-ink-muted` 15 px; middle: the two button groups from `TOOLBAR_ACTIONS` split by a thin rule; right: `ConnectionIndicator`. Map actions to `DisabledButton`
+- [X] T017 [US2] Replace the temporary header in `src/components/AppShell.tsx` with `<Toolbar />`
 - [ ] T018 [US2] Manual check: quickstart.md check 2 (five buttons spelled right, all disabled, hover shows "Not available yet" within 1 second, no separate header, status visible)
 
 **Checkpoint**: Toolbar done.

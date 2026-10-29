@@ -54,3 +54,11 @@ body {
     animation: none !important;
   }
 }
+
+.dot-grid {
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--rule) 60%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 20px 20px;
+}
