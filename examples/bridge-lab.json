@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "lab": { "id": "lab-bridge", "name": "Bridge lab" },
+  "nodes": [
+    { "id": "node-ns1", "name": "ns1", "type": "namespace", "role": "host" },
+    { "id": "node-ns2", "name": "ns2", "type": "namespace", "role": "host" },
+    {
+      "id": "node-br0",
+      "name": "br0",
+      "type": "bridge",
+      "bridge": { "stp": false }
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "if-ns1-eth0",
+      "nodeId": "node-ns1",
+      "name": "eth0",
+      "mtu": 1500,
+      "state": "up",
+      "addresses": [{ "cidr": "10.0.0.1/24" }]
+    },
+    {
+      "id": "if-ns2-eth0",
+      "nodeId": "node-ns2",
+      "name": "eth0",
+      "mtu": 1500,
+      "state": "up",
+      "addresses": [{ "cidr": "10.0.0.2/24" }]
+    },
+    {
+      "id": "if-br0-port1",
+      "nodeId": "node-br0",
+      "name": "port1",
+      "mtu": 1500,
+      "state": "up"
+    },
+    {
+      "id": "if-br0-port2",
+      "nodeId": "node-br0",
+      "name": "port2",
+      "mtu": 1500,
+      "state": "up"
+    }
+  ],
+  "links": [
+    {
+      "id": "link-ns1-br0",
+      "endpointA": "if-ns1-eth0",
+      "endpointB": "if-br0-port1",
+      "kind": "veth",
+      "mtu": 1500,
+      "state": "up"
+    },
+    {
+      "id": "link-ns2-br0",
+      "endpointA": "if-ns2-eth0",
+      "endpointB": "if-br0-port2",
+      "kind": "veth",
+      "mtu": 1500,
+      "state": "up"
+    }
+  ],
+  "layout": {
+    "node-ns1": { "x": 0, "y": 0 },
+    "node-ns2": { "x": 400, "y": 0 },
+    "node-br0": { "x": 200, "y": 200 }
+  }
+}

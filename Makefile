@@ -3,7 +3,11 @@ SANDBOX_DIR := .sandbox
 WORKER_DIR := api/cmd/worker
 WORKER_SOCKET := $(SANDBOX_DIR)/worker.sock
 
-.PHONY: install-web dev-web dev-api build lint sandbox-shell sandbox-test sandbox-worker
+.PHONY: generate install-web dev-web dev-api build lint sandbox-shell sandbox-test sandbox-worker
+
+generate:
+	cd api && go run ./cmd/genschema ../docs/topology.schema.json
+	cd web && npx json2ts -i ../docs/topology.schema.json -o src/types/topology.ts --additionalProperties false
 
 install-web:
 	cd web && npm install

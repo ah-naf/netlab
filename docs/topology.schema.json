@@ -1,0 +1,370 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "Address": {
+      "properties": {
+        "cidr": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "cidr"
+      ]
+    },
+    "BridgeSettings": {
+      "properties": {
+        "stp": {
+          "type": "boolean"
+        },
+        "stpPriority": {
+          "type": "integer"
+        },
+        "vlan": {
+          "$ref": "#/$defs/VlanSettings"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "stp"
+      ]
+    },
+    "CaptureSession": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "interfaceId": {
+          "type": "string"
+        },
+        "filter": {
+          "type": "string"
+        },
+        "maxPackets": {
+          "type": "integer"
+        },
+        "maxSeconds": {
+          "type": "integer"
+        },
+        "state": {
+          "$ref": "#/$defs/CaptureState"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "interfaceId",
+        "state"
+      ]
+    },
+    "CaptureState": {
+      "type": "string",
+      "enum": [
+        "running",
+        "stopped"
+      ]
+    },
+    "Interface": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "nodeId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "mtu": {
+          "type": "integer"
+        },
+        "state": {
+          "$ref": "#/$defs/State"
+        },
+        "addresses": {
+          "items": {
+            "$ref": "#/$defs/Address"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "nodeId",
+        "name",
+        "mtu",
+        "state"
+      ]
+    },
+    "Lab": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "Link": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "endpointA": {
+          "type": "string"
+        },
+        "endpointB": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/LinkKind"
+        },
+        "mtu": {
+          "type": "integer"
+        },
+        "state": {
+          "$ref": "#/$defs/State"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "endpointA",
+        "endpointB",
+        "kind",
+        "mtu",
+        "state"
+      ]
+    },
+    "LinkKind": {
+      "type": "string",
+      "enum": [
+        "veth"
+      ]
+    },
+    "NatKind": {
+      "type": "string",
+      "enum": [
+        "masquerade",
+        "dnat"
+      ]
+    },
+    "NatRule": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/NatKind"
+        },
+        "interfaceId": {
+          "type": "string"
+        },
+        "protocol": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "toAddress": {
+          "type": "string"
+        },
+        "toPort": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "interfaceId"
+      ]
+    },
+    "Node": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/NodeType"
+        },
+        "role": {
+          "$ref": "#/$defs/Role"
+        },
+        "router": {
+          "$ref": "#/$defs/RouterSettings"
+        },
+        "natRules": {
+          "items": {
+            "$ref": "#/$defs/NatRule"
+          },
+          "type": "array"
+        },
+        "routes": {
+          "items": {
+            "$ref": "#/$defs/Route"
+          },
+          "type": "array"
+        },
+        "bridge": {
+          "$ref": "#/$defs/BridgeSettings"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "type"
+      ]
+    },
+    "NodeType": {
+      "type": "string",
+      "enum": [
+        "namespace",
+        "bridge"
+      ]
+    },
+    "Position": {
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "x",
+        "y"
+      ]
+    },
+    "Role": {
+      "type": "string",
+      "enum": [
+        "host",
+        "router",
+        "nat"
+      ]
+    },
+    "Route": {
+      "properties": {
+        "destination": {
+          "type": "string"
+        },
+        "gateway": {
+          "type": "string"
+        },
+        "interfaceId": {
+          "type": "string"
+        },
+        "metric": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "destination"
+      ]
+    },
+    "RouterSettings": {
+      "properties": {
+        "forwarding": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "forwarding"
+      ]
+    },
+    "State": {
+      "type": "string",
+      "enum": [
+        "up",
+        "down"
+      ]
+    },
+    "VlanSettings": {
+      "properties": {
+        "filtering": {
+          "type": "boolean"
+        },
+        "defaultVlanId": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "filtering"
+      ]
+    }
+  },
+  "properties": {
+    "schemaVersion": {
+      "type": "integer"
+    },
+    "lab": {
+      "$ref": "#/$defs/Lab"
+    },
+    "nodes": {
+      "items": {
+        "$ref": "#/$defs/Node"
+      },
+      "type": "array"
+    },
+    "interfaces": {
+      "items": {
+        "$ref": "#/$defs/Interface"
+      },
+      "type": "array"
+    },
+    "links": {
+      "items": {
+        "$ref": "#/$defs/Link"
+      },
+      "type": "array"
+    },
+    "layout": {
+      "additionalProperties": {
+        "$ref": "#/$defs/Position"
+      },
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "lab",
+    "nodes",
+    "interfaces",
+    "links"
+  ],
+  "title": "Document"
+}
