@@ -10,6 +10,13 @@ export const JSON_CONTENT_TYPE = "application/json";
 export const HEALTH_POLL_MS = 5000;
 export const REQUEST_TIMEOUT_MS = 3000;
 
+export const HTTP_METHOD = {
+  GET: "GET",
+  POST: "POST",
+  PUT: "PUT",
+  DELETE: "DELETE",
+} as const;
+
 export const ERROR_KIND = { SERVER: "server", NETWORK: "network" } as const;
 
 export const UNKNOWN_ERROR_CODE = "unknown";
