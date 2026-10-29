@@ -85,10 +85,10 @@ description: "Task list for the Health Endpoint and API Client"
 
 ### Implementation for User Story 3
 
-- [ ] T015 [US3] Create `web/src/hooks/useConnectionState.ts` exporting `useConnectionState(): ConnectionState`: state starts `"checking"`; an effect runs a loop that awaits `getHealth()`, maps the result (`workerReachable` true → `"online"`, false → `"online-worker-offline"`, any thrown error → `"offline"`), then waits `HEALTH_POLL_MS` with `setTimeout` before the next check (so checks never overlap); the effect cleanup clears the timer and stops the loop
-- [ ] T016 [P] [US3] Create `web/src/components/ConnectionIndicator.tsx` with a labels map `CONNECTION_LABELS: Record<ConnectionState, string>` = `{ checking: "Checking API", online: "API online", "online-worker-offline": "API online, worker offline", offline: "API offline" }` and a component that calls `useConnectionState()` and renders a coloured dot (Tailwind classes: gray, green, amber, red for the four states) and the label
-- [ ] T017 [US3] Update `web/src/App.tsx` to render a header bar containing the text `NetLab` and `<ConnectionIndicator />` (Tailwind classes for a simple top bar), with an empty main area below
-- [ ] T018 [US3] Run quickstart section 4 (first "Checking API", then "API online, worker offline"; stop the API and see "API offline" within 10 seconds; start it and see the online state again within 10 seconds with no reload) and fix until it matches
+- [X] T015 [US3] Create `web/src/hooks/useConnectionState.ts` exporting `useConnectionState(): ConnectionState`: state starts `"checking"`; an effect runs a loop that awaits `getHealth()`, maps the result (`workerReachable` true → `"online"`, false → `"online-worker-offline"`, any thrown error → `"offline"`), then waits `HEALTH_POLL_MS` with `setTimeout` before the next check (so checks never overlap); the effect cleanup clears the timer and stops the loop
+- [X] T016 [P] [US3] Create `web/src/components/ConnectionIndicator.tsx` with a labels map `CONNECTION_LABELS: Record<ConnectionState, string>` = `{ checking: "Checking API", online: "API online", "online-worker-offline": "API online, worker offline", offline: "API offline" }` and a component that calls `useConnectionState()` and renders a coloured dot (Tailwind classes: gray, green, amber, red for the four states) and the label
+- [X] T017 [US3] Update `web/src/App.tsx` to render a header bar containing the text `NetLab` and `<ConnectionIndicator />` (Tailwind classes for a simple top bar), with an empty main area below
+- [X] T018 [US3] Run quickstart section 4 (first "Checking API", then "API online, worker offline"; stop the API and see "API offline" within 10 seconds; start it and see the online state again within 10 seconds with no reload) and fix until it matches
 
 **Checkpoint**: The indicator works in the browser.
 
@@ -96,8 +96,8 @@ description: "Task list for the Health Endpoint and API Client"
 
 ## Final Phase: Polish
 
-- [ ] T019 Run `make lint` and `make build` from the repository root and fix any failure; delete `web/.env.local` and `web/dist` if they exist
-- [ ] T020 Run all six quickstart sections in order and report which passed; confirm no API or Vite process is left running (`pgrep -af 'api|vite'`)
+- [X] T019 Run `make lint` and `make build` from the repository root and fix any failure; delete `web/.env.local` and `web/dist` if they exist
+- [X] T020 Run all six quickstart sections in order and report which passed; confirm no API or Vite process is left running (`pgrep -af 'api|vite'`)
 
 ---
 

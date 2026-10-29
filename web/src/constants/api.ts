@@ -22,3 +22,10 @@ export const ERROR_KIND = { SERVER: "server", NETWORK: "network" } as const;
 export const UNKNOWN_ERROR_CODE = "unknown";
 export const GENERIC_ERROR_MESSAGE = "request failed";
 export const NETWORK_ERROR_MESSAGE = "cannot reach the server";
+
+export const CONNECTION_STATE = {
+  CHECKING: "checking",
+  ONLINE: "online",
+  ONLINE_WORKER_OFFLINE: "online-worker-offline",
+  OFFLINE: "offline",
+} as const;

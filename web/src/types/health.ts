@@ -1,3 +1,5 @@
+import type { CONNECTION_STATE } from "../constants/api";
+
 export type Health = {
   status: string;
   version: string;
@@ -5,4 +7,4 @@ export type Health = {
 };
 
 export type ConnectionState =
-  "checking" | "online" | "online-worker-offline" | "offline";
+  (typeof CONNECTION_STATE)[keyof typeof CONNECTION_STATE];
