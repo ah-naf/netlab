@@ -123,7 +123,7 @@ The app follows the user's system appearance. In dark mode and in light mode, te
 - **FR-008**: The drawer MUST have exactly nine tabs in this order: Deployment logs, Interface state, Addresses, Routes, Neighbors, Bridge state, Firewall/NAT, Packet capture, Diagnostics.
 - **FR-009**: Each tab MUST show a panel with its name and the text "Not available yet" and MUST NOT show sample data.
 - **FR-010**: The left column, center area, and right column MUST show clearly labeled empty areas (for example "Components", "Canvas", "Inspector") that say they are not available yet, until their features exist.
-- **FR-011**: The app MUST support light and dark appearance, following the system setting, with named color values defined in one place.
+- **FR-011**: The app MUST support light and dark appearance, following the system setting by default, with a toolbar button to switch and remember the choice, and with named color values defined in one place.
 - **FR-012**: Buttons, tabs, and drag edges MUST be reachable and usable with the keyboard, and the active tab MUST be announced to assistive tools.
 - **FR-013**: No tests are written (constitution). The visual and behavior checks are done by hand at 1280x720 and 1920x1080.
 
@@ -152,7 +152,7 @@ The app follows the user's system appearance. In dark mode and in light mode, te
 - Desktop-first: a minimum window width of 1024 pixels is supported. Phones and tablets are out of scope.
 - The project name shows a default such as "Untitled lab" until the save and open features exist, and it is not editable yet.
 - Save and Validate are also disabled (not only Deploy, Stop, and Reset), as confirmed by the owner, because their features do not exist yet and an enabled button that does nothing would mislead. They are enabled when their features arrive.
-- The app follows the system light or dark setting. A manual theme switch is out of scope.
+- The app follows the system light or dark setting until the user clicks the theme button in the toolbar. The choice is then remembered (key `netlab.theme`). The button was added at the owner's request after the first review.
 - Remembered values live in the browser's local storage, wrapped so that unavailable storage never causes an error.
 - Resizing uses simple mouse dragging plus keyboard arrows on the drag edges. Touch support is out of scope.
 - The ticket's Vitest test is dropped because the constitution says no tests are written. The checks are manual (FR-013).

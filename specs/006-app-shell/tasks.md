@@ -113,7 +113,7 @@ All paths are under `web/` unless stated otherwise.
 
 **Independent Test**: quickstart.md check 8.
 
-- [ ] T027 [US5] In `src/index.css` add `@media (prefers-color-scheme: dark)` overriding every token with the dark values from design-direction.md (use `#253942` for `--rule`); do not add any JS theme code
+- [X] T027 [US5] In `src/index.css` add `@media (prefers-color-scheme: dark)` overriding every token with the dark values from design-direction.md (use `#2f4752` for `--rule`); do not add any JS theme code
 - [ ] T028 [US5] Manual check: quickstart.md check 8 with devtools emulation. Confirm text contrast of at least 4.5:1 on `panel` and `chassis`, visible rails, visible LED colors, dot grid visible but quiet, focus ring visible in both modes. Adjust token values if not
 
 **Checkpoint**: Both themes pass.
@@ -122,8 +122,8 @@ All paths are under `web/` unless stated otherwise.
 
 ## Phase 8: Polish
 
-- [ ] T029 [P] Review all new files against the constitution: no magic strings or numbers (sizes, labels, keys all from `src/constants/layout.ts`), functions under 100 lines, no dead code, no unused imports
-- [ ] T030 Run `npm run build`, `npm run lint`, and `npm run format:check` in `web/`; fix every error
+- [X] T029 [P] Review all new files against the constitution: no magic strings or numbers (sizes, labels, keys all from `src/constants/layout.ts`), functions under 100 lines, no dead code, no unused imports
+- [X] T030 Run `npm run build`, `npm run lint`, and `npm run format:check` in `web/`; fix every error
 - [ ] T031 Visual self-critique at 1280x720 and 1920x1080 in light and dark: confirm the patch-panel tabs are the one bold element, nothing generic (default grays, uniform cards, all-caps labels) remains, and remove one decoration if the page feels busy
 - [ ] T032 Narrow edge check at 900 px: page scrolls sideways, no area hidden (quickstart.md check 9)
 - [ ] T033 Run the full quickstart.md checklist once from top to bottom
@@ -152,3 +152,15 @@ US5: T027 can run in parallel with US3 or US4 work (different file).
 - **MVP**: Phases 1, 2, and US1 (T001 to T013). The frame with labeled empty regions runs.
 - **Then**: US2 (toolbar, P1), then US3 and US4 (P2), then US5 (P3), then Polish.
 - Keep the app runnable after every phase. Commit after each phase.
+
+---
+
+## Phase 9: Convergence
+
+- [X] T034 Add a manual light/dark switch: create `web/src/store/themeStore.ts` (Zustand `persist`, key `netlab.theme` as a constant, over `safeStorage`; value `"light"` or `"dark"` from a `THEME` constant; first visit uses the system setting; unknown stored value falls back to the system setting), set `document.documentElement.dataset.theme` from it, and apply the stored value before first paint (in `web/src/main.tsx` before `createRoot`) to avoid a flash; per user request (not in spec.md, which lists a manual switch as out of scope; update the spec Assumptions and FR-011 when accepting this) (contradicts)
+- [X] T035 In `web/src/index.css` move the dark token values into `:root[data-theme="dark"]` and `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { ... } }`, and set `color-scheme: light` / `dark` with each, so the stored choice wins over the system setting and the system setting still applies when nothing is stored; keep one copy of each token value (define dark values once, for example through shared custom properties) per user request and FR-011 (partial)
+- [X] T036 [P] Create `web/src/components/ThemeToggle.tsx`: 28 px square icon button (sun or moon inline SVG, `currentColor`), `aria-label` "Switch to dark theme" / "Switch to light theme" and matching `title` (strings as constants), same border and hover style as `DisabledButton` enabled state, `aria-pressed` not used (label states the action); place it left of `ConnectionIndicator` in `web/src/components/Toolbar.tsx` per user request (missing)
+- [X] T037 Fix the narrow-window edge case: `body { overflow: hidden }` in `web/src/index.css` stops the page scrolling sideways below 1024 px, so change it to `overflow-x: auto; overflow-y: hidden` (or move the minimum width to `#root`) so no area is hidden per spec Edge Cases (window narrower than 1024 px) and US1 (partial)
+- [X] T038 Keep canvas and drawer usable in a short window: add `CANVAS_MIN_HEIGHT` (and use the existing `SIZE_RANGE.drawerHeight.min`) to `web/src/constants/layout.ts`, give the main row `minmax(CANVAS_MIN_HEIGHT, 1fr)` in `web/src/components/AppShell.tsx`, and cap the drawer height (store value, handle `max`, and arrow keys) at window height minus toolbar, rails, and `CANVAS_MIN_HEIGHT` per spec Edge Cases (window very short) and FR-006 (partial)
+- [X] T039 Keep the center at least `CENTER_MIN_WIDTH` when restored sizes or a smaller window make the columns too wide: in `web/src/components/AppShell.tsx` limit the rendered `leftWidth` and `rightWidth` so their sum never exceeds `columnSpace` (rendering only; do not overwrite the stored values), and re-render on window resize per FR-005 and US3/AC1 (partial)
+- [ ] T040 Add manual checks to `specs/006-app-shell/quickstart.md` for the theme switch (click toggles, choice survives reload, clearing storage returns to the system setting, no flash on load) and run them after T034 to T036; also run the short-window (height 400 px) and narrow-window (width 900 px) checks after T037 to T039 per FR-013 (missing)

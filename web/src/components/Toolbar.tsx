@@ -2,10 +2,12 @@ import {
   APP_NAME,
   DEFAULT_PROJECT_NAME,
   FILE_ACTIONS,
+  TOOLBAR_HEIGHT,
   LAB_ACTIONS,
 } from "../constants/layout";
 import type { ToolbarAction } from "../types/layout";
 import ConnectionIndicator from "./ConnectionIndicator";
+import ThemeToggle from "./ThemeToggle";
 import DisabledButton from "./DisabledButton";
 
 function Divider() {
@@ -24,7 +26,10 @@ function ActionGroup({ actions }: { actions: readonly ToolbarAction[] }) {
 
 export default function Toolbar() {
   return (
-    <header className="flex h-11 shrink-0 items-center gap-4 border-b border-rule bg-panel px-4">
+    <header
+      style={{ height: TOOLBAR_HEIGHT }}
+      className="flex shrink-0 items-center gap-4 border-b border-rule bg-panel px-4"
+    >
       <span className="text-lg font-semibold tracking-[-0.01em]">
         {APP_NAME}
       </span>
@@ -35,7 +40,8 @@ export default function Toolbar() {
         <Divider />
         <ActionGroup actions={LAB_ACTIONS} />
       </div>
-      <div className="ml-auto">
+      <div className="ml-auto flex items-center gap-4">
+        <ThemeToggle />
         <ConnectionIndicator />
       </div>
     </header>

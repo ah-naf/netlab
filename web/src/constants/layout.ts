@@ -137,3 +137,12 @@ export const RESIZE_KEYS = {
 
 export const COLLAPSE_LABEL = "Collapse drawer";
 export const EXPAND_LABEL = "Expand drawer";
+
+export const RESIZE_LABEL = {
+  LEFT: "Resize components column",
+  RIGHT: "Resize inspector column",
+  DRAWER: "Resize drawer",
+} as const;
+
+export const TOOLBAR_HEIGHT = 44;
+export const CANVAS_MIN_HEIGHT = 160;

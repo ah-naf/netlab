@@ -1,16 +1,25 @@
 @import "tailwindcss";
 
 :root {
-  --chassis: #dde3e6;
-  --panel: #f3f6f7;
-  --ink: #14232b;
-  --ink-muted: #5b6e77;
-  --rule: #b9c5ca;
-  --signal: #0e7c86;
-  --led-off: #9aa9af;
-  --led-ok: #2e9a57;
-  --led-warn: #c47f0a;
-  --led-fault: #c23a3a;
+  color-scheme: light dark;
+  --chassis: light-dark(#dde3e6, #0c161c);
+  --panel: light-dark(#f3f6f7, #13222a);
+  --ink: light-dark(#14232b, #d4e0e4);
+  --ink-muted: light-dark(#5b6e77, #7f959f);
+  --rule: light-dark(#b9c5ca, #2f4752);
+  --signal: light-dark(#0e7c86, #3dc4cf);
+  --led-off: light-dark(#9aa9af, #31454e);
+  --led-ok: light-dark(#2e9a57, #4ccb7b);
+  --led-warn: light-dark(#c47f0a, #e3a93a);
+  --led-fault: light-dark(#c23a3a, #f06a6a);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -35,7 +44,8 @@ body,
 
 body {
   margin: 0;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   background: var(--chassis);
   color: var(--ink);
   font-size: 14px;

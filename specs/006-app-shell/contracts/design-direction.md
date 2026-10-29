@@ -14,7 +14,7 @@ The drawer tab bar is a **patch panel**. Each tab is a port with a small LED. An
 | `panel` | #F3F6F7 | #13222A | panel surfaces |
 | `ink` | #14232B | #D4E0E4 | main text |
 | `ink-muted` | #5B6E77 | #7F959F | secondary text |
-| `rule` | #B9C5CA | #253942 | borders, rail grooves |
+| `rule` | #B9C5CA | #2f4752 | borders, rail grooves |
 | `signal` | #0E7C86 | #3DC4CF | focus ring, active tab, drag-handle hover |
 | `led-off` | #9AA9AF | #31454E | dark LED, idle status |
 | `led-ok` | #2E9A57 | #4CCB7B | online |
