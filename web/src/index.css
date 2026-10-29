@@ -62,3 +62,15 @@ body {
   );
   background-size: 20px 20px;
 }
+
+.shell-grid {
+  transition: grid-template-rows 150ms;
+}
+
+body[data-resizing] {
+  user-select: none;
+}
+
+body[data-resizing] .shell-grid {
+  transition: none;
+}

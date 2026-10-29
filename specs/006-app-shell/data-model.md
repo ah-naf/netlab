@@ -19,7 +19,7 @@ Rules:
 
 ## Drawer tab
 
-`{ id: DrawerTabId, label: string }`. Nine entries, fixed order (FR-008): Deployment logs, Interface state, Addresses, Routes, Neighbors, Bridge state, Firewall/NAT, Packet capture, Diagnostics. Panel body is always the name plus "Not available yet".
+`{ id: DrawerTabId, label: string, hint: string }`. The hint is one plain sentence about what the tab will show. Nine entries, fixed order (FR-008): Deployment logs, Interface state, Addresses, Routes, Neighbors, Bridge state, Firewall/NAT, Packet capture, Diagnostics. Panel body is always the name plus "Not available yet".
 
 ## Toolbar action
 

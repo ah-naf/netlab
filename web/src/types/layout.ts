@@ -5,6 +5,7 @@ export type DrawerTabId = (typeof DRAWER_TAB_ID)[keyof typeof DRAWER_TAB_ID];
 export interface DrawerTab {
   id: DrawerTabId;
   label: string;
+  hint: string;
 }
 
 export interface LayoutState {
