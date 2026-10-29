@@ -14,8 +14,6 @@ import (
 const (
 	usage         = "usage: genschema <output.json>"
 	documentTitle = "Document"
-	jsonIndent    = "  "
-	fileMode      = 0o644
 )
 
 func main() {
@@ -30,11 +28,11 @@ func run() error {
 		return fmt.Errorf(usage)
 	}
 	schema := documentSchema()
-	content, err := json.MarshalIndent(schema, "", jsonIndent)
+	content, err := json.MarshalIndent(schema, "", topology.JSONIndent)
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(os.Args[1], append(content, '\n'), fileMode)
+	return os.WriteFile(os.Args[1], append(content, '\n'), topology.FileMode)
 }
 
 // documentSchema describes the saved document and also defines the runtime-only CaptureSession.

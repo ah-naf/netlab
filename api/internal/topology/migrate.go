@@ -26,5 +26,19 @@ func Migrate(raw []byte) (Document, error) {
 		return doc, fmt.Errorf(unsupportedVersionFormat, header.SchemaVersion)
 	}
 	err := json.Unmarshal(raw, &doc)
-	return doc, err
+	return withEmptyLists(doc), err
+}
+
+// withEmptyLists makes missing lists save as [] instead of null.
+func withEmptyLists(doc Document) Document {
+	if doc.Nodes == nil {
+		doc.Nodes = []Node{}
+	}
+	if doc.Interfaces == nil {
+		doc.Interfaces = []Interface{}
+	}
+	if doc.Links == nil {
+		doc.Links = []Link{}
+	}
+	return doc
 }

@@ -124,3 +124,11 @@ After T005: T006, T010, T011 in parallel. In US2: T015 and T016 together. In US3
 
 - **MVP**: Phase 1, Phase 2, and User Story 1 (T001 to T014): a core document that round-trips on both sides with a generated schema and types.
 - Then US2 (roles, settings, capture shape) and US3 (version handling), then Polish.
+
+---
+
+## Phase 6: Convergence
+
+- [X] T027 In `api/internal/topology/migrate.go` after decoding, replace nil `Nodes`, `Interfaces`, and `Links` with empty slices (`[]Node{}`, `[]Interface{}`, `[]Link{}`) so a document without those lists saves as `[]` and not `null`; in `web/src/types/topologyDocument.ts` make `migrate` default missing `nodes`, `interfaces`, and `links` to `[]` the same way per Edge Cases: empty lab and FR-001 (partial)
+- [X] T028 In `api/internal/topology/document.go` add an exported `Marshal(doc Document) ([]byte, error)` (indented JSON with trailing newline) and use it from `Save` and from `api/cmd/topocheck/main.go`; export the shared `JSONIndent` constant from the `topology` package and use it in `api/cmd/genschema/main.go` instead of its own copy per Constitution III (contradicts)
+- [X] T029 [P] Delete `web/src/types/.gitkeep` (the folder now holds `topology.ts` and `topologyDocument.ts`) per plan: structure (unrequested)

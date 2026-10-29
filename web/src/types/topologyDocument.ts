@@ -13,7 +13,13 @@ export function migrate(raw: unknown): Document {
   if (version !== CURRENT_VERSION) {
     throw new Error(`${UNSUPPORTED_VERSION_MESSAGE} ${version}`);
   }
-  return raw as Document;
+  const doc = raw as Document;
+  return {
+    ...doc,
+    nodes: doc.nodes ?? [],
+    interfaces: doc.interfaces ?? [],
+    links: doc.links ?? [],
+  };
 }
 
 export function parseDocument(text: string): Document {

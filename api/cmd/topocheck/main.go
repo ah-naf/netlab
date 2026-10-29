@@ -2,17 +2,13 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 
 	"netlab/api/internal/topology"
 )
 
-const (
-	usage      = "usage: topocheck <document.json>"
-	jsonIndent = "  "
-)
+const usage = "usage: topocheck <document.json>"
 
 func main() {
 	if err := run(); err != nil {
@@ -29,10 +25,10 @@ func run() error {
 	if err != nil {
 		return err
 	}
-	content, err := json.MarshalIndent(doc, "", jsonIndent)
+	content, err := topology.Marshal(doc)
 	if err != nil {
 		return err
 	}
-	fmt.Println(string(content))
+	fmt.Print(string(content))
 	return nil
 }
