@@ -10,13 +10,22 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	"netlab/api/internal/api"
 )
 
 const (
 	addrEnv         = "NETLAB_API_ADDR"
 	defaultAddr     = ":8080"
 	shutdownTimeout = 5 * time.Second
+	defaultVersion  = "dev"
 )
+
+// version is set at build time with -ldflags "-X main.version=...".
+var version = defaultVersion
+
+// workerNotBuilt reports the worker as unreachable until the worker exists (NL-032).
+func workerNotBuilt() bool { return false }
 
 func main() {
 	if err := run(); err != nil {
@@ -26,7 +35,7 @@ func main() {
 }
 
 func run() error {
-	server := &http.Server{Addr: listenAddr(), Handler: http.NewServeMux()}
+	server := &http.Server{Addr: listenAddr(), Handler: api.NewHandler(version, workerNotBuilt)}
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
