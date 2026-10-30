@@ -35,6 +35,7 @@ interface TopologyState {
   setSelection: (nodeIds: string[]) => void;
   setLinkSelection: (linkId: string | null) => void;
   connect: (from: LinkEnd, to: LinkEnd) => ConnectionCheck;
+  edit: (change: (document: Document) => Document) => void;
   undo: () => void;
   redo: () => void;
   createNode: (entryId: PaletteKind, position: Position) => void;
@@ -103,6 +104,11 @@ export const useTopologyStore = create<TopologyState>()((set, get) => ({
       );
     return check;
   },
+  edit: (change) =>
+    set((state) => {
+      const next = change(state.document);
+      return next === state.document ? {} : withHistory(state, next);
+    }),
   undo: () =>
     set((state) => {
       const document = state.past.at(-1);
