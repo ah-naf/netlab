@@ -1,4 +1,5 @@
 import { useId } from "react";
+import { KEY } from "../../constants/palette";
 import { useFieldDraft } from "../../hooks/useFieldDraft";
 import type { FieldRule } from "../../types/inspector";
 
@@ -10,8 +11,6 @@ interface Props {
   onCommit: (value: string) => void;
   placeholder?: string;
 }
-
-const KEY = { ENTER: "Enter", ESCAPE: "Escape" };
 
 export default function ValidatedField({
   fieldKey,

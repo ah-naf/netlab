@@ -10,6 +10,7 @@ import { interfacesOf, useTopologyStore } from "../../store/topologyStore";
 import type { RouteDraft } from "../../types/inspector";
 import type { Route } from "../../types/topology";
 import ActionButton from "../nodes/ActionButton";
+import ObservedLine from "./ObservedLine";
 import SelectField from "./SelectField";
 import ValidatedField from "./ValidatedField";
 
@@ -57,6 +58,7 @@ export default function RouteRow({ nodeId, index, route }: Props) {
         options={interfaceOptions}
         onChange={(value) => change("interfaceId", value)}
       />
+      <ObservedLine />
       <ActionButton
         onClick={() => edit((d) => removeRoute(d, nodeId, index))}
         aria-label={`${ACTION_LABEL.REMOVE} ${route.destination}`}

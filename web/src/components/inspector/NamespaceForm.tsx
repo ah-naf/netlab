@@ -6,7 +6,6 @@ import AddInterfaceButton from "../nodes/AddInterfaceButton";
 import GatewayField from "./GatewayField";
 import RoleField from "./RoleField";
 import RoutesTable from "./RoutesTable";
-import ErrorBanner from "./ErrorBanner";
 import InterfaceEditor from "./InterfaceEditor";
 import ValidatedField from "./ValidatedField";
 
@@ -21,7 +20,6 @@ export default function NamespaceForm({ nodeId }: { nodeId: string }) {
 
   return (
     <div>
-      <ErrorBanner />
       <div className="px-3 py-2">
         <ValidatedField
           fieldKey={`node-name-${nodeId}`}

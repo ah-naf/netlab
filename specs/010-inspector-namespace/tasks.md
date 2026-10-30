@@ -101,9 +101,9 @@ All paths are under `web/` unless stated otherwise.
 
 **Independent Test**: quickstart.md "Observed and lab name".
 
-- [ ] T026 [P] [US4] Edit `src/components/inspector/InterfaceEditor.tsx` and `src/components/inspector/RouteRow.tsx`: add a read-only line "Observed: " plus `OBSERVED_TEXT` in `text-ink-muted text-xs`, not focusable, not an input
-- [ ] T027 [P] [US4] Create `src/components/inspector/LabNameField.tsx`: a `ValidatedField` for the lab name (`validateLabName`, commit `renameLab` through `edit`)
-- [ ] T028 [US4] Edit `src/components/NodeInspector.tsx`: in the nothing-selected view render `LabNameField` above the existing hint (the summary counts come with the link and bridge panel feature)
+- [X] T026 [P] [US4] Edit `src/components/inspector/InterfaceEditor.tsx` and `src/components/inspector/RouteRow.tsx`: add a read-only line "Observed: " plus `OBSERVED_TEXT` in `text-ink-muted text-xs`, not focusable, not an input
+- [X] T027 [P] [US4] Create `src/components/inspector/LabNameField.tsx`: a `ValidatedField` for the lab name (`validateLabName`, commit `renameLab` through `edit`)
+- [X] T028 [US4] Edit `src/components/NodeInspector.tsx`: in the nothing-selected view render `LabNameField` above the existing hint (the summary counts come with the link and bridge panel feature)
 - [ ] T029 [US4] Manual check from quickstart.md "Observed and lab name"; `npm run build && npm run lint && npm run format:check` pass
 
 **Checkpoint**: All four stories work together.
@@ -113,7 +113,7 @@ All paths are under `web/` unless stated otherwise.
 ## Phase 7: Polish
 
 - [ ] T030 Run the whole of quickstart.md once on a fresh page load; confirm no console errors; confirm typing in one field does not re-render the others (React dev tools or visible flicker); confirm undo and redo of each kind of edit
-- [ ] T031 Confirm constitution rules across the new files: no inline strings with meaning (all from `constants/inspector.ts`), every function under 100 lines, `NamespaceForm.tsx` and `RoutesTable.tsx` stay small; `npm run build && npm run lint && npm run format:check` pass
+- [X] T031 Confirm constitution rules across the new files: no inline strings with meaning (all from `constants/inspector.ts`), every function under 100 lines, `NamespaceForm.tsx` and `RoutesTable.tsx` stay small; `npm run build && npm run lint && npm run format:check` pass
 
 ---
 
@@ -139,3 +139,9 @@ All paths are under `web/` unless stated otherwise.
 - **MVP**: Phase 1, Phase 2, US1. You can already name a namespace and give it addresses.
 - Then US2 (error banner and behavior audit), then US3 (routes), then US4, then polish.
 - Stop and run the manual check after each story; keep the app runnable after each ticket.
+
+## Phase 8: Convergence
+
+- [X] T032 Make `isIpv6` in `web/src/store/ipAddress.ts` reject text outside hex digits, `:` and `.` before calling the `URL` parser (today `::1]/x[::1` and `::1` followed by a tab pass as valid, so a bad gateway or address can be written to the lab), per FR-008 and FR-010 "valid IPv4 or IPv6 address" (partial)
+- [X] T033 Show the lab error banner in the nothing-selected view as well: move `ErrorBanner` from `web/src/components/inspector/NamespaceForm.tsx` into `web/src/components/NodeInspector.tsx` so an unresolved lab-name error is reported, per FR-009 and US2/AC7 "While any field has an unresolved error, the panel shows that the lab has errors" (partial)
+- [X] T034 Remove the duplicate key map in `web/src/components/inspector/ValidatedField.tsx` by reusing `KEY` from `web/src/constants/palette.ts` (add `ENTER` and `ESCAPE` there) and use a named constant for the `"/"` check in `validateInterfaceName` in `web/src/store/fieldRules.ts`, per Constitution IV (contradicts)

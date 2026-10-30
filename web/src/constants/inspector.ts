@@ -3,8 +3,10 @@ import type { Role, State } from "../types/topology";
 export const MTU_MIN = 68;
 export const MTU_MAX = 65535;
 export const INTERFACE_NAME_MAX = 15;
+export const PATH_SEPARATOR = "/";
 
 export const DEFAULT_DESTINATION = { IPV4: "0.0.0.0/0", IPV6: "::/0" } as const;
+export const OBSERVED_LABEL = "Observed";
 export const OBSERVED_TEXT = "Not deployed";
 
 export const ROLE_CHOICES: { value: Role; label: string }[] = [

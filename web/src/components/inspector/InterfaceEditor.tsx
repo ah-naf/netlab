@@ -9,6 +9,7 @@ import { useTopologyStore } from "../../store/topologyStore";
 import type { State } from "../../types/topology";
 import { RemoveInterfaceButton } from "../nodes/InterfaceRow";
 import AddressList from "./AddressList";
+import ObservedLine from "./ObservedLine";
 import SelectField from "./SelectField";
 import ValidatedField from "./ValidatedField";
 
@@ -52,6 +53,7 @@ export default function InterfaceEditor({
         />
       </div>
       <AddressList interfaceId={interfaceId} />
+      <ObservedLine />
       <RemoveInterfaceButton nodeName={nodeName} item={item} />
     </div>
   );

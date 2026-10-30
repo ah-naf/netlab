@@ -3,6 +3,7 @@ import {
   INTERFACE_NAME_MAX,
   MTU_MAX,
   MTU_MIN,
+  PATH_SEPARATOR,
 } from "../constants/inspector";
 import type { RouteDraft } from "../types/inspector";
 import type { Document } from "../types/topology";
@@ -22,7 +23,7 @@ export function validateInterfaceName(
 ): string | null {
   if (!name) return FIELD_ERROR.NAME_EMPTY;
   if (name.length > INTERFACE_NAME_MAX) return FIELD_ERROR.NAME_LONG;
-  if (name.includes("/") || WHITESPACE.test(name))
+  if (name.includes(PATH_SEPARATOR) || WHITESPACE.test(name))
     return FIELD_ERROR.NAME_CHARS;
   if (RESERVED_NAMES.includes(name)) return FIELD_ERROR.NAME_DOT;
   const nodeId = interfaceOf(document, interfaceId)?.nodeId;

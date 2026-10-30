@@ -3,6 +3,7 @@ const IPV4_PART_MAX = 255;
 const IPV4_PREFIX_MAX = 32;
 const IPV6_PREFIX_MAX = 128;
 const WHOLE_NUMBER = /^\d+$/;
+const IPV6_CHARS = /^[0-9a-fA-F:.]+$/;
 
 export const isIpv4 = (text: string): boolean => {
   const parts = text.split(".");
@@ -14,7 +15,7 @@ export const isIpv4 = (text: string): boolean => {
 
 /** The URL parser already implements IPv6 address parsing. */
 export const isIpv6 = (text: string): boolean => {
-  if (!text.includes(":")) return false;
+  if (!text.includes(":") || !IPV6_CHARS.test(text)) return false;
   try {
     new URL(`http://[${text}]/`);
     return true;
