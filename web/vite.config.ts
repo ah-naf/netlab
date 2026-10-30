@@ -10,6 +10,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     strictPort: true,
+    fs: { allow: [".."] },
     proxy: {
       [API_PATH]: API_TARGET,
       [WS_PATH]: { target: API_TARGET, ws: true },
