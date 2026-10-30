@@ -62,7 +62,10 @@ export default function NodeTitle({ nodeId, name }: Props) {
         className="nodrag nopan w-full border border-signal bg-panel px-1 text-sm font-semibold text-ink"
       />
       {error && (
-        <span role="alert" className="block text-xs font-normal text-led-fault mt-1.5">
+        <span
+          role="alert"
+          className="block text-xs font-normal text-led-fault mt-1.5"
+        >
           {error}
         </span>
       )}

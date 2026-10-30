@@ -28,6 +28,8 @@ interface TopologyState {
   dragBase: Document | null;
   loadDocument: (document: Document) => void;
   setSelection: (nodeIds: string[]) => void;
+  undo: () => void;
+  redo: () => void;
   createNode: (entryId: PaletteKind, position: Position) => void;
   deleteSelected: () => void;
   duplicateSelected: () => void;
@@ -50,6 +52,9 @@ const EMPTY_DOCUMENT: Document = {
 export const interfacesOf = (document: Document, nodeId: string): Interface[] =>
   document.interfaces.filter((item) => item.nodeId === nodeId);
 
+const existingIds = (ids: string[], document: Document) =>
+  ids.filter((id) => document.nodes.some((n) => n.id === id));
+
 /** One user action is one history step. */
 const withHistory = (
   state: TopologyState,
@@ -70,6 +75,28 @@ export const useTopologyStore = create<TopologyState>()((set, get) => ({
   loadDocument: (document) =>
     set({ document, selectedNodeIds: [], past: [], future: [] }),
   setSelection: (selectedNodeIds) => set({ selectedNodeIds }),
+  undo: () =>
+    set((state) => {
+      const document = state.past.at(-1);
+      if (!document) return {};
+      return {
+        document,
+        past: state.past.slice(0, -1),
+        future: [state.document, ...state.future],
+        selectedNodeIds: existingIds(state.selectedNodeIds, document),
+      };
+    }),
+  redo: () =>
+    set((state) => {
+      const [document, ...future] = state.future;
+      if (!document) return {};
+      return {
+        document,
+        past: [...state.past, state.document],
+        future,
+        selectedNodeIds: existingIds(state.selectedNodeIds, document),
+      };
+    }),
   createNode: (entryId, position) =>
     set((state) => {
       const entry = PALETTE_ENTRIES.find((e) => e.id === entryId);

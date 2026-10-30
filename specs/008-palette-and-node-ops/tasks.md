@@ -107,8 +107,8 @@ All paths are under `web/` unless stated otherwise.
 
 **Independent Test**: quickstart.md check 11.
 
-- [ ] T027 [US5] In `src/store/topologyStore.ts` add `undo()` (pop the last document from `past`, push the current one onto `future`, set `document`) and `redo()` (the reverse); both are no-ops when the list is empty; neither changes selection except to drop ids whose nodes no longer exist in the restored document. "A new change after an undo discards the redo steps" is already done by `commit`
-- [ ] T028 [US5] In `src/hooks/useCanvasShortcuts.ts` handle Ctrl+Z (undo), Ctrl+Shift+Z and Ctrl+Y (redo), with Meta variants for macOS, and `preventDefault` when the lab handles it; the editable-target check keeps the field's own undo while typing
+- [X] T027 [US5] In `src/store/topologyStore.ts` add `undo()` (pop the last document from `past`, push the current one onto `future`, set `document`) and `redo()` (the reverse); both are no-ops when the list is empty; neither changes selection except to drop ids whose nodes no longer exist in the restored document. "A new change after an undo discards the redo steps" is already done by `commit`
+- [X] T028 [US5] In `src/hooks/useCanvasShortcuts.ts` handle Ctrl+Z (undo), Ctrl+Shift+Z and Ctrl+Y (redo), with Meta variants for macOS, and `preventDefault` when the lab handles it; the editable-target check keeps the field's own undo while typing
 - [ ] T029 [US5] Manual check: quickstart.md check 11 (delete then undo restores nodes, interfaces, links, and ids; redo removes again; a drag undoes in one step; a new change after undo kills redo; undo while typing in the search box uses the field's undo; nothing happens with empty history; after `loadDocument` history is empty); build, lint, format pass
 
 ---
