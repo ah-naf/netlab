@@ -13,6 +13,7 @@ import { PALETTE_DRAG_TYPE } from "../constants/palette";
 import type { PaletteKind } from "../types/palette";
 import { CANVAS_LABEL } from "../constants/layout";
 import { NODE_TYPE } from "../constants/topology";
+import { endsOf } from "../store/linkEnds";
 import { toFlowEdges, toFlowNodes } from "../store/toFlow";
 import { useTopologyStore } from "../store/topologyStore";
 import BridgeNode from "./nodes/BridgeNode";
@@ -89,7 +90,7 @@ function CanvasView({ className }: { className: string }) {
           nodeTypes={NODE_TYPES}
           onNodesChange={handleChanges}
           connectionMode={ConnectionMode.Loose}
-          nodesConnectable={false}
+          onConnect={(c) => useTopologyStore.getState().connect(...endsOf(c))}
           fitView
           proOptions={{ hideAttribution: true }}
           onNodeDragStart={beginDrag}

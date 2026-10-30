@@ -1,4 +1,5 @@
-import type { NodeProps } from "@xyflow/react";
+import { Handle, Position, type NodeProps } from "@xyflow/react";
+import { NEW_PORT_HANDLE_ID, NEW_PORT_LABEL } from "../../constants/links";
 import { useShallow } from "zustand/react/shallow";
 import { nodeKindOf } from "../../store/nodeKind";
 import NodeIcon from "../icons/NodeIcon";
@@ -34,6 +35,16 @@ export default function BridgeNode({
       {portIds.map((portId) => (
         <InterfaceRow key={portId} nodeName={node.name} interfaceId={portId} />
       ))}
+      <div className="nodrag relative border-t border-rule px-3 py-1 text-xs text-ink-muted">
+        {NEW_PORT_LABEL}
+        <Handle
+          id={NEW_PORT_HANDLE_ID}
+          type="source"
+          position={Position.Right}
+          aria-label={`${node.name} ${NEW_PORT_LABEL}`}
+          className="!h-2.5 !w-2.5 !border-rule !bg-signal"
+        />
+      </div>
       <AddInterfaceButton node={node} />
     </NodeCard>
   );
