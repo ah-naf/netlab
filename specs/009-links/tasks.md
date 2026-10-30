@@ -62,10 +62,10 @@ All paths are under `web/` unless stated otherwise.
 
 **Independent Test**: quickstart.md combination table, rows for self-link, already-linked, empty-canvas release, and "rejected drop creates nothing".
 
-- [ ] T011 [US2] Edit `src/components/Canvas.tsx`: add `isValidConnection` that maps the connection to ends (reuse the helper from T008) and returns `checkConnection(...).ok`, reading the document from `useTopologyStore.getState()`
-- [ ] T012 [P] [US2] Edit `src/index.css`: style the library handle states `.react-flow__handle.connectingto.valid` green and `.react-flow__handle.connectingto.invalid` red (ring or fill) using existing theme tokens (`led-ok`, `led-fault`); no new colors. Use the frontend-design skill
-- [ ] T013 [P] [US2] Create `src/components/LinkNotice.tsx`: shows a message with `role="alert"` above the canvas content, hidden when empty, dismisses itself after `LINK_NOTICE_MS`, styled with existing tokens (`border-led-fault`, `text-ink`)
-- [ ] T014 [US2] Edit `src/components/Canvas.tsx`: keep notice text in local state; add `onConnectEnd(event, state)`: when `state.toHandle` exists and `state.isValid` is false, set the notice to the `reason` from `checkConnection` for the same ends; when no handle was hit, set nothing; clear the notice on a successful `onConnect`. Render `LinkNotice` inside the canvas area
+- [X] T011 [US2] Edit `src/components/Canvas.tsx`: add `isValidConnection` that maps the connection to ends (reuse the helper from T008) and returns `checkConnection(...).ok`, reading the document from `useTopologyStore.getState()`
+- [X] T012 [P] [US2] Edit `src/index.css`: style the library handle states `.react-flow__handle.connectingto.valid` green and `.react-flow__handle.connectingto.invalid` red (ring or fill) using existing theme tokens (`led-ok`, `led-fault`); no new colors. Use the frontend-design skill
+- [X] T013 [P] [US2] Create `src/components/LinkNotice.tsx`: shows a message with `role="alert"` above the canvas content, hidden when empty, dismisses itself after `LINK_NOTICE_MS`, styled with existing tokens (`border-led-fault`, `text-ink`)
+- [X] T014 [US2] Edit `src/components/Canvas.tsx`: keep notice text in local state; add `onConnectEnd(event, state)`: when `state.toHandle` exists and `state.isValid` is false, set the notice to the `reason` from `checkConnection` for the same ends; when no handle was hit, set nothing; clear the notice on a successful `onConnect`. Render `LinkNotice` inside the canvas area
 - [ ] T015 [US2] Manual check from quickstart.md for every red row and the empty-canvas row; confirm a rejected drop leaves nodes, interfaces, ports, and links unchanged; `npm run build && npm run lint && npm run format:check` pass
 
 **Checkpoint**: Every pairing is either green with a link or red with a named reason.

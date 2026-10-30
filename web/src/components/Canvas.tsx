@@ -1,10 +1,13 @@
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   Background,
   ConnectionMode,
   ReactFlow,
   ReactFlowProvider,
   useReactFlow,
+  type Connection,
+  type Edge,
+  type FinalConnectionState,
   type NodeChange,
   type NodeTypes,
 } from "@xyflow/react";
@@ -13,9 +16,11 @@ import { PALETTE_DRAG_TYPE } from "../constants/palette";
 import type { PaletteKind } from "../types/palette";
 import { CANVAS_LABEL } from "../constants/layout";
 import { NODE_TYPE } from "../constants/topology";
-import { endsOf } from "../store/linkEnds";
+import { endOf, endsOf } from "../store/linkEnds";
+import { checkConnection } from "../store/linkRules";
 import { toFlowEdges, toFlowNodes } from "../store/toFlow";
 import { useTopologyStore } from "../store/topologyStore";
+import LinkNotice from "./LinkNotice";
 import BridgeNode from "./nodes/BridgeNode";
 import NamespaceNode from "./nodes/NamespaceNode";
 
@@ -40,6 +45,25 @@ function CanvasView({ className }: { className: string }) {
   const selectedNodeIds = useTopologyStore((s) => s.selectedNodeIds);
   const { beginDrag, moveNode, endDrag } = useTopologyStore.getState();
   const { screenToFlowPosition } = useReactFlow();
+  const [notice, setNotice] = useState("");
+  const clearNotice = useCallback(() => setNotice(""), []);
+  const isValidConnection = (c: Connection | Edge) =>
+    checkConnection(useTopologyStore.getState().document, ...endsOf(c)).ok;
+  const showRejection = (_: unknown, state: FinalConnectionState) => {
+    const { fromNode, fromHandle, toNode, toHandle } = state;
+    if (state.isValid || !fromNode || !fromHandle || !toNode || !toHandle)
+      return;
+    const check = checkConnection(
+      useTopologyStore.getState().document,
+      endOf(fromNode.id, fromHandle.id),
+      endOf(toNode.id, toHandle.id),
+    );
+    if (!check.ok) setNotice(check.reason);
+  };
+  const connect = (c: Connection) => {
+    setNotice("");
+    useTopologyStore.getState().connect(...endsOf(c));
+  };
   const allowDrop = (event: React.DragEvent) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "copy";
@@ -83,14 +107,20 @@ function CanvasView({ className }: { className: string }) {
       <div className="flex h-6 shrink-0 items-center border-b border-rule px-3 text-xs font-medium text-ink-muted">
         {CANVAS_LABEL}
       </div>
-      <div className="min-h-0 flex-1" onDragOver={allowDrop} onDrop={dropPart}>
+      <div
+        className="relative min-h-0 flex-1"
+        onDragOver={allowDrop}
+        onDrop={dropPart}
+      >
         <ReactFlow
           nodes={nodes}
           edges={edges}
           nodeTypes={NODE_TYPES}
           onNodesChange={handleChanges}
           connectionMode={ConnectionMode.Loose}
-          onConnect={(c) => useTopologyStore.getState().connect(...endsOf(c))}
+          onConnect={connect}
+          isValidConnection={isValidConnection}
+          onConnectEnd={showRejection}
           fitView
           proOptions={{ hideAttribution: true }}
           onNodeDragStart={beginDrag}
@@ -102,6 +132,7 @@ function CanvasView({ className }: { className: string }) {
         >
           <Background />
         </ReactFlow>
+        <LinkNotice message={notice} onDismiss={clearNotice} />
       </div>
     </main>
   );
