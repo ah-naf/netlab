@@ -73,7 +73,14 @@ export const NAME_ERROR = {
   TAKEN: "Another node already uses this name",
 } as const;
 
-export const KEY = { DELETE: "Delete", UNDO: "z", REDO: "y", DUPLICATE: "d" };
+export const KEY = {
+  DELETE: "Delete",
+  UNDO: "z",
+  REDO: "y",
+  DUPLICATE: "d",
+  ENTER: "Enter",
+  ESCAPE: "Escape",
+};
 
 export const MULTI_SELECT_HINT =
   "Press Delete to remove or Ctrl+D to duplicate.";

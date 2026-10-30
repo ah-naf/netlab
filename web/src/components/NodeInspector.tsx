@@ -2,9 +2,12 @@ import { useShallow } from "zustand/react/shallow";
 import { LINK_SELECTED_HINT, linkLabel } from "../constants/links";
 import { MULTI_SELECT_HINT, multiSelectText } from "../constants/palette";
 import { REGION } from "../constants/layout";
-import { NO_SELECTION_HINT } from "../constants/topology";
+import { NODE_TYPE, NO_SELECTION_HINT } from "../constants/topology";
 import { interfacesOf, useTopologyStore } from "../store/topologyStore";
 import AddInterfaceButton from "./nodes/AddInterfaceButton";
+import ErrorBanner from "./inspector/ErrorBanner";
+import LabNameField from "./inspector/LabNameField";
+import NamespaceForm from "./inspector/NamespaceForm";
 import { InterfaceLabel, RemoveInterfaceButton } from "./nodes/InterfaceRow";
 
 export default function NodeInspector({
@@ -38,8 +41,11 @@ export default function NodeInspector({
       <div className="flex h-6 shrink-0 items-center border-b border-rule px-3 text-xs font-medium text-ink-muted">
         {REGION.INSPECTOR.label}
       </div>
+      <ErrorBanner />
       <div className="min-h-0 flex-1 overflow-auto text-sm">
-        {node ? (
+        {node?.type === NODE_TYPE.NAMESPACE ? (
+          <NamespaceForm key={node.id} nodeId={node.id} />
+        ) : node ? (
           <>
             <div className="px-3 py-2">
               <div className="truncate font-semibold" title={node.name}>
@@ -69,7 +75,10 @@ export default function NodeInspector({
             <p className="text-xs text-ink-muted">{MULTI_SELECT_HINT}</p>
           </div>
         ) : (
-          <p className="p-3 text-xs text-ink-muted">{NO_SELECTION_HINT}</p>
+          <div className="space-y-2 p-3">
+            <LabNameField />
+            <p className="text-xs text-ink-muted">{NO_SELECTION_HINT}</p>
+          </div>
         )}
       </div>
     </aside>
