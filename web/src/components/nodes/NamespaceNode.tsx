@@ -1,12 +1,13 @@
 import type { NodeProps } from "@xyflow/react";
 import { useShallow } from "zustand/react/shallow";
+import { iconKindOf } from "../icons/iconKind";
+import NodeIcon from "../icons/NodeIcon";
 import type { FlowNodeData } from "../../types/flow";
 import { interfacesOf, useTopologyStore } from "../../store/topologyStore";
 import { useRefreshHandles } from "../../hooks/useRefreshHandles";
 import AddInterfaceButton from "./AddInterfaceButton";
 import InterfaceRow from "./InterfaceRow";
 import NodeCard from "./NodeCard";
-import RoleIcon from "./RoleIcon";
 
 export default function NamespaceNode({
   id,
@@ -25,7 +26,7 @@ export default function NamespaceNode({
   return (
     <NodeCard
       title={node.name}
-      icon={<RoleIcon role={node.role} />}
+      icon={<NodeIcon kind={iconKindOf(node)} />}
       status={data.status}
       selected={selected}
     >

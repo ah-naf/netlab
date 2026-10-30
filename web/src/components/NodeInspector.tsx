@@ -11,7 +11,9 @@ export default function NodeInspector({
   className?: string;
 }) {
   const node = useTopologyStore((s) =>
-    s.document.nodes.find((n) => n.id === s.selectedNodeId),
+    s.selectedNodeIds.length === 1
+      ? s.document.nodes.find((n) => n.id === s.selectedNodeIds[0])
+      : undefined,
   );
   const items = useTopologyStore(
     useShallow((s) => (node ? interfacesOf(s.document, node.id) : [])),

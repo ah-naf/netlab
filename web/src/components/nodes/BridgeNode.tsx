@@ -1,5 +1,7 @@
 import type { NodeProps } from "@xyflow/react";
 import { useShallow } from "zustand/react/shallow";
+import { iconKindOf } from "../icons/iconKind";
+import NodeIcon from "../icons/NodeIcon";
 import type { FlowNodeData } from "../../types/flow";
 import { interfacesOf, useTopologyStore } from "../../store/topologyStore";
 import { useRefreshHandles } from "../../hooks/useRefreshHandles";
@@ -22,7 +24,12 @@ export default function BridgeNode({
   if (!node) return null;
 
   return (
-    <NodeCard title={node.name} status={data.status} selected={selected}>
+    <NodeCard
+      title={node.name}
+      icon={<NodeIcon kind={iconKindOf(node)} />}
+      status={data.status}
+      selected={selected}
+    >
       {portIds.map((portId) => (
         <InterfaceRow key={portId} nodeName={node.name} interfaceId={portId} />
       ))}
