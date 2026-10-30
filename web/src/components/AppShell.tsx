@@ -5,6 +5,7 @@ import {
   RESIZE_LABEL,
   SIZE_RANGE,
 } from "../constants/layout";
+import { useCanvasShortcuts } from "../hooks/useCanvasShortcuts";
 import { useShellSizes } from "../hooks/useShellSizes";
 import { useLayoutStore } from "../store/layoutStore";
 import BottomDrawer from "./BottomDrawer";
@@ -19,6 +20,7 @@ export default function AppShell() {
   const { drawerCollapsed, setLeftWidth, setRightWidth, setDrawerHeight } =
     useLayoutStore();
   const sizes = useShellSizes();
+  useCanvasShortcuts();
   const rail = `${RAIL_SIZE}px`;
 
   return (

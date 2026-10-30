@@ -25,6 +25,7 @@ export default function BridgeNode({
 
   return (
     <NodeCard
+      nodeId={id}
       title={node.name}
       icon={<NodeIcon kind={iconKindOf(node)} />}
       status={data.status}

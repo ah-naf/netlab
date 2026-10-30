@@ -10,7 +10,13 @@ import {
 import { CURRENT_VERSION } from "../types/topologyDocument";
 import type { PaletteKind } from "../types/palette";
 import type { Document, Interface, Position } from "../types/topology";
-import { createNode, removeInterfaces } from "./documentOps";
+import {
+  createNode,
+  deleteNodes,
+  removeInterfaces,
+  renameNode,
+  validateNodeName,
+} from "./documentOps";
 import { nextFreeName } from "./naming";
 
 interface TopologyState {
@@ -22,6 +28,8 @@ interface TopologyState {
   loadDocument: (document: Document) => void;
   setSelection: (nodeIds: string[]) => void;
   createNode: (entryId: PaletteKind, position: Position) => void;
+  deleteSelected: () => void;
+  renameNode: (nodeId: string, name: string) => string | null;
   addInterface: (nodeId: string) => void;
   removeInterface: (interfaceId: string) => void;
   beginDrag: () => void;
@@ -51,7 +59,7 @@ const withHistory = (
   future: [],
 });
 
-export const useTopologyStore = create<TopologyState>()((set) => ({
+export const useTopologyStore = create<TopologyState>()((set, get) => ({
   document: EMPTY_DOCUMENT,
   selectedNodeIds: [],
   past: [],
@@ -70,6 +78,19 @@ export const useTopologyStore = create<TopologyState>()((set) => ({
         selectedNodeIds: [created.nodeId],
       };
     }),
+  deleteSelected: () =>
+    set((state) => {
+      if (!state.selectedNodeIds.length) return {};
+      const next = deleteNodes(state.document, new Set(state.selectedNodeIds));
+      return { ...withHistory(state, next), selectedNodeIds: [] };
+    }),
+  renameNode: (nodeId, name) => {
+    const { document } = get();
+    const error = validateNodeName(document, nodeId, name);
+    if (!error)
+      set((state) => withHistory(state, renameNode(document, nodeId, name)));
+    return error;
+  },
   addInterface: (nodeId) =>
     set((state) => {
       const { document } = state;
