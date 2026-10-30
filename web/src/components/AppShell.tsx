@@ -9,6 +9,8 @@ import {
 import { useShellSizes } from "../hooks/useShellSizes";
 import { useLayoutStore } from "../store/layoutStore";
 import BottomDrawer from "./BottomDrawer";
+import Canvas from "./Canvas";
+import NodeInspector from "./NodeInspector";
 import ResizeHandle from "./ResizeHandle";
 import SidePanel from "./SidePanel";
 import Toolbar from "./Toolbar";
@@ -49,12 +51,7 @@ export default function AppShell() {
           onChange={setLeftWidth}
           className="col-start-2 row-start-1"
         />
-        <SidePanel
-          as="main"
-          {...REGION.CANVAS}
-          dotGrid
-          className="col-start-3 row-start-1"
-        />
+        <Canvas className="col-start-3 row-start-1" />
         <ResizeHandle
           axis="x"
           label={RESIZE_LABEL.RIGHT}
@@ -65,11 +62,7 @@ export default function AppShell() {
           onChange={setRightWidth}
           className="col-start-4 row-start-1"
         />
-        <SidePanel
-          as="aside"
-          {...REGION.INSPECTOR}
-          className="col-start-5 row-start-1"
-        />
+        <NodeInspector className="col-start-5 row-start-1" />
         {!drawerCollapsed && (
           <ResizeHandle
             axis="y"
