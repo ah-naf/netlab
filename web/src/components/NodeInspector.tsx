@@ -1,4 +1,5 @@
 import { useShallow } from "zustand/react/shallow";
+import { LINK_SELECTED_HINT, linkLabel } from "../constants/links";
 import { MULTI_SELECT_HINT, multiSelectText } from "../constants/palette";
 import { REGION } from "../constants/layout";
 import { NO_SELECTION_HINT } from "../constants/topology";
@@ -16,6 +17,14 @@ export default function NodeInspector({
       ? s.document.nodes.find((n) => n.id === s.selectedNodeIds[0])
       : undefined,
   );
+  const linkText = useTopologyStore((s) => {
+    const link = s.document.links.find((l) => l.id === s.selectedLinkId);
+    const name = (id: string) =>
+      s.document.interfaces.find((i) => i.id === id)?.name ?? "";
+    return link
+      ? linkLabel(name(link.endpointA), name(link.endpointB), link.mtu)
+      : "";
+  });
   const count = useTopologyStore((s) => s.selectedNodeIds.length);
   const items = useTopologyStore(
     useShallow((s) => (node ? interfacesOf(s.document, node.id) : [])),
@@ -49,6 +58,11 @@ export default function NodeInspector({
             ))}
             <AddInterfaceButton node={node} />
           </>
+        ) : linkText ? (
+          <div className="p-3">
+            <p className="font-semibold">{linkText}</p>
+            <p className="text-xs text-ink-muted">{LINK_SELECTED_HINT}</p>
+          </div>
         ) : count > 1 ? (
           <div className="p-3">
             <p className="font-semibold">{multiSelectText(count)}</p>

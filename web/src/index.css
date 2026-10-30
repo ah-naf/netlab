@@ -88,3 +88,13 @@ body[data-resizing] .shell-grid {
   );
   --xy-node-boxshadow-selected: none;
 }
+
+.react-flow__handle.connectingto {
+  background: var(--led-fault) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--led-fault) 40%, transparent);
+}
+
+.react-flow__handle.connectingto.valid {
+  background: var(--led-ok) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--led-ok) 40%, transparent);
+}

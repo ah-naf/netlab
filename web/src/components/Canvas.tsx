@@ -13,8 +13,10 @@ import { PALETTE_DRAG_TYPE } from "../constants/palette";
 import type { PaletteKind } from "../types/palette";
 import { CANVAS_LABEL } from "../constants/layout";
 import { NODE_TYPE } from "../constants/topology";
+import { useLinkConnect } from "../hooks/useLinkConnect";
 import { toFlowEdges, toFlowNodes } from "../store/toFlow";
 import { useTopologyStore } from "../store/topologyStore";
+import LinkNotice from "./LinkNotice";
 import BridgeNode from "./nodes/BridgeNode";
 import NamespaceNode from "./nodes/NamespaceNode";
 
@@ -39,6 +41,8 @@ function CanvasView({ className }: { className: string }) {
   const selectedNodeIds = useTopologyStore((s) => s.selectedNodeIds);
   const { beginDrag, moveNode, endDrag } = useTopologyStore.getState();
   const { screenToFlowPosition } = useReactFlow();
+  const { notice, clearNotice, isValidConnection, showRejection, connect } =
+    useLinkConnect();
   const allowDrop = (event: React.DragEvent) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "copy";
@@ -72,7 +76,15 @@ function CanvasView({ className }: { className: string }) {
       })),
     [document, selectedNodeIds],
   );
-  const edges = useMemo(() => toFlowEdges(document), [document]);
+  const selectedLinkId = useTopologyStore((s) => s.selectedLinkId);
+  const edges = useMemo(
+    () =>
+      toFlowEdges(document).map((e) => ({
+        ...e,
+        selected: e.id === selectedLinkId,
+      })),
+    [document, selectedLinkId],
+  );
 
   return (
     <main
@@ -82,14 +94,24 @@ function CanvasView({ className }: { className: string }) {
       <div className="flex h-6 shrink-0 items-center border-b border-rule px-3 text-xs font-medium text-ink-muted">
         {CANVAS_LABEL}
       </div>
-      <div className="min-h-0 flex-1" onDragOver={allowDrop} onDrop={dropPart}>
+      <div
+        className="relative min-h-0 flex-1"
+        onDragOver={allowDrop}
+        onDrop={dropPart}
+      >
         <ReactFlow
           nodes={nodes}
           edges={edges}
           nodeTypes={NODE_TYPES}
           onNodesChange={handleChanges}
           connectionMode={ConnectionMode.Loose}
-          nodesConnectable={false}
+          onEdgeClick={(_, edge) =>
+            useTopologyStore.getState().setLinkSelection(edge.id)
+          }
+          onPaneClick={() => useTopologyStore.getState().setLinkSelection(null)}
+          onConnect={connect}
+          isValidConnection={isValidConnection}
+          onConnectEnd={showRejection}
           fitView
           proOptions={{ hideAttribution: true }}
           onNodeDragStart={beginDrag}
@@ -101,6 +123,7 @@ function CanvasView({ className }: { className: string }) {
         >
           <Background />
         </ReactFlow>
+        <LinkNotice message={notice} onDismiss={clearNotice} />
       </div>
     </main>
   );
