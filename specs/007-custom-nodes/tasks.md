@@ -81,8 +81,8 @@ All paths are under `web/` unless stated otherwise.
 
 **Independent Test**: quickstart.md checks 8 and 10.
 
-- [ ] T021 [US3] In `src/store/topologyStore.ts` add `setNodePosition(nodeId, position)` writing `document.layout[nodeId]` only
-- [ ] T022 [US3] In `src/components/Canvas.tsx` add `onNodesChange` that, for each change of type `position` with a `position`, calls `setNodePosition`; ignore other change types (research.md R6). Selection comes from the store, not React Flow state
+- [X] T021 [US3] In `src/store/topologyStore.ts` add `setNodePosition(nodeId, position)` writing `document.layout[nodeId]` only
+- [X] T022 [US3] In `src/components/Canvas.tsx` add `onNodesChange` that, for each change of type `position` with a `position`, calls `setNodePosition`; ignore other change types (research.md R6). Selection comes from the store, not React Flow state
 - [ ] T023 [US3] Manual check: quickstart.md checks 8 and 10; confirm `loadDocument` with a different document replaces all cards and clears selection; build, lint, format pass
 
 ---
@@ -93,7 +93,7 @@ All paths are under `web/` unless stated otherwise.
 
 **Independent Test**: quickstart.md check 9.
 
-- [ ] T024 [US4] In `src/components/nodes/NodeCard.tsx` add the status tag from `STATUS_STYLE[status]`: glyph and label text in the header (non-color cue); border style (dashed, solid, dotted) from `borderClass`; make sure tag text is readable in light and dark. If no component draws glyphs yet, add four tiny inline glyphs in `src/components/nodes/StatusGlyph.tsx`
+- [X] T024 [US4] In `src/components/nodes/NodeCard.tsx` add the status tag from `STATUS_STYLE[status]`: glyph and label text in the header (non-color cue); border style (dashed, solid, dotted) from `borderClass`; make sure tag text is readable in light and dark. If no component draws glyphs yet, add four tiny inline glyphs in `src/components/nodes/StatusGlyph.tsx`
 - [ ] T025 [US4] Manual check: temporarily render `NodeCard` once per status (do not commit the temporary code) and confirm four distinct looks in light and dark; confirm every example node shows Desired
 
 ---

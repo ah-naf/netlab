@@ -3,6 +3,7 @@ import {
   Background,
   ConnectionMode,
   ReactFlow,
+  type NodeChange,
   type NodeTypes,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
@@ -22,6 +23,12 @@ export default function Canvas({ className = "" }: { className?: string }) {
   const document = useTopologyStore((s) => s.document);
   const selectedNodeId = useTopologyStore((s) => s.selectedNodeId);
   const selectNode = useTopologyStore((s) => s.selectNode);
+  const setNodePosition = useTopologyStore((s) => s.setNodePosition);
+  const writePositions = (changes: NodeChange[]) =>
+    changes.forEach((c) => {
+      if (c.type === "position" && c.position)
+        setNodePosition(c.id, c.position);
+    });
   const nodes = useMemo(
     () =>
       toFlowNodes(document).map((n) => ({
@@ -45,6 +52,7 @@ export default function Canvas({ className = "" }: { className?: string }) {
           nodes={nodes}
           edges={edges}
           nodeTypes={NODE_TYPES}
+          onNodesChange={writePositions}
           connectionMode={ConnectionMode.Loose}
           nodesConnectable={false}
           fitView

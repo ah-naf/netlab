@@ -27,6 +27,12 @@ export default function NodeCard({
         <span className="min-w-0 flex-1 truncate" title={title}>
           {title}
         </span>
+        <span
+          className="shrink-0 text-xs font-normal text-ink-muted"
+          title={STATUS_STYLE[status].label}
+        >
+          {STATUS_STYLE[status].glyph} {STATUS_STYLE[status].label}
+        </span>
       </div>
       {children}
     </div>

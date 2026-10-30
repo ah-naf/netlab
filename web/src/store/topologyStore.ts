@@ -5,7 +5,7 @@ import {
   INTERFACE_ID_PREFIX,
 } from "../constants/topology";
 import { CURRENT_VERSION } from "../types/topologyDocument";
-import type { Document, Interface, Node } from "../types/topology";
+import type { Document, Interface, Node, Position } from "../types/topology";
 import { nextInterfaceName } from "./interfaceNaming";
 
 interface TopologyState {
@@ -15,6 +15,7 @@ interface TopologyState {
   selectNode: (nodeId: string | null) => void;
   addInterface: (nodeId: string) => void;
   removeInterface: (interfaceId: string) => void;
+  setNodePosition: (nodeId: string, position: Position) => void;
 }
 
 const EMPTY_DOCUMENT: Document = {
@@ -54,6 +55,13 @@ export const useTopologyStore = create<TopologyState>()((set) => ({
         document: { ...document, interfaces: [...document.interfaces, item] },
       };
     }),
+  setNodePosition: (nodeId, position) =>
+    set(({ document }) => ({
+      document: {
+        ...document,
+        layout: { ...document.layout, [nodeId]: position },
+      },
+    })),
   removeInterface: (interfaceId) =>
     set(({ document }) => ({
       document: {
