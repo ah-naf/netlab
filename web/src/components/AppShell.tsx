@@ -2,7 +2,6 @@ import {
   APP_MIN_WIDTH,
   CANVAS_MIN_HEIGHT,
   RAIL_SIZE,
-  REGION,
   RESIZE_LABEL,
   SIZE_RANGE,
 } from "../constants/layout";
@@ -11,8 +10,8 @@ import { useLayoutStore } from "../store/layoutStore";
 import BottomDrawer from "./BottomDrawer";
 import Canvas from "./Canvas";
 import NodeInspector from "./NodeInspector";
+import Palette from "./palette/Palette";
 import ResizeHandle from "./ResizeHandle";
-import SidePanel from "./SidePanel";
 import Toolbar from "./Toolbar";
 
 /** Tracks alternate panel and rail; rails hold the drag handles. */
@@ -36,11 +35,7 @@ export default function AppShell() {
           gridTemplateRows: `minmax(${CANVAS_MIN_HEIGHT}px, 1fr) ${rail} ${sizes.rowHeight}px`,
         }}
       >
-        <SidePanel
-          as="aside"
-          {...REGION.COMPONENTS}
-          className="col-start-1 row-start-1"
-        />
+        <Palette className="col-start-1 row-start-1" />
         <ResizeHandle
           axis="x"
           label={RESIZE_LABEL.LEFT}

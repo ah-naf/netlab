@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { HISTORY_LIMIT } from "../constants/palette";
+import { HISTORY_LIMIT, PALETTE_ENTRIES } from "../constants/palette";
 import {
   DEFAULT_INTERFACE_MTU,
   DEFAULT_INTERFACE_STATE,
@@ -8,8 +8,9 @@ import {
   INTERFACE_NAME_START,
 } from "../constants/topology";
 import { CURRENT_VERSION } from "../types/topologyDocument";
+import type { PaletteKind } from "../types/palette";
 import type { Document, Interface, Position } from "../types/topology";
-import { removeInterfaces } from "./documentOps";
+import { createNode, removeInterfaces } from "./documentOps";
 import { nextFreeName } from "./naming";
 
 interface TopologyState {
@@ -20,6 +21,7 @@ interface TopologyState {
   dragBase: Document | null;
   loadDocument: (document: Document) => void;
   setSelection: (nodeIds: string[]) => void;
+  createNode: (entryId: PaletteKind, position: Position) => void;
   addInterface: (nodeId: string) => void;
   removeInterface: (interfaceId: string) => void;
   beginDrag: () => void;
@@ -58,6 +60,16 @@ export const useTopologyStore = create<TopologyState>()((set) => ({
   loadDocument: (document) =>
     set({ document, selectedNodeIds: [], past: [], future: [] }),
   setSelection: (selectedNodeIds) => set({ selectedNodeIds }),
+  createNode: (entryId, position) =>
+    set((state) => {
+      const entry = PALETTE_ENTRIES.find((e) => e.id === entryId);
+      if (!entry?.available) return {};
+      const created = createNode(state.document, entry, position);
+      return {
+        ...withHistory(state, created.document),
+        selectedNodeIds: [created.nodeId],
+      };
+    }),
   addInterface: (nodeId) =>
     set((state) => {
       const { document } = state;

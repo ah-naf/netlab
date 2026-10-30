@@ -4,10 +4,13 @@ import {
   ConnectionMode,
   ReactFlow,
   ReactFlowProvider,
+  useReactFlow,
   type NodeChange,
   type NodeTypes,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
+import { PALETTE_DRAG_TYPE } from "../constants/palette";
+import type { PaletteKind } from "../types/palette";
 import { CANVAS_LABEL } from "../constants/layout";
 import { NODE_TYPE } from "../constants/topology";
 import { toFlowEdges, toFlowNodes } from "../store/toFlow";
@@ -35,6 +38,21 @@ function CanvasView({ className }: { className: string }) {
   const document = useTopologyStore((s) => s.document);
   const selectedNodeIds = useTopologyStore((s) => s.selectedNodeIds);
   const { beginDrag, moveNode, endDrag } = useTopologyStore.getState();
+  const { screenToFlowPosition } = useReactFlow();
+  const allowDrop = (event: React.DragEvent) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "copy";
+  };
+  const dropPart = (event: React.DragEvent) => {
+    event.preventDefault();
+    const kind = event.dataTransfer.getData(PALETTE_DRAG_TYPE);
+    if (!kind) return;
+    const position = screenToFlowPosition({
+      x: event.clientX,
+      y: event.clientY,
+    });
+    useTopologyStore.getState().createNode(kind as PaletteKind, position);
+  };
   const handleChanges = (changes: NodeChange[]) => {
     const picked = changes.filter((c) => c.type === "select");
     if (picked.length) {
@@ -64,7 +82,7 @@ function CanvasView({ className }: { className: string }) {
       <div className="flex h-6 shrink-0 items-center border-b border-rule px-3 text-xs font-medium text-ink-muted">
         {CANVAS_LABEL}
       </div>
-      <div className="min-h-0 flex-1">
+      <div className="min-h-0 flex-1" onDragOver={allowDrop} onDrop={dropPart}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
