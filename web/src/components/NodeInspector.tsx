@@ -2,9 +2,10 @@ import { useShallow } from "zustand/react/shallow";
 import { LINK_SELECTED_HINT, linkLabel } from "../constants/links";
 import { MULTI_SELECT_HINT, multiSelectText } from "../constants/palette";
 import { REGION } from "../constants/layout";
-import { NO_SELECTION_HINT } from "../constants/topology";
+import { NODE_TYPE, NO_SELECTION_HINT } from "../constants/topology";
 import { interfacesOf, useTopologyStore } from "../store/topologyStore";
 import AddInterfaceButton from "./nodes/AddInterfaceButton";
+import NamespaceForm from "./inspector/NamespaceForm";
 import { InterfaceLabel, RemoveInterfaceButton } from "./nodes/InterfaceRow";
 
 export default function NodeInspector({
@@ -39,7 +40,9 @@ export default function NodeInspector({
         {REGION.INSPECTOR.label}
       </div>
       <div className="min-h-0 flex-1 overflow-auto text-sm">
-        {node ? (
+        {node?.type === NODE_TYPE.NAMESPACE ? (
+          <NamespaceForm key={node.id} nodeId={node.id} />
+        ) : node ? (
           <>
             <div className="px-3 py-2">
               <div className="truncate font-semibold" title={node.name}>
