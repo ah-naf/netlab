@@ -1,4 +1,8 @@
-import { ACTION_LABEL, FIELD_LABEL } from "../../constants/inspector";
+import {
+  ACTION_LABEL,
+  FIELD_LABEL,
+  PLACEHOLDER,
+} from "../../constants/inspector";
 import { validateAddress } from "../../store/fieldRules";
 import { addAddress, removeAddress } from "../../store/namespaceOps";
 import { useTopologyStore } from "../../store/topologyStore";
@@ -29,7 +33,7 @@ export default function AddressList({ interfaceId }: { interfaceId: string }) {
         fieldKey={`address-${interfaceId}`}
         label={FIELD_LABEL.ADDRESS}
         value=""
-        placeholder="10.0.0.5/24"
+        placeholder={PLACEHOLDER.ADDRESS}
         rule={(text) =>
           text ? validateAddress(document, interfaceId, text) : null
         }

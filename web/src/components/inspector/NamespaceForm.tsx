@@ -3,6 +3,9 @@ import { FIELD_LABEL, SECTION_TITLE } from "../../constants/inspector";
 import { renameNode, validateNodeName } from "../../store/documentOps";
 import { interfacesOf, useTopologyStore } from "../../store/topologyStore";
 import AddInterfaceButton from "../nodes/AddInterfaceButton";
+import GatewayField from "./GatewayField";
+import RoleField from "./RoleField";
+import RoutesTable from "./RoutesTable";
 import ErrorBanner from "./ErrorBanner";
 import InterfaceEditor from "./InterfaceEditor";
 import ValidatedField from "./ValidatedField";
@@ -27,6 +30,9 @@ export default function NamespaceForm({ nodeId }: { nodeId: string }) {
           rule={(text) => validateNodeName(document, nodeId, text)}
           onCommit={(name) => edit((d) => renameNode(d, nodeId, name))}
         />
+        <div className="mt-1.5">
+          <RoleField nodeId={nodeId} />
+        </div>
       </div>
       <h3 className="border-t border-rule px-3 pt-2 text-xs font-medium text-ink-muted">
         {SECTION_TITLE.INTERFACES}
@@ -35,6 +41,13 @@ export default function NamespaceForm({ nodeId }: { nodeId: string }) {
         <InterfaceEditor key={id} interfaceId={id} />
       ))}
       <AddInterfaceButton node={node} />
+      <div className="border-t border-rule px-3 py-2">
+        <GatewayField nodeId={nodeId} />
+      </div>
+      <h3 className="border-t border-rule px-3 pt-2 text-xs font-medium text-ink-muted">
+        {SECTION_TITLE.ROUTES}
+      </h3>
+      <RoutesTable nodeId={nodeId} />
     </div>
   );
 }

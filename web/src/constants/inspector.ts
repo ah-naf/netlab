@@ -46,6 +46,12 @@ export const SECTION_TITLE = {
   ROUTES: "Static routes",
 } as const;
 
+export const NONE_CHOICE_LABEL = "None";
+export const PLACEHOLDER = {
+  ADDRESS: "10.0.0.5/24",
+  GATEWAY: "10.0.0.1",
+} as const;
+
 export const NO_ROUTES_TEXT = "No static routes";
 export const NO_ROLE_TEXT = "Namespace";
 

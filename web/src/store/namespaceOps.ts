@@ -75,20 +75,18 @@ export const removeAddress = (
     addresses: i.addresses?.filter((a) => a.cidr !== cidr),
   }));
 
-/** The default route of the gateway's address family; an empty gateway removes it. */
+/** Replaces the node's default route; an empty gateway removes it. */
 export function setDefaultGateway(
   document: Document,
   nodeId: string,
   gateway: string,
 ): Document {
   return mapNode(document, nodeId, (node) => {
-    const routes = node.routes ?? [];
-    if (!gateway)
-      return { ...node, routes: routes.filter((r) => !isDefaultRoute(r)) };
+    const rest = (node.routes ?? []).filter((r) => !isDefaultRoute(r));
+    if (!gateway) return { ...node, routes: rest };
     const destination = isIpv6(gateway)
       ? DEFAULT_DESTINATION.IPV6
       : DEFAULT_DESTINATION.IPV4;
-    const rest = routes.filter((r) => r.destination !== destination);
     return { ...node, routes: [...rest, { destination, gateway }] };
   });
 }
