@@ -10,6 +10,7 @@ import { useShellSizes } from "../hooks/useShellSizes";
 import { useLayoutStore } from "../store/layoutStore";
 import BottomDrawer from "./BottomDrawer";
 import Canvas from "./Canvas";
+import NodeInspector from "./NodeInspector";
 import ResizeHandle from "./ResizeHandle";
 import SidePanel from "./SidePanel";
 import Toolbar from "./Toolbar";
@@ -61,11 +62,7 @@ export default function AppShell() {
           onChange={setRightWidth}
           className="col-start-4 row-start-1"
         />
-        <SidePanel
-          as="aside"
-          {...REGION.INSPECTOR}
-          className="col-start-5 row-start-1"
-        />
+        <NodeInspector className="col-start-5 row-start-1" />
         {!drawerCollapsed && (
           <ResizeHandle
             axis="y"

@@ -20,8 +20,16 @@ const NODE_TYPES: NodeTypes = {
 
 export default function Canvas({ className = "" }: { className?: string }) {
   const document = useTopologyStore((s) => s.document);
+  const selectedNodeId = useTopologyStore((s) => s.selectedNodeId);
   const selectNode = useTopologyStore((s) => s.selectNode);
-  const nodes = useMemo(() => toFlowNodes(document), [document]);
+  const nodes = useMemo(
+    () =>
+      toFlowNodes(document).map((n) => ({
+        ...n,
+        selected: n.id === selectedNodeId,
+      })),
+    [document, selectedNodeId],
+  );
   const edges = useMemo(() => toFlowEdges(document), [document]);
 
   return (

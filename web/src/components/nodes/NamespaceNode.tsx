@@ -2,6 +2,8 @@ import type { NodeProps } from "@xyflow/react";
 import { useShallow } from "zustand/react/shallow";
 import type { FlowNodeData } from "../../types/flow";
 import { interfacesOf, useTopologyStore } from "../../store/topologyStore";
+import { useRefreshHandles } from "../../hooks/useRefreshHandles";
+import AddInterfaceButton from "./AddInterfaceButton";
 import InterfaceRow from "./InterfaceRow";
 import NodeCard from "./NodeCard";
 import RoleIcon from "./RoleIcon";
@@ -17,6 +19,7 @@ export default function NamespaceNode({
   const interfaceIds = useTopologyStore(
     useShallow((s) => interfacesOf(s.document, id).map((i) => i.id)),
   );
+  useRefreshHandles(id, interfaceIds);
   if (!node) return null;
 
   return (
@@ -33,6 +36,7 @@ export default function NamespaceNode({
           interfaceId={interfaceId}
         />
       ))}
+      <AddInterfaceButton node={node} />
     </NodeCard>
   );
 }

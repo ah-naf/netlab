@@ -2,6 +2,8 @@ import type { NodeProps } from "@xyflow/react";
 import { useShallow } from "zustand/react/shallow";
 import type { FlowNodeData } from "../../types/flow";
 import { interfacesOf, useTopologyStore } from "../../store/topologyStore";
+import { useRefreshHandles } from "../../hooks/useRefreshHandles";
+import AddInterfaceButton from "./AddInterfaceButton";
 import InterfaceRow from "./InterfaceRow";
 import NodeCard from "./NodeCard";
 
@@ -16,6 +18,7 @@ export default function BridgeNode({
   const portIds = useTopologyStore(
     useShallow((s) => interfacesOf(s.document, id).map((i) => i.id)),
   );
+  useRefreshHandles(id, portIds);
   if (!node) return null;
 
   return (
@@ -23,6 +26,7 @@ export default function BridgeNode({
       {portIds.map((portId) => (
         <InterfaceRow key={portId} nodeName={node.name} interfaceId={portId} />
       ))}
+      <AddInterfaceButton node={node} />
     </NodeCard>
   );
 }
