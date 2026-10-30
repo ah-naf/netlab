@@ -1,8 +1,19 @@
-import { NAME_ERROR, NAME_RULE, NODE_ID_PREFIX } from "../constants/palette";
-import { NODE_TYPE } from "../constants/topology";
+import {
+  DUPLICATE_OFFSET,
+  LINK_ID_PREFIX,
+  NAME_ERROR,
+  NAME_RULE,
+  NODE_ID_PREFIX,
+} from "../constants/palette";
+import {
+  DEFAULT_POSITION,
+  INTERFACE_ID_PREFIX,
+  NODE_TYPE,
+} from "../constants/topology";
 import type { PaletteEntry } from "../types/palette";
 import type { Document, Node, Position } from "../types/topology";
 import { nextFreeName } from "./naming";
+import { nodeKindOf } from "./nodeKind";
 
 const withoutRefs = (node: Node, ids: Set<string>): Node => ({
   ...node,
@@ -93,3 +104,77 @@ export const renameNode = (
     n.id === nodeId ? { ...n, name: name.trim() } : n,
   ),
 });
+
+const newId = (prefix: string) => `${prefix}${crypto.randomUUID()}`;
+
+/** Copies nodes with their interfaces; links are kept only between copied nodes. */
+export function duplicateNodes(
+  document: Document,
+  ids: Set<string>,
+): { document: Document; nodeIds: string[] } {
+  const originals = document.nodes.filter((n) => ids.has(n.id));
+  const nodeMap = new Map(originals.map((n) => [n.id, newId(NODE_ID_PREFIX)]));
+  const interfaceMap = new Map<string, string>();
+  const names = new Set(document.nodes.map((n) => n.name));
+  const layout = { ...document.layout };
+
+  const interfaces = document.interfaces
+    .filter((i) => nodeMap.has(i.nodeId))
+    .map((i) => {
+      interfaceMap.set(i.id, newId(INTERFACE_ID_PREFIX));
+      return {
+        ...i,
+        id: interfaceMap.get(i.id)!,
+        nodeId: nodeMap.get(i.nodeId)!,
+        addresses: i.addresses?.map((a) => ({ ...a })),
+      };
+    });
+
+  const nodes = originals.map((n) => {
+    const rule = NAME_RULE[nodeKindOf(n)]!;
+    const name = nextFreeName(rule.prefix, rule.start, names);
+    names.add(name);
+    const id = nodeMap.get(n.id)!;
+    const origin = document.layout?.[n.id] ?? DEFAULT_POSITION;
+    layout[id] = {
+      x: origin.x + DUPLICATE_OFFSET.x,
+      y: origin.y + DUPLICATE_OFFSET.y,
+    };
+    const mapRef = <T extends { interfaceId?: string }>(refs?: T[]) =>
+      refs
+        ?.filter((r) => !r.interfaceId || interfaceMap.has(r.interfaceId))
+        .map((r) => ({
+          ...r,
+          interfaceId: r.interfaceId && interfaceMap.get(r.interfaceId),
+        }));
+    return {
+      ...n,
+      id,
+      name,
+      routes: mapRef(n.routes),
+      natRules: mapRef(n.natRules),
+    } as Node;
+  });
+
+  const links = document.links
+    .filter(
+      (l) => interfaceMap.has(l.endpointA) && interfaceMap.has(l.endpointB),
+    )
+    .map((l) => ({
+      ...l,
+      id: newId(LINK_ID_PREFIX),
+      endpointA: interfaceMap.get(l.endpointA)!,
+      endpointB: interfaceMap.get(l.endpointB)!,
+    }));
+
+  return {
+    document: {
+      ...document,
+      nodes: [...document.nodes, ...nodes],
+      interfaces: [...document.interfaces, ...interfaces],
+      links: [...document.links, ...links],
+      layout,
+    },
+    nodeIds: nodes.map((n) => n.id),
+  };
+}

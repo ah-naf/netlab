@@ -1,6 +1,6 @@
 import type { NodeProps } from "@xyflow/react";
 import { useShallow } from "zustand/react/shallow";
-import { iconKindOf } from "../icons/iconKind";
+import { nodeKindOf } from "../../store/nodeKind";
 import NodeIcon from "../icons/NodeIcon";
 import type { FlowNodeData } from "../../types/flow";
 import { interfacesOf, useTopologyStore } from "../../store/topologyStore";
@@ -27,7 +27,7 @@ export default function BridgeNode({
     <NodeCard
       nodeId={id}
       title={node.name}
-      icon={<NodeIcon kind={iconKindOf(node)} />}
+      icon={<NodeIcon kind={nodeKindOf(node)} />}
       status={data.status}
       selected={selected}
     >

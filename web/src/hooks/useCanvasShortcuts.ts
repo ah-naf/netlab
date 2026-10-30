@@ -17,8 +17,13 @@ export function useCanvasShortcuts() {
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (isEditableTarget(event.target)) return;
-      if (event.key === KEY.DELETE)
-        useTopologyStore.getState().deleteSelected();
+      const store = useTopologyStore.getState();
+      if (event.key === KEY.DELETE) store.deleteSelected();
+      const withModifier = event.ctrlKey || event.metaKey;
+      if (withModifier && event.key.toLowerCase() === KEY.DUPLICATE) {
+        event.preventDefault();
+        store.duplicateSelected();
+      }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);

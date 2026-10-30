@@ -13,6 +13,7 @@ import type { Document, Interface, Position } from "../types/topology";
 import {
   createNode,
   deleteNodes,
+  duplicateNodes,
   removeInterfaces,
   renameNode,
   validateNodeName,
@@ -29,6 +30,7 @@ interface TopologyState {
   setSelection: (nodeIds: string[]) => void;
   createNode: (entryId: PaletteKind, position: Position) => void;
   deleteSelected: () => void;
+  duplicateSelected: () => void;
   renameNode: (nodeId: string, name: string) => string | null;
   addInterface: (nodeId: string) => void;
   removeInterface: (interfaceId: string) => void;
@@ -83,6 +85,18 @@ export const useTopologyStore = create<TopologyState>()((set, get) => ({
       if (!state.selectedNodeIds.length) return {};
       const next = deleteNodes(state.document, new Set(state.selectedNodeIds));
       return { ...withHistory(state, next), selectedNodeIds: [] };
+    }),
+  duplicateSelected: () =>
+    set((state) => {
+      if (!state.selectedNodeIds.length) return {};
+      const copied = duplicateNodes(
+        state.document,
+        new Set(state.selectedNodeIds),
+      );
+      return {
+        ...withHistory(state, copied.document),
+        selectedNodeIds: copied.nodeIds,
+      };
     }),
   renameNode: (nodeId, name) => {
     const { document } = get();
