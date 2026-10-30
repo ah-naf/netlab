@@ -78,10 +78,10 @@ All paths are under `web/` unless stated otherwise.
 
 **Independent Test**: quickstart.md "Other checks": label text, click selects, Delete removes link and bridge port while the namespace interface and address stay.
 
-- [ ] T016 [P] [US3] Edit `src/store/toFlow.ts` `toFlowEdges`: set `label` to `linkLabel(nameA, nameB, link.mtu)` using the interface names found by endpoint id; skip the label when an interface is missing (the edge is already skipped then)
-- [ ] T017 [US3] Edit `src/components/Canvas.tsx`: derive each edge's `selected` from `selectedLinkId`; add `onEdgeClick` that calls `setLinkSelection(edge.id)`; clicking empty canvas or a node clears the link selection through the existing selection handlers (`setSelection` already clears it). Style label text and background with existing tokens (small `labelStyle`, `labelBgStyle` constants in `src/constants/links.ts`)
-- [ ] T018 [US3] Edit `src/hooks/useCanvasShortcuts.ts` only if needed: `store.deleteSelected()` already handles a selected link after T006; confirm Delete removes a selected link, and that Delete still ignores typing in inputs
-- [ ] T019 [US3] Edit `src/components/NodeInspector.tsx`: when `selectedLinkId` is set, show a read-only line with the link label (the full inspector arrives with NL-018, add a short comment pointing to it); nothing selected keeps the existing hint
+- [X] T016 [P] [US3] Edit `src/store/toFlow.ts` `toFlowEdges`: set `label` to `linkLabel(nameA, nameB, link.mtu)` using the interface names found by endpoint id; skip the label when an interface is missing (the edge is already skipped then)
+- [X] T017 [US3] Edit `src/components/Canvas.tsx`: derive each edge's `selected` from `selectedLinkId`; add `onEdgeClick` that calls `setLinkSelection(edge.id)`; clicking empty canvas or a node clears the link selection through the existing selection handlers (`setSelection` already clears it). Style label text and background with existing tokens (small `labelStyle`, `labelBgStyle` constants in `src/constants/links.ts`)
+- [X] T018 [US3] Edit `src/hooks/useCanvasShortcuts.ts` only if needed: `store.deleteSelected()` already handles a selected link after T006; confirm Delete removes a selected link, and that Delete still ignores typing in inputs
+- [X] T019 [US3] Edit `src/components/NodeInspector.tsx`: when `selectedLinkId` is set, show a read-only line with the link label (the full inspector arrives with NL-018, add a short comment pointing to it); nothing selected keeps the existing hint
 - [ ] T020 [US3] Manual check from quickstart.md "Other checks": label, click-select, Delete, undo of delete, rename an interface and see the label update; `npm run build && npm run lint && npm run format:check` pass
 
 **Checkpoint**: All three stories work together.
@@ -90,7 +90,7 @@ All paths are under `web/` unless stated otherwise.
 
 ## Phase 6: Polish
 
-- [ ] T021 [P] Create `docs/links.md`: one short page stating the allowed pairs (namespace-namespace, namespace-bridge, bridge-bridge), that an interface is in at most one link, that bridge-to-bridge is a veth whose two ends are bridge ports, that the "New port" handle creates a bridge port, and that deleting a link removes bridge ports but keeps namespace interfaces. Plain English, normal prose
+- [X] T021 [P] Create `docs/links.md`: one short page stating the allowed pairs (namespace-namespace, namespace-bridge, bridge-bridge), that an interface is in at most one link, that bridge-to-bridge is a veth whose two ends are bridge ports, that the "New port" handle creates a bridge port, and that deleting a link removes bridge ports but keeps namespace interfaces. Plain English, normal prose
 - [ ] T022 Run the whole of quickstart.md once in a fresh page load; confirm no console errors; confirm the document stays valid (undo, redo, delete node with links) and `npm run build && npm run lint && npm run format:check` pass
 
 ---
@@ -115,3 +115,10 @@ All paths are under `web/` unless stated otherwise.
 - **MVP**: Phase 1, Phase 2, US1. You can already build the example lab.
 - Then US2 (feedback), then US3 (labels, select, delete), then polish.
 - Stop and run the manual check after each story; keep the app runnable after each ticket.
+
+## Phase 7: Convergence
+
+- [X] T023 CRITICAL: Shrink `CanvasView` in `web/src/components/Canvas.tsx` to at most 100 lines by moving the connection handlers (`isValidConnection`, `showRejection`, `connect`, notice state) into a hook such as `web/src/hooks/useLinkConnect.ts` per Constitution III (contradicts)
+- [X] T024 CRITICAL: Replace the inline `"veth"` literal in `createLink` in `web/src/store/documentOps.ts` with a named constant (for example `LINK_KIND.VETH` in `web/src/constants/links.ts`) per Constitution IV (contradicts)
+- [X] T025 Make `deleteNodes` and `removeInterface` also delete bridge ports left without a link on the far side of removed links, sharing one helper with `removeLink` in `web/src/store/documentOps.ts`, per spec Edge Cases "Deleting a node removes its links and the bridge ports on the far side" (missing)
+- [X] T026 Set both endpoint interfaces' MTU to the new link's MTU in `createLink` in `web/src/store/documentOps.ts` per US1/AC6 "shared by both of its interfaces" (partial)

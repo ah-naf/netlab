@@ -1,13 +1,10 @@
-import { useCallback, useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   Background,
   ConnectionMode,
   ReactFlow,
   ReactFlowProvider,
   useReactFlow,
-  type Connection,
-  type Edge,
-  type FinalConnectionState,
   type NodeChange,
   type NodeTypes,
 } from "@xyflow/react";
@@ -16,8 +13,7 @@ import { PALETTE_DRAG_TYPE } from "../constants/palette";
 import type { PaletteKind } from "../types/palette";
 import { CANVAS_LABEL } from "../constants/layout";
 import { NODE_TYPE } from "../constants/topology";
-import { endOf, endsOf } from "../store/linkEnds";
-import { checkConnection } from "../store/linkRules";
+import { useLinkConnect } from "../hooks/useLinkConnect";
 import { toFlowEdges, toFlowNodes } from "../store/toFlow";
 import { useTopologyStore } from "../store/topologyStore";
 import LinkNotice from "./LinkNotice";
@@ -45,25 +41,8 @@ function CanvasView({ className }: { className: string }) {
   const selectedNodeIds = useTopologyStore((s) => s.selectedNodeIds);
   const { beginDrag, moveNode, endDrag } = useTopologyStore.getState();
   const { screenToFlowPosition } = useReactFlow();
-  const [notice, setNotice] = useState("");
-  const clearNotice = useCallback(() => setNotice(""), []);
-  const isValidConnection = (c: Connection | Edge) =>
-    checkConnection(useTopologyStore.getState().document, ...endsOf(c)).ok;
-  const showRejection = (_: unknown, state: FinalConnectionState) => {
-    const { fromNode, fromHandle, toNode, toHandle } = state;
-    if (state.isValid || !fromNode || !fromHandle || !toNode || !toHandle)
-      return;
-    const check = checkConnection(
-      useTopologyStore.getState().document,
-      endOf(fromNode.id, fromHandle.id),
-      endOf(toNode.id, toHandle.id),
-    );
-    if (!check.ok) setNotice(check.reason);
-  };
-  const connect = (c: Connection) => {
-    setNotice("");
-    useTopologyStore.getState().connect(...endsOf(c));
-  };
+  const { notice, clearNotice, isValidConnection, showRejection, connect } =
+    useLinkConnect();
   const allowDrop = (event: React.DragEvent) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "copy";
@@ -97,7 +76,15 @@ function CanvasView({ className }: { className: string }) {
       })),
     [document, selectedNodeIds],
   );
-  const edges = useMemo(() => toFlowEdges(document), [document]);
+  const selectedLinkId = useTopologyStore((s) => s.selectedLinkId);
+  const edges = useMemo(
+    () =>
+      toFlowEdges(document).map((e) => ({
+        ...e,
+        selected: e.id === selectedLinkId,
+      })),
+    [document, selectedLinkId],
+  );
 
   return (
     <main
@@ -118,6 +105,10 @@ function CanvasView({ className }: { className: string }) {
           nodeTypes={NODE_TYPES}
           onNodesChange={handleChanges}
           connectionMode={ConnectionMode.Loose}
+          onEdgeClick={(_, edge) =>
+            useTopologyStore.getState().setLinkSelection(edge.id)
+          }
+          onPaneClick={() => useTopologyStore.getState().setLinkSelection(null)}
           onConnect={connect}
           isValidConnection={isValidConnection}
           onConnectEnd={showRejection}

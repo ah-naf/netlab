@@ -1,3 +1,4 @@
+export const LINK_KIND = { VETH: "veth" } as const;
 export const NEW_PORT_HANDLE_ID = "new-port";
 export const NEW_PORT_LABEL = "New port";
 export const LINK_NOTICE_MS = 4000;
@@ -10,3 +11,8 @@ export const LINK_REASON = {
 
 export const linkLabel = (nameA: string, nameB: string, mtu: number) =>
   `${nameA} ↔ ${nameB} · MTU ${mtu}`;
+
+export const LINK_LABEL_STYLE = { fill: "var(--ink)", fontSize: 11 };
+export const LINK_LABEL_BG = { fill: "var(--panel)" };
+export const LINK_SELECTED_HINT =
+  "Link properties arrive with the link inspector.";
