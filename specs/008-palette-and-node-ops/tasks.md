@@ -39,7 +39,7 @@ All paths are under `web/` unless stated otherwise.
 - [X] T005 Refactor `src/store/topologyStore.ts` per data-model.md: replace `selectedNodeId` and `selectNode` with `selectedNodeIds: string[]` and `setSelection(ids)`; add `past: Document[]` and `future: Document[]`; add an internal `commit(next: Document)` that pushes the current document onto `past` (drop the oldest beyond `HISTORY_LIMIT`), clears `future`, and sets `document`; `loadDocument` clears selection, `past`, and `future`; route `addInterface` and `removeInterface` through `commit`; replace `setNodePosition` with drag batching: `beginDrag()` remembers the current document, `moveNode(id, position)` writes `layout[id]` without history, `endDrag()` pushes the remembered document onto `past` (and clears `future`) only if the document changed since `beginDrag`. History stays in memory and selection is never in history
 - [X] T006 [P] Create `src/components/icons/NodeIcon.tsx` replacing `src/components/nodes/RoleIcon.tsx`: one component taking `kind: PaletteKind` and `size`, six drawn-object line icons on a 24 px grid (1.5 px stroke, round caps, `currentColor`) exactly as described in design-direction.md "Icons" (namespace: dashed rounded square with a small solid node and two stubs inside; host: monitor on a stand with a small keyboard; veth: two plug ends facing each other joined by a sagging cable; bridge: horizontal bar with four ports dropping from it; router: flat box with four arrows out of its corners; nat: two boxes side by side with a wall between and a two-way arrow crossing it); `aria-hidden`. Keep each icon to at most six strokes so it reads at 16 px. Add a helper `iconKindOf(node)` mapping a node to a kind (bridge → `bridge`; namespace with role → that role's kind; namespace with no role → `namespace`). Update `NamespaceNode.tsx` to use `NodeIcon`, add the bridge icon to the header in `BridgeNode.tsx`, then delete `RoleIcon.tsx`
 - [X] T007 Edit `src/components/Canvas.tsx`: split into an outer `Canvas` wrapped in `ReactFlowProvider` and an inner component (needed for `useReactFlow`); derive each node's `selected` from `selectedNodeIds`; in `onNodesChange` handle `select` changes by calling `setSelection` with the new full set and `position` changes by calling `moveNode`; add `onNodeDragStart={beginDrag}` and `onNodeDragStop={endDrag}`; set `selectionOnDrag`, `panOnDrag={[1, 2]}`, `multiSelectionKeyCode="Shift"`, `deleteKeyCode={null}`; remove the old `onNodeClick` and `onPaneClick` selection calls. Update `src/components/NodeInspector.tsx` to read `selectedNodeIds`: exactly one id shows the node view as today; nothing keeps the hint
-- [ ] T008 Manual check: app still runs; click selects a node and shows it in the inspector; a drag moves a node and updates links; add and remove interface still work; `npm run build && npm run lint && npm run format:check` pass
+- [X] T008 Manual check: app still runs; click selects a node and shows it in the inspector; a drag moves a node and updates links; add and remove interface still work; `npm run build && npm run lint && npm run format:check` pass
 
 **Checkpoint**: Same behavior as before, on the new store, icons, and canvas.
 
@@ -56,7 +56,7 @@ All paths are under `web/` unless stated otherwise.
 - [X] T011 [P] [US1] Create `src/components/palette/PaletteEntry.tsx`: a flat row (no card, no shadow) per design-direction.md: 40 px inset icon tile (`NodeIcon` at 28 px, `border-rule`, 4 px radius), name 14 px weight 600, description 12 px `text-ink-muted` clamped to 2 lines; `draggable={entry.available}`; `onDragStart` sets `dataTransfer` type `PALETTE_DRAG_TYPE` to `entry.id` and `effectAllowed = "copy"`; hover takes `text-signal` and `border-signal`; cursor `grab`; focusable with the app's focus ring; accessible name is the label plus description
 - [X] T012 [US1] Create `src/components/palette/Palette.tsx`: panel frame with the "Components" header strip (same classes as `SidePanel`/`Canvas`, `aria-label={REGION.COMPONENTS.label}`, `<aside>`), then the list of `PaletteEntry` rows separated by `border-rule` lines, `role="list"`. Edit `src/components/AppShell.tsx` to render `Palette` in the left column instead of the Components `SidePanel` placeholder (keep `col-start-1 row-start-1`)
 - [X] T013 [US1] In `src/components/Canvas.tsx` add `onDragOver` (preventDefault, `dropEffect = "copy"`) and `onDrop` on the `ReactFlow` wrapper: read `PALETTE_DRAG_TYPE` from `dataTransfer`, convert `clientX`/`clientY` with `screenToFlowPosition`, call the store `createNode`. A drop with no data does nothing; a release outside the canvas has no handler so nothing is created
-- [ ] T014 [US1] Manual check: quickstart.md checks 1 to 4 (palette content and icons readable without labels; drag each of Namespace, Host, Router, NAT gateway, Linux bridge; release over the toolbar creates nothing; 30 nodes in a row all have unique names and ids); build, lint, format pass
+- [X] T014 [US1] Manual check: quickstart.md checks 1 to 4 (palette content and icons readable without labels; drag each of Namespace, Host, Router, NAT gateway, Linux bridge; release over the toolbar creates nothing; 30 nodes in a row all have unique names and ids); build, lint, format pass
 
 **Checkpoint**: MVP. Users can build a lab by dragging parts.
 
@@ -73,7 +73,7 @@ All paths are under `web/` unless stated otherwise.
 - [X] T017 [US3] Create `src/hooks/useCanvasShortcuts.ts`: one `keydown` listener on `window`, registered in `src/components/AppShell.tsx` (or `Canvas.tsx`); a helper `isEditableTarget(event)` returns true for input, textarea, select, or `contentEditable` targets and every shortcut returns early when true (FR-016). For now handles `KEY.DELETE` calling `deleteSelected`; later stories add more keys in this same hook
 - [X] T018 [P] [US3] Create `src/components/nodes/NodeTitle.tsx`: shows the name (truncated, `title` with the full name); double-click switches to an input (`nodrag nopan`, accessible name `NODE_NAME_LABEL`, auto-focused with the text selected, current name as value); Enter calls the store `renameNode` — if it returns an error, show the text under the field in `text-led-fault`, keep focus, keep the old name; no error closes the field; Escape or blur cancels and restores the old name; keydown events inside the field call `stopPropagation`. Use it in `src/components/nodes/NodeCard.tsx` in place of the plain title text (add a `nodeId` prop and pass it from `NamespaceNode.tsx` and `BridgeNode.tsx`)
 - [X] T019 [US3] In `src/components/NodeInspector.tsx` handle several selected nodes: show `MULTI_SELECT_TEXT(count)` and `MULTI_SELECT_HINT` in the panel body
-- [ ] T020 [US3] Manual check: quickstart.md checks 7 to 9 (click, shift-click, box select; Delete removes nodes, interfaces, and links with no dangling link; Delete or Backspace while typing in the rename field edits text only; rename Enter, Escape, empty name, duplicate name); build, lint, format pass
+- [X] T020 [US3] Manual check: quickstart.md checks 7 to 9 (click, shift-click, box select; Delete removes nodes, interfaces, and links with no dangling link; Delete or Backspace while typing in the rename field edits text only; rename Enter, Escape, empty name, duplicate name); build, lint, format pass
 
 ---
 
@@ -85,7 +85,7 @@ All paths are under `web/` unless stated otherwise.
 
 - [X] T021 [P] [US2] Create `src/components/palette/filterEntries.ts` exporting `filterEntries(entries, query)`: trims the query, returns all entries when empty, otherwise entries whose label or description contains the query, ignoring letter case
 - [X] T022 [US2] In `src/components/palette/Palette.tsx` add the search input above the list: `type="search"`, label and placeholder `SEARCH_LABEL`, magnifier glyph inside, Escape clears; keep the query in local state; render `filterEntries(PALETTE_ENTRIES, query)`; when the result is empty show `NO_MATCH_TEXT` in `text-ink-muted`; the input updates the list on every keystroke
-- [ ] T023 [US2] Manual check: quickstart.md check 5 ("bridge", "NAT", "zzz", clear, uppercase); build, lint, format pass
+- [X] T023 [US2] Manual check: quickstart.md check 5 ("bridge", "NAT", "zzz", clear, uppercase); build, lint, format pass
 
 ---
 
@@ -97,7 +97,7 @@ All paths are under `web/` unless stated otherwise.
 
 - [X] T024 [US4] In `src/store/documentOps.ts` add `duplicateNodes(document, ids: Set<string>)` returning the new document and the new node ids: build maps old node id → new id and old interface id → new id (`NODE_ID_PREFIX` / `INTERFACE_ID_PREFIX` / `LINK_ID_PREFIX` plus `crypto.randomUUID()`); each copy gets a new unique name using `nextFreeName` with the prefix and start from `NAME_RULE` for its kind (a namespace copy uses its role's rule), counting names already used including earlier copies in this same call; position = original layout position plus `DUPLICATE_OFFSET`; copy each node's interfaces with the same `name`, `mtu`, `state`, and `addresses` and new ids; copy `routes` and `natRules` with interface ids mapped to the copies and drop entries whose interface was not copied; copy a link only when both `endpointA` and `endpointB` map to copied interfaces; never create a link from a copy to an original
 - [X] T025 [US4] In `src/store/topologyStore.ts` add `duplicateSelected()`: one `commit` of `duplicateNodes`, then select the copies; no-op when nothing is selected. In `src/hooks/useCanvasShortcuts.ts` handle Ctrl+D (also Meta+D on macOS) calling it, with `preventDefault` so the browser does not bookmark the page
-- [ ] T026 [US4] Manual check: quickstart.md check 10 (copy ns1 and br0 together: copies are linked to each other and not to ns2; copy ns1 alone: no links; interface names and addresses copied; nothing selected: nothing happens; two duplicates in a row get different names); build, lint, format pass
+- [X] T026 [US4] Manual check: quickstart.md check 10 (copy ns1 and br0 together: copies are linked to each other and not to ns2; copy ns1 alone: no links; interface names and addresses copied; nothing selected: nothing happens; two duplicates in a row get different names); build, lint, format pass
 
 ---
 
@@ -109,7 +109,7 @@ All paths are under `web/` unless stated otherwise.
 
 - [X] T027 [US5] In `src/store/topologyStore.ts` add `undo()` (pop the last document from `past`, push the current one onto `future`, set `document`) and `redo()` (the reverse); both are no-ops when the list is empty; neither changes selection except to drop ids whose nodes no longer exist in the restored document. "A new change after an undo discards the redo steps" is already done by `commit`
 - [X] T028 [US5] In `src/hooks/useCanvasShortcuts.ts` handle Ctrl+Z (undo), Ctrl+Shift+Z and Ctrl+Y (redo), with Meta variants for macOS, and `preventDefault` when the lab handles it; the editable-target check keeps the field's own undo while typing
-- [ ] T029 [US5] Manual check: quickstart.md check 11 (delete then undo restores nodes, interfaces, links, and ids; redo removes again; a drag undoes in one step; a new change after undo kills redo; undo while typing in the search box uses the field's undo; nothing happens with empty history; after `loadDocument` history is empty); build, lint, format pass
+- [X] T029 [US5] Manual check: quickstart.md check 11 (delete then undo restores nodes, interfaces, links, and ids; redo removes again; a drag undoes in one step; a new change after undo kills redo; undo while typing in the search box uses the field's undo; nothing happens with empty history; after `loadDocument` history is empty); build, lint, format pass
 
 ---
 
@@ -119,17 +119,17 @@ All paths are under `web/` unless stated otherwise.
 
 **Independent Test**: quickstart.md check 6.
 
-- [ ] T030 [US6] In `src/components/palette/PaletteEntry.tsx` style the unavailable state from design-direction.md: `aria-disabled`, reduced-contrast text, a dark `bg-led-off` dot beside the name, `cursor-not-allowed`, no hover color change, `title={NOT_AVAILABLE_TEXT}` (from `src/constants/layout.ts`), and `draggable={false}`. In the store `createNode` keep the guard that ignores unavailable entries
-- [ ] T031 [US6] Manual check: quickstart.md check 6 (dim entry with a dark dot, hover shows "Not available yet", dragging it creates nothing); build, lint, format pass
+- [X] T030 [US6] In `src/components/palette/PaletteEntry.tsx` style the unavailable state from design-direction.md: `aria-disabled`, reduced-contrast text, a dark `bg-led-off` dot beside the name, `cursor-not-allowed`, no hover color change, `title={NOT_AVAILABLE_TEXT}` (from `src/constants/layout.ts`), and `draggable={false}`. In the store `createNode` keep the guard that ignores unavailable entries
+- [X] T031 [US6] Manual check: quickstart.md check 6 (dim entry with a dark dot, hover shows "Not available yet", dragging it creates nothing); build, lint, format pass
 
 ---
 
 ## Phase 9: Polish and cross-cutting
 
-- [ ] T032 [P] Icons at both sizes: view all six icons at 28 px in the palette and 16 px on canvas headers in light and dark; simplify strokes where a shape is unclear at 16 px (design-direction.md)
-- [ ] T033 [P] Perf: temporarily load a document of about 20 nodes (use `loadDocument` from the console; do not commit the temporary code), select all, Delete and undo, Ctrl+D, and type quickly in the search box; fix any visible lag, for example by memoizing `PaletteEntry` and node components (SC-005, SC-007)
-- [ ] T034 [P] Keyboard and accessibility: Tab reaches the search box and every entry with a visible focus ring; rename and shortcuts work from the keyboard; entries have accessible names (quickstart.md check 14)
-- [ ] T035 Final pass: walk all of quickstart.md; `npm run build && npm run lint && npm run format:check`; check constitution rules (no magic strings, functions under 100 lines, minimal comments, files in the right folder); confirm no temporary debug code remains (for example `window.topologyStore`)
+- [X] T032 [P] Icons at both sizes: view all six icons at 28 px in the palette and 16 px on canvas headers in light and dark; simplify strokes where a shape is unclear at 16 px (design-direction.md)
+- [X] T033 [P] Perf: temporarily load a document of about 20 nodes (use `loadDocument` from the console; do not commit the temporary code), select all, Delete and undo, Ctrl+D, and type quickly in the search box; fix any visible lag, for example by memoizing `PaletteEntry` and node components (SC-005, SC-007)
+- [X] T034 [P] Keyboard and accessibility: Tab reaches the search box and every entry with a visible focus ring; rename and shortcuts work from the keyboard; entries have accessible names (quickstart.md check 14)
+- [X] T035 Final pass: walk all of quickstart.md; `npm run build && npm run lint && npm run format:check`; check constitution rules (no magic strings, functions under 100 lines, minimal comments, files in the right folder); confirm no temporary debug code remains (for example `window.topologyStore`)
 
 ---
 
