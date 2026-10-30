@@ -3,6 +3,7 @@ import { FIELD_LABEL, SECTION_TITLE } from "../../constants/inspector";
 import { renameNode, validateNodeName } from "../../store/documentOps";
 import { interfacesOf, useTopologyStore } from "../../store/topologyStore";
 import AddInterfaceButton from "../nodes/AddInterfaceButton";
+import ErrorBanner from "./ErrorBanner";
 import InterfaceEditor from "./InterfaceEditor";
 import ValidatedField from "./ValidatedField";
 
@@ -17,6 +18,7 @@ export default function NamespaceForm({ nodeId }: { nodeId: string }) {
 
   return (
     <div>
+      <ErrorBanner />
       <div className="px-3 py-2">
         <ValidatedField
           fieldKey={`node-name-${nodeId}`}

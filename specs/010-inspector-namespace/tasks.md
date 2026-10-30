@@ -69,9 +69,9 @@ All paths are under `web/` unless stated otherwise.
 
 **Independent Test**: quickstart.md "Invalid values" table, every row; Escape and fix flows.
 
-- [ ] T016 [P] [US2] Create `src/components/inspector/ErrorBanner.tsx`: reads the error count from `fieldErrorStore`; when above 0 shows `errorBannerText(count)` in `text-led-fault` with `role="status"`; renders nothing at 0
-- [ ] T017 [US2] Edit `src/components/inspector/NamespaceForm.tsx`: render `ErrorBanner` at the top of the form
-- [ ] T018 [US2] Review `src/components/inspector/ValidatedField.tsx` and `src/hooks/useFieldDraft.ts` against the "Field behavior" table in contracts/ui-contract.md: Enter or blur with a valid draft writes once; with an invalid draft writes nothing and keeps draft and error; Escape restores the lab value and clears the error and the error-store flag; unmounting (selecting another node) clears the flag. Fix any gap
+- [X] T016 [P] [US2] Create `src/components/inspector/ErrorBanner.tsx`: reads the error count from `fieldErrorStore`; when above 0 shows `errorBannerText(count)` in `text-led-fault` with `role="status"`; renders nothing at 0
+- [X] T017 [US2] Edit `src/components/inspector/NamespaceForm.tsx`: render `ErrorBanner` at the top of the form
+- [X] T018 [US2] Review `src/components/inspector/ValidatedField.tsx` and `src/hooks/useFieldDraft.ts` against the "Field behavior" table in contracts/ui-contract.md: Enter or blur with a valid draft writes once; with an invalid draft writes nothing and keeps draft and error; Escape restores the lab value and clears the error and the error-store flag; unmounting (selecting another node) clears the flag. Fix any gap
 - [ ] T019 [US2] Manual check from quickstart.md "Invalid values" (all rows, fix, Escape) and the edge check "Select another node with a bad draft open"; `npm run build && npm run lint && npm run format:check` pass
 
 **Checkpoint**: Every covered field validates live and never writes a bad value.
