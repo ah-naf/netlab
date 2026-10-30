@@ -1,12 +1,13 @@
 import { useShallow } from "zustand/react/shallow";
-import { FIELD_LABEL, SECTION_TITLE } from "../../constants/inspector";
+import { FIELD_LABEL, GROUP_TITLE } from "../../constants/inspector";
 import { renameNode, validateNodeName } from "../../store/documentOps";
 import { interfacesOf, useTopologyStore } from "../../store/topologyStore";
 import AddInterfaceButton from "../nodes/AddInterfaceButton";
 import GatewayField from "./GatewayField";
+import InterfaceEditor from "./InterfaceEditor";
 import RoleField from "./RoleField";
 import RoutesTable from "./RoutesTable";
-import InterfaceEditor from "./InterfaceEditor";
+import Section from "./Section";
 import ValidatedField from "./ValidatedField";
 
 export default function NamespaceForm({ nodeId }: { nodeId: string }) {
@@ -20,32 +21,34 @@ export default function NamespaceForm({ nodeId }: { nodeId: string }) {
 
   return (
     <div>
-      <div className="px-3 py-2">
-        <ValidatedField
-          fieldKey={`node-name-${nodeId}`}
-          label={FIELD_LABEL.NODE_NAME}
-          value={node.name}
-          rule={(text) => validateNodeName(document, nodeId, text)}
-          onCommit={(name) => edit((d) => renameNode(d, nodeId, name))}
-        />
-        <div className="mt-1.5">
+      <Section title={GROUP_TITLE.NAMESPACE}>
+        <div className="space-y-2 px-3 pb-3">
+          <ValidatedField
+            fieldKey={`node-name-${nodeId}`}
+            label={FIELD_LABEL.NODE_NAME}
+            value={node.name}
+            rule={(text) => validateNodeName(document, nodeId, text)}
+            onCommit={(name) => edit((d) => renameNode(d, nodeId, name))}
+          />
           <RoleField nodeId={nodeId} />
         </div>
-      </div>
-      <h3 className="border-t border-rule px-3 pt-2 text-xs font-medium text-ink-muted">
-        {SECTION_TITLE.INTERFACES}
-      </h3>
-      {interfaceIds.map((id) => (
-        <InterfaceEditor key={id} interfaceId={id} />
-      ))}
-      <AddInterfaceButton node={node} />
-      <div className="border-t border-rule px-3 py-2">
-        <GatewayField nodeId={nodeId} />
-      </div>
-      <h3 className="border-t border-rule px-3 pt-2 text-xs font-medium text-ink-muted">
-        {SECTION_TITLE.ROUTES}
-      </h3>
-      <RoutesTable nodeId={nodeId} />
+      </Section>
+      <Section title={GROUP_TITLE.INTERFACES}>
+        <div className="space-y-3 px-3 pb-2">
+          {interfaceIds.map((id) => (
+            <InterfaceEditor key={id} interfaceId={id} />
+          ))}
+        </div>
+        <AddInterfaceButton node={node} />
+      </Section>
+      <Section title={GROUP_TITLE.GATEWAY}>
+        <div className="px-3 pb-3">
+          <GatewayField nodeId={nodeId} />
+        </div>
+      </Section>
+      <Section title={GROUP_TITLE.ROUTES}>
+        <RoutesTable nodeId={nodeId} />
+      </Section>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import {
   FIELD_LABEL,
   NO_ROLE_TEXT,
   ROLE_CHOICES,
+  ROLE_NAME,
 } from "../../constants/inspector";
 import { setRole } from "../../store/namespaceOps";
 import { useTopologyStore } from "../../store/topologyStore";
@@ -17,10 +18,12 @@ export default function RoleField({ nodeId }: { nodeId: string }) {
 
   if (!editable)
     return (
-      <p className="text-xs text-ink-muted">
-        {FIELD_LABEL.ROLE}:{" "}
-        <span className="text-ink">{role ?? NO_ROLE_TEXT}</span>
-      </p>
+      <div className="text-xs text-ink-muted">
+        {FIELD_LABEL.ROLE}
+        <p className="text-sm text-ink">
+          {role ? ROLE_NAME[role] : NO_ROLE_TEXT}
+        </p>
+      </div>
     );
   return (
     <SelectField

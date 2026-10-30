@@ -16,7 +16,7 @@ export default function GatewayField({ nodeId }: { nodeId: string }) {
   return (
     <ValidatedField
       fieldKey={`gateway-${nodeId}`}
-      label={FIELD_LABEL.GATEWAY}
+      label={FIELD_LABEL.GATEWAY_ADDRESS}
       value={gateway}
       placeholder={PLACEHOLDER.GATEWAY}
       rule={validateGateway}

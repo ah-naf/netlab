@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useShallow } from "zustand/react/shallow";
 import {
   ACTION_LABEL,
   FIELD_LABEL,
+  NEW_ROUTE_TITLE,
   NONE_CHOICE_LABEL,
 } from "../../constants/inspector";
 import {
@@ -41,7 +43,9 @@ export default function NewRouteRow({
   onDone: () => void;
 }) {
   const edit = useTopologyStore((s) => s.edit);
-  const interfaces = useTopologyStore((s) => interfacesOf(s.document, nodeId));
+  const interfaces = useTopologyStore(
+    useShallow((s) => interfacesOf(s.document, nodeId)),
+  );
   const [draft, setDraft] = useState(EMPTY_ROUTE_DRAFT);
   const set = (field: keyof RouteDraft, value: string) =>
     setDraft((current) => ({ ...current, [field]: value }));
@@ -51,34 +55,40 @@ export default function NewRouteRow({
   };
 
   return (
-    <div className="space-y-1.5 border-t border-rule px-3 py-2">
-      {TEXT_FIELDS.map(({ field, label, rule }) => (
-        <ValidatedField
-          key={field}
-          fieldKey={`new-route-${nodeId}-${field}`}
-          label={label}
-          value={draft[field]}
-          rule={(text) => (text ? rule(text) : null)}
-          onCommit={(text) => set(field, text)}
+    <div className="border border-signal">
+      <div className="flex items-center justify-between gap-2 border-b border-rule bg-chassis px-2 py-1">
+        <span className="text-sm font-semibold">{NEW_ROUTE_TITLE}</span>
+        <span className="flex items-center gap-3">
+          <ActionButton onClick={onDone}>{ACTION_LABEL.CANCEL}</ActionButton>
+          <ActionButton
+            disabled={validateRoute(draft) !== null}
+            onClick={confirm}
+            className="border border-signal px-2 py-0.5 text-signal disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {ACTION_LABEL.CONFIRM}
+          </ActionButton>
+        </span>
+      </div>
+      <div className="space-y-2 p-2">
+        {TEXT_FIELDS.map(({ field, label, rule }) => (
+          <ValidatedField
+            key={field}
+            fieldKey={`new-route-${nodeId}-${field}`}
+            label={label}
+            value={draft[field]}
+            rule={(text) => (text ? rule(text) : null)}
+            onCommit={(text) => set(field, text)}
+          />
+        ))}
+        <SelectField
+          label={FIELD_LABEL.OUTPUT_INTERFACE}
+          value={draft.interfaceId}
+          options={[
+            { value: "", label: NONE_CHOICE_LABEL },
+            ...interfaces.map((i) => ({ value: i.id, label: i.name })),
+          ]}
+          onChange={(value) => set("interfaceId", value)}
         />
-      ))}
-      <SelectField
-        label={FIELD_LABEL.OUTPUT_INTERFACE}
-        value={draft.interfaceId}
-        options={[
-          { value: "", label: NONE_CHOICE_LABEL },
-          ...interfaces.map((i) => ({ value: i.id, label: i.name })),
-        ]}
-        onChange={(value) => set("interfaceId", value)}
-      />
-      <div className="flex gap-3">
-        <ActionButton
-          disabled={validateRoute(draft) !== null}
-          onClick={confirm}
-        >
-          {ACTION_LABEL.CONFIRM}
-        </ActionButton>
-        <ActionButton onClick={onDone}>{ACTION_LABEL.CANCEL}</ActionButton>
       </div>
     </div>
   );

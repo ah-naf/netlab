@@ -10,6 +10,7 @@ interface Props {
   rule: FieldRule;
   onCommit: (value: string) => void;
   placeholder?: string;
+  hint?: string;
 }
 
 export default function ValidatedField({
@@ -19,6 +20,7 @@ export default function ValidatedField({
   rule,
   onCommit,
   placeholder,
+  hint,
 }: Props) {
   const { draft, error, setDraft, confirm, cancel } = useFieldDraft({
     fieldKey,
@@ -44,8 +46,9 @@ export default function ValidatedField({
         onBlur={confirm}
         aria-invalid={error !== null}
         aria-describedby={error ? errorId : undefined}
-        className="mt-0.5 block w-full border border-rule bg-panel px-1 text-sm text-ink aria-invalid:border-led-fault"
+        className="mt-0.5 block w-full border border-rule bg-panel px-1 text-sm text-ink placeholder:italic placeholder:text-ink-muted/70 aria-invalid:border-led-fault"
       />
+      {hint && !error && <span className="mt-0.5 block">{hint}</span>}
       {error && (
         <span id={errorId} role="alert" className="mt-0.5 block text-led-fault">
           {error}
