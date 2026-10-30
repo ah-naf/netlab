@@ -54,7 +54,7 @@ All paths are under `web/` unless stated otherwise.
 - [X] T011 [US1] Create `src/components/Canvas.tsx`: `ReactFlow` with `nodeTypes` (`NODE_TYPE.NAMESPACE` → `NamespaceNode`, `NODE_TYPE.BRIDGE` → `BridgeNode`; defined outside the component), `nodes`/`edges` from `useMemo` over `toFlowNodes`/`toFlowEdges` of the store document, `connectionMode={ConnectionMode.Loose}`, `nodesConnectable={false}`, `fitView`, `Background`, `onNodeClick`/`onPaneClick` calling `selectNode`. Import `@xyflow/react/dist/style.css`. Keep the "Canvas" label header from the old placeholder (`REGION.CANVAS`) via `SidePanel`-style frame
 - [X] T012 [US1] Edit `src/components/AppShell.tsx` to render `Canvas` in the center slot instead of the Canvas `SidePanel` placeholder (keep `as="main"`, `aria-label`, `col-start-3 row-start-1` classes); remove the now-unused `dotGrid` prop use if nothing else needs it
 - [X] T013 [US1] Style React Flow to the app theme in `src/index.css`: edge stroke `var(--ink-muted)`, handle size and color (`var(--signal)`), controls and background using tokens, so light and dark both read well
-- [ ] T014 [US1] Manual check: `npm run dev`, run quickstart.md checks 1 and 10 (empty document, no-interface node, dangling link); `npm run build && npm run lint && npm run format:check` pass
+- [X] T014 [US1] Manual check: `npm run dev`, run quickstart.md checks 1 and 10 (empty document, no-interface node, dangling link); `npm run build && npm run lint && npm run format:check` pass
 
 **Checkpoint**: MVP. The example shows 3 cards, 4 handles, 2 links.
 
@@ -71,7 +71,7 @@ All paths are under `web/` unless stated otherwise.
 - [X] T017 [US2] Add an Add button (label from `ADD_LABEL[type]`, class `nodrag`) at the bottom of `src/components/nodes/NamespaceNode.tsx` and `src/components/nodes/BridgeNode.tsx` calling `addInterface(id)`. After add or remove call `useUpdateNodeInternals()(id)` so React Flow re-measures handles (research.md R2); put this in one small hook `src/hooks/useRefreshHandles.ts` used by both nodes and by the row's remove button
 - [X] T018 [US2] Create `src/components/NodeInspector.tsx`: reads `selectedNodeId`; with nothing selected shows `NO_SELECTION_HINT`; otherwise shows the node name and type, its interface list (name, addresses) each with Remove, and the same Add button; reuse the store actions. Reuse `InterfaceRow` pieces where they fit but without a `Handle` (the Handle only renders inside React Flow), so split the row text part into a small shared `InterfaceLabel` in `src/components/nodes/InterfaceRow.tsx` and use it in both places
 - [X] T019 [US2] Edit `src/components/AppShell.tsx` to render `NodeInspector` in the right column instead of the Inspector placeholder (keep `aria-label="Inspector"`, `as="aside"`, same classes, same header label `REGION.INSPECTOR.label`)
-- [ ] T020 [US2] Manual check: quickstart.md checks 2 to 7, 11, 12 (add on card, add on inspector, 20 unique ids, remove with link leaves 1 link, re-add gets new id, many interfaces stay aligned, keyboard); build, lint, format pass
+- [X] T020 [US2] Manual check: quickstart.md checks 2 to 7, 11, 12 (add on card, add on inspector, 20 unique ids, remove with link leaves 1 link, re-add gets new id, many interfaces stay aligned, keyboard); build, lint, format pass
 
 ---
 
@@ -83,7 +83,7 @@ All paths are under `web/` unless stated otherwise.
 
 - [X] T021 [US3] In `src/store/topologyStore.ts` add `setNodePosition(nodeId, position)` writing `document.layout[nodeId]` only
 - [X] T022 [US3] In `src/components/Canvas.tsx` add `onNodesChange` that, for each change of type `position` with a `position`, calls `setNodePosition`; ignore other change types (research.md R6). Selection comes from the store, not React Flow state
-- [ ] T023 [US3] Manual check: quickstart.md checks 8 and 10; confirm `loadDocument` with a different document replaces all cards and clears selection; build, lint, format pass
+- [X] T023 [US3] Manual check: quickstart.md checks 8 and 10; confirm `loadDocument` with a different document replaces all cards and clears selection; build, lint, format pass
 
 ---
 
@@ -94,15 +94,15 @@ All paths are under `web/` unless stated otherwise.
 **Independent Test**: quickstart.md check 9.
 
 - [X] T024 [US4] In `src/components/nodes/NodeCard.tsx` add the status tag from `STATUS_STYLE[status]`: glyph and label text in the header (non-color cue); border style (dashed, solid, dotted) from `borderClass`; make sure tag text is readable in light and dark. If no component draws glyphs yet, add four tiny inline glyphs in `src/components/nodes/StatusGlyph.tsx`
-- [ ] T025 [US4] Manual check: temporarily render `NodeCard` once per status (do not commit the temporary code) and confirm four distinct looks in light and dark; confirm every example node shows Desired
+- [X] T025 [US4] Manual check: temporarily render `NodeCard` once per status (do not commit the temporary code) and confirm four distinct looks in light and dark; confirm every example node shows Desired
 
 ---
 
 ## Phase 7: Polish and cross-cutting
 
-- [ ] T026 [P] Long names and many rows: confirm truncation with hover `title`, no overlap of handles (quickstart.md check 11); adjust `NodeCard` and `InterfaceRow` spacing if needed
-- [ ] T027 [P] Perf: with about 20 nodes of 5 interfaces each (temporary document loaded via `loadDocument` from the console), drag a node and confirm no visible lag (SC-007); if it lags, memoize `NodeCard`/`InterfaceRow` with `React.memo`
-- [ ] T028 Final pass: walk all of quickstart.md; `npm run build && npm run lint && npm run format:check`; check constitution rules (no magic strings, functions under 100 lines, minimal comments)
+- [X] T026 [P] Long names and many rows: confirm truncation with hover `title`, no overlap of handles (quickstart.md check 11); adjust `NodeCard` and `InterfaceRow` spacing if needed
+- [X] T027 [P] Perf: with about 20 nodes of 5 interfaces each (temporary document loaded via `loadDocument` from the console), drag a node and confirm no visible lag (SC-007); if it lags, memoize `NodeCard`/`InterfaceRow` with `React.memo`
+- [X] T028 Final pass: walk all of quickstart.md; `npm run build && npm run lint && npm run format:check`; check constitution rules (no magic strings, functions under 100 lines, minimal comments)
 
 ---
 
