@@ -6,12 +6,23 @@ import {
   NODE_ID_PREFIX,
 } from "../constants/palette";
 import {
+  DEFAULT_INTERFACE_MTU,
+  DEFAULT_INTERFACE_STATE,
   DEFAULT_POSITION,
   INTERFACE_ID_PREFIX,
+  INTERFACE_NAME_PREFIX,
+  INTERFACE_NAME_START,
   NODE_TYPE,
 } from "../constants/topology";
+import type { LinkEnd } from "../types/links";
 import type { PaletteEntry } from "../types/palette";
-import type { Document, Node, Position } from "../types/topology";
+import type {
+  Document,
+  Interface,
+  Link,
+  Node,
+  Position,
+} from "../types/topology";
 import { nextFreeName } from "./naming";
 import { nodeKindOf } from "./nodeKind";
 
@@ -177,4 +188,61 @@ export function duplicateNodes(
     },
     nodeIds: nodes.map((n) => n.id),
   };
+}
+
+const newPort = (document: Document, nodeId: string): Interface => ({
+  id: newId(INTERFACE_ID_PREFIX),
+  nodeId,
+  name: nextFreeName(
+    INTERFACE_NAME_PREFIX[NODE_TYPE.BRIDGE],
+    INTERFACE_NAME_START[NODE_TYPE.BRIDGE],
+    document.interfaces.filter((i) => i.nodeId === nodeId).map((i) => i.name),
+  ),
+  mtu: DEFAULT_INTERFACE_MTU,
+  state: DEFAULT_INTERFACE_STATE,
+});
+
+/** Joins two ends with a veth link; an end without an interface gets a new bridge port. */
+export function createLink(
+  document: Document,
+  from: LinkEnd,
+  to: LinkEnd,
+): { document: Document; linkId: string } {
+  let next = document;
+  const endpointOf = (end: LinkEnd) => {
+    if (end.interfaceId) return end.interfaceId;
+    const port = newPort(next, end.nodeId);
+    next = { ...next, interfaces: [...next.interfaces, port] };
+    return port.id;
+  };
+  const endpointA = endpointOf(from);
+  const endpointB = endpointOf(to);
+  const linkId = newId(LINK_ID_PREFIX);
+  const link: Link = {
+    id: linkId,
+    endpointA,
+    endpointB,
+    kind: "veth",
+    mtu: DEFAULT_INTERFACE_MTU,
+    state: DEFAULT_INTERFACE_STATE,
+  };
+  return { document: { ...next, links: [...next.links, link] }, linkId };
+}
+
+/** Removes a link and its bridge ports; namespace interfaces stay. */
+export function removeLink(document: Document, linkId: string): Document {
+  const link = document.links.find((l) => l.id === linkId);
+  if (!link) return document;
+  const bridgeIds = new Set(
+    document.nodes.filter((n) => n.type === NODE_TYPE.BRIDGE).map((n) => n.id),
+  );
+  const ports = document.interfaces
+    .filter(
+      (i) =>
+        [link.endpointA, link.endpointB].includes(i.id) &&
+        bridgeIds.has(i.nodeId),
+    )
+    .map((i) => i.id);
+  const rest = removeInterfaces(document, new Set(ports));
+  return { ...rest, links: rest.links.filter((l) => l.id !== linkId) };
 }
