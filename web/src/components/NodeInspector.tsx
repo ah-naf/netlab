@@ -1,4 +1,5 @@
 import { useShallow } from "zustand/react/shallow";
+import { MULTI_SELECT_HINT, multiSelectText } from "../constants/palette";
 import { REGION } from "../constants/layout";
 import { NO_SELECTION_HINT } from "../constants/topology";
 import { interfacesOf, useTopologyStore } from "../store/topologyStore";
@@ -11,8 +12,11 @@ export default function NodeInspector({
   className?: string;
 }) {
   const node = useTopologyStore((s) =>
-    s.document.nodes.find((n) => n.id === s.selectedNodeId),
+    s.selectedNodeIds.length === 1
+      ? s.document.nodes.find((n) => n.id === s.selectedNodeIds[0])
+      : undefined,
   );
+  const count = useTopologyStore((s) => s.selectedNodeIds.length);
   const items = useTopologyStore(
     useShallow((s) => (node ? interfacesOf(s.document, node.id) : [])),
   );
@@ -45,6 +49,11 @@ export default function NodeInspector({
             ))}
             <AddInterfaceButton node={node} />
           </>
+        ) : count > 1 ? (
+          <div className="p-3">
+            <p className="font-semibold">{multiSelectText(count)}</p>
+            <p className="text-xs text-ink-muted">{MULTI_SELECT_HINT}</p>
+          </div>
         ) : (
           <p className="p-3 text-xs text-ink-muted">{NO_SELECTION_HINT}</p>
         )}

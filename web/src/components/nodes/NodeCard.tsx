@@ -1,8 +1,10 @@
 import type { ReactNode } from "react";
 import { STATUS_STYLE } from "../../constants/topology";
 import type { NodeStatus } from "../../types/flow";
+import NodeTitle from "./NodeTitle";
 
 interface Props {
+  nodeId: string;
   title: string;
   icon?: ReactNode;
   status: NodeStatus;
@@ -12,6 +14,7 @@ interface Props {
 
 /** Rows span the full card width so each row's handle sits on the card edge. */
 export default function NodeCard({
+  nodeId,
   title,
   icon,
   status,
@@ -24,9 +27,7 @@ export default function NodeCard({
     >
       <div className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold">
         {icon && <span className="text-signal">{icon}</span>}
-        <span className="min-w-0 flex-1 truncate" title={title}>
-          {title}
-        </span>
+        <NodeTitle nodeId={nodeId} name={title} />
         <span
           className="shrink-0 text-xs font-normal text-ink-muted"
           title={STATUS_STYLE[status].label}
