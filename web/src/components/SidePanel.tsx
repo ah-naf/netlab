@@ -5,7 +5,6 @@ interface Props {
   label: string;
   hint: string;
   className?: string;
-  dotGrid?: boolean;
 }
 
 export default function SidePanel({
@@ -13,7 +12,6 @@ export default function SidePanel({
   label,
   hint,
   className = "",
-  dotGrid = false,
 }: Props) {
   return (
     <Tag
@@ -23,9 +21,7 @@ export default function SidePanel({
       <div className="flex h-6 shrink-0 items-center border-b border-rule px-3 text-xs font-medium text-ink-muted">
         {label}
       </div>
-      <div
-        className={`min-h-0 flex-1 overflow-hidden ${dotGrid ? "dot-grid" : ""}`}
-      >
+      <div className="min-h-0 flex-1 overflow-hidden">
         <NotAvailable name={label} hint={hint} />
       </div>
     </Tag>

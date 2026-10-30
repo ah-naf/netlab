@@ -146,3 +146,5 @@ export const RESIZE_LABEL = {
 
 export const TOOLBAR_HEIGHT = 44;
 export const CANVAS_MIN_HEIGHT = 160;
+
+export const CANVAS_LABEL = REGION.CANVAS.label;
