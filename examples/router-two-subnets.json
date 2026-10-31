@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "lab": { "id": "lab-router", "name": "Router between two subnets" },
+  "nodes": [
+    {
+      "id": "node-ns1",
+      "name": "ns1",
+      "type": "namespace",
+      "role": "host",
+      "routes": [
+        {
+          "destination": "0.0.0.0/0",
+          "gateway": "10.0.1.1",
+          "interfaceId": "if-ns1-eth0"
+        }
+      ]
+    },
+    {
+      "id": "node-r1",
+      "name": "r1",
+      "type": "namespace",
+      "role": "router",
+      "router": { "forwarding": true }
+    },
+    {
+      "id": "node-ns2",
+      "name": "ns2",
+      "type": "namespace",
+      "role": "host",
+      "routes": [
+        {
+          "destination": "0.0.0.0/0",
+          "gateway": "10.0.2.1",
+          "interfaceId": "if-ns2-eth0"
+        }
+      ]
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "if-ns1-eth0",
+      "nodeId": "node-ns1",
+      "name": "eth0",
+      "mtu": 1500,
+      "state": "up",
+      "addresses": [{ "cidr": "10.0.1.10/24" }]
+    },
+    {
+      "id": "if-r1-eth0",
+      "nodeId": "node-r1",
+      "name": "eth0",
+      "mtu": 1500,
+      "state": "up",
+      "addresses": [{ "cidr": "10.0.1.1/24" }]
+    },
+    {
+      "id": "if-r1-eth1",
+      "nodeId": "node-r1",
+      "name": "eth1",
+      "mtu": 1500,
+      "state": "up",
+      "addresses": [{ "cidr": "10.0.2.1/24" }]
+    },
+    {
+      "id": "if-ns2-eth0",
+      "nodeId": "node-ns2",
+      "name": "eth0",
+      "mtu": 1500,
+      "state": "up",
+      "addresses": [{ "cidr": "10.0.2.10/24" }]
+    }
+  ],
+  "links": [
+    {
+      "id": "link-ns1-r1",
+      "endpointA": "if-ns1-eth0",
+      "endpointB": "if-r1-eth0",
+      "kind": "veth",
+      "mtu": 1500,
+      "state": "up"
+    },
+    {
+      "id": "link-r1-ns2",
+      "endpointA": "if-r1-eth1",
+      "endpointB": "if-ns2-eth0",
+      "kind": "veth",
+      "mtu": 1500,
+      "state": "up"
+    }
+  ],
+  "layout": {
+    "node-ns1": { "x": 0, "y": 0 },
+    "node-r1": { "x": 300, "y": 0 },
+    "node-ns2": { "x": 600, "y": 0 }
+  }
+}

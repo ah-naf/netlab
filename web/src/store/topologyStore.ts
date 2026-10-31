@@ -7,7 +7,6 @@ import {
   INTERFACE_NAME_PREFIX,
   INTERFACE_NAME_START,
 } from "../constants/topology";
-import { CURRENT_VERSION } from "../types/topologyDocument";
 import type { ConnectionCheck, LinkEnd } from "../types/links";
 import type { PaletteKind } from "../types/palette";
 import type { Document, Interface, Position } from "../types/topology";
@@ -22,6 +21,7 @@ import {
   validateNodeName,
 } from "./documentOps";
 import { checkConnection } from "./linkRules";
+import { emptyLab } from "./labFile";
 import { nextFreeName } from "./naming";
 
 interface TopologyState {
@@ -49,14 +49,6 @@ interface TopologyState {
   endDrag: () => void;
 }
 
-const EMPTY_DOCUMENT: Document = {
-  schemaVersion: CURRENT_VERSION,
-  lab: { id: "", name: "" },
-  nodes: [],
-  interfaces: [],
-  links: [],
-};
-
 export const interfacesOf = (document: Document, nodeId: string): Interface[] =>
   document.interfaces.filter((item) => item.nodeId === nodeId);
 
@@ -78,7 +70,7 @@ const withHistory = (
 });
 
 export const useTopologyStore = create<TopologyState>()((set, get) => ({
-  document: EMPTY_DOCUMENT,
+  document: emptyLab(),
   selectedNodeIds: [],
   selectedLinkId: null,
   past: [],

@@ -2,11 +2,9 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
-import exampleLab from "../../examples/bridge-lab.json";
-import { useTopologyStore } from "./store/topologyStore";
-import { migrate } from "./types/topologyDocument";
+import { initDraft } from "./store/labActions";
 
-useTopologyStore.getState().loadDocument(migrate(exampleLab));
+initDraft();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
