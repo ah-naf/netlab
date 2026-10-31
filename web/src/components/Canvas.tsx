@@ -15,8 +15,10 @@ import { CANVAS_LABEL } from "../constants/layout";
 import { NODE_TYPE } from "../constants/topology";
 import { useIssueHighlights } from "../hooks/useIssueHighlights";
 import { useLinkConnect } from "../hooks/useLinkConnect";
+import { openFiles } from "../store/labActions";
 import { toFlowEdges, toFlowNodes } from "../store/toFlow";
 import { useTopologyStore } from "../store/topologyStore";
+import FileNotice from "./FileNotice";
 import LinkNotice from "./LinkNotice";
 import BridgeNode from "./nodes/BridgeNode";
 import NamespaceNode from "./nodes/NamespaceNode";
@@ -51,6 +53,10 @@ function CanvasView({ className }: { className: string }) {
   };
   const dropPart = (event: React.DragEvent) => {
     event.preventDefault();
+    if (event.dataTransfer.files.length) {
+      openFiles(event.dataTransfer.files);
+      return;
+    }
     const kind = event.dataTransfer.getData(PALETTE_DRAG_TYPE);
     if (!kind) return;
     const position = screenToFlowPosition({
@@ -126,6 +132,7 @@ function CanvasView({ className }: { className: string }) {
           <Background />
         </ReactFlow>
         <LinkNotice message={notice} onDismiss={clearNotice} />
+        <FileNotice />
       </div>
     </main>
   );

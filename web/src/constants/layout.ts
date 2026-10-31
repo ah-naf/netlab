@@ -4,6 +4,7 @@ import type {
   SizeRange,
   ToolbarAction,
 } from "../types/layout";
+import { OPEN_LABEL, SAVE_LABEL } from "./labFile";
 import { ISSUES_TAB_HINT, ISSUES_TAB_LABEL } from "./validation";
 
 export const APP_NAME = "NetLab";
@@ -95,6 +96,8 @@ export const DEFAULT_LAYOUT: LayoutState = {
   activeTab: DRAWER_TAB_ID.DEPLOYMENT_LOGS,
 };
 
+export const SAVE_ACTION_ID = "save";
+export const OPEN_ACTION_ID = "open";
 export const VALIDATE_ACTION_ID = "validate";
 
 const disabledAction = (id: string, label: string): ToolbarAction => ({
@@ -105,7 +108,18 @@ const disabledAction = (id: string, label: string): ToolbarAction => ({
 });
 
 export const FILE_ACTIONS: readonly ToolbarAction[] = [
-  disabledAction("save", "Save"),
+  {
+    id: SAVE_ACTION_ID,
+    label: SAVE_LABEL,
+    enabled: true,
+    disabledReason: "",
+  },
+  {
+    id: OPEN_ACTION_ID,
+    label: OPEN_LABEL,
+    enabled: true,
+    disabledReason: "",
+  },
   {
     id: VALIDATE_ACTION_ID,
     label: "Validate",

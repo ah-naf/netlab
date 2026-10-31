@@ -5,11 +5,13 @@ import {
   RESIZE_LABEL,
   SIZE_RANGE,
 } from "../constants/layout";
+import { useAutosave } from "../hooks/useAutosave";
 import { useCanvasShortcuts } from "../hooks/useCanvasShortcuts";
 import { useShellSizes } from "../hooks/useShellSizes";
 import { useLayoutStore } from "../store/layoutStore";
 import BottomDrawer from "./BottomDrawer";
 import Canvas from "./Canvas";
+import DraftPrompt from "./DraftPrompt";
 import NodeInspector from "./NodeInspector";
 import Palette from "./palette/Palette";
 import ResizeHandle from "./ResizeHandle";
@@ -21,6 +23,7 @@ export default function AppShell() {
     useLayoutStore();
   const sizes = useShellSizes();
   useCanvasShortcuts();
+  useAutosave();
   const rail = `${RAIL_SIZE}px`;
 
   return (
@@ -74,6 +77,7 @@ export default function AppShell() {
         )}
         <BottomDrawer className="col-span-5 row-start-3" />
       </div>
+      <DraftPrompt />
     </div>
   );
 }
