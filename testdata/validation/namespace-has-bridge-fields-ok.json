@@ -1,0 +1,20 @@
+{
+  "description": "plain namespace",
+  "document": {
+    "schemaVersion": 1,
+    "lab": {
+      "id": "a1b2",
+      "name": "t"
+    },
+    "nodes": [
+      {
+        "id": "n1",
+        "name": "ns1",
+        "type": "namespace"
+      }
+    ],
+    "interfaces": [],
+    "links": []
+  },
+  "expectedCodes": []
+}

@@ -3,20 +3,14 @@ import {
   STP_PRIORITY_MAX,
   STP_PRIORITY_MIN,
 } from "../constants/inspectorBridgeLink";
-import {
-  FIELD_ERROR,
-  INTERFACE_NAME_MAX,
-  MTU_MAX,
-  MTU_MIN,
-  PATH_SEPARATOR,
-} from "../constants/inspector";
+import { ISSUE_MESSAGE } from "../constants/validation";
+import { FIELD_ERROR, MTU_MAX, MTU_MIN } from "../constants/inspector";
 import type { RouteDraft } from "../types/inspector";
 import type { Document } from "../types/topology";
 import { isCidr, isIpAddress } from "./ipAddress";
+import { interfaceNameCodes } from "./validation/nameRules";
 
-const WHITESPACE = /\s/;
 const WHOLE_NUMBER = /^\d+$/;
-const RESERVED_NAMES = [".", ".."];
 
 const interfaceOf = (document: Document, interfaceId: string) =>
   document.interfaces.find((i) => i.id === interfaceId);
@@ -26,16 +20,8 @@ export function validateInterfaceName(
   interfaceId: string,
   name: string,
 ): string | null {
-  if (!name) return FIELD_ERROR.NAME_EMPTY;
-  if (name.length > INTERFACE_NAME_MAX) return FIELD_ERROR.NAME_LONG;
-  if (name.includes(PATH_SEPARATOR) || WHITESPACE.test(name))
-    return FIELD_ERROR.NAME_CHARS;
-  if (RESERVED_NAMES.includes(name)) return FIELD_ERROR.NAME_DOT;
-  const nodeId = interfaceOf(document, interfaceId)?.nodeId;
-  const taken = document.interfaces.some(
-    (i) => i.nodeId === nodeId && i.id !== interfaceId && i.name === name,
-  );
-  return taken ? FIELD_ERROR.NAME_TAKEN : null;
+  const [code] = interfaceNameCodes(document, interfaceId, name);
+  return code ? ISSUE_MESSAGE[code] : null;
 }
 
 export function validateMtu(text: string): string | null {

@@ -98,3 +98,14 @@ body[data-resizing] .shell-grid {
   background: var(--led-ok) !important;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--led-ok) 40%, transparent);
 }
+
+.link-issue-error path.react-flow__edge-path {
+  stroke: var(--led-fault);
+  stroke-width: 2.5;
+}
+
+.link-issue-warning path.react-flow__edge-path {
+  stroke: var(--led-warn);
+  stroke-width: 2.5;
+  stroke-dasharray: 6 4;
+}

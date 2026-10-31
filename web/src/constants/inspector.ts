@@ -84,8 +84,6 @@ export const ROLE_NAME = {
 export const NO_ROLE_TEXT = "Namespace (no role)";
 
 export const FIELD_ERROR = {
-  NAME_EMPTY: "Name cannot be empty",
-  NAME_LONG: `Name must be at most ${INTERFACE_NAME_MAX} characters`,
   NAME_CHARS: "Name cannot contain a slash or spaces",
   NAME_DOT: "Name cannot be . or ..",
   NAME_TAKEN: "Another interface on this node uses this name",

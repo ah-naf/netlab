@@ -13,6 +13,7 @@ import { PALETTE_DRAG_TYPE } from "../constants/palette";
 import type { PaletteKind } from "../types/palette";
 import { CANVAS_LABEL } from "../constants/layout";
 import { NODE_TYPE } from "../constants/topology";
+import { useIssueHighlights } from "../hooks/useIssueHighlights";
 import { useLinkConnect } from "../hooks/useLinkConnect";
 import { toFlowEdges, toFlowNodes } from "../store/toFlow";
 import { useTopologyStore } from "../store/topologyStore";
@@ -39,6 +40,7 @@ export default function Canvas({ className = "" }: { className?: string }) {
 function CanvasView({ className }: { className: string }) {
   const document = useTopologyStore((s) => s.document);
   const selectedNodeIds = useTopologyStore((s) => s.selectedNodeIds);
+  const highlights = useIssueHighlights();
   const { beginDrag, moveNode, endDrag } = useTopologyStore.getState();
   const { screenToFlowPosition } = useReactFlow();
   const { notice, clearNotice, isValidConnection, showRejection, connect } =
@@ -70,20 +72,20 @@ function CanvasView({ className }: { className: string }) {
   };
   const nodes = useMemo(
     () =>
-      toFlowNodes(document).map((n) => ({
+      toFlowNodes(document, highlights.nodes).map((n) => ({
         ...n,
         selected: selectedNodeIds.includes(n.id),
       })),
-    [document, selectedNodeIds],
+    [document, selectedNodeIds, highlights.nodes],
   );
   const selectedLinkId = useTopologyStore((s) => s.selectedLinkId);
   const edges = useMemo(
     () =>
-      toFlowEdges(document).map((e) => ({
+      toFlowEdges(document, highlights.links).map((e) => ({
         ...e,
         selected: e.id === selectedLinkId,
       })),
-    [document, selectedLinkId],
+    [document, selectedLinkId, highlights.links],
   );
 
   return (

@@ -1,0 +1,27 @@
+{
+  "description": "two long names that shorten to the same Linux name",
+  "document": {
+    "schemaVersion": 1,
+    "lab": {
+      "id": "a1b2",
+      "name": "t"
+    },
+    "nodes": [
+      {
+        "id": "n1",
+        "name": "longnode-2143",
+        "type": "namespace"
+      },
+      {
+        "id": "n2",
+        "name": "longnode-3140",
+        "type": "namespace"
+      }
+    ],
+    "interfaces": [],
+    "links": []
+  },
+  "expectedCodes": [
+    "LINUX_NAME_COLLISION"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "description": "two long names that do not collide",
+  "document": {
+    "schemaVersion": 1,
+    "lab": {
+      "id": "a1b2",
+      "name": "t"
+    },
+    "nodes": [
+      {
+        "id": "n1",
+        "name": "longnode-a",
+        "type": "namespace"
+      },
+      {
+        "id": "n2",
+        "name": "longnode-b",
+        "type": "namespace"
+      }
+    ],
+    "interfaces": [],
+    "links": []
+  },
+  "expectedCodes": []
+}

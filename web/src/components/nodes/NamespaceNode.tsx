@@ -30,6 +30,7 @@ export default function NamespaceNode({
       icon={<NodeIcon kind={nodeKindOf(node)} />}
       status={data.status}
       selected={selected}
+      issue={data.issue}
     >
       {interfaceIds.map((interfaceId) => (
         <InterfaceRow
