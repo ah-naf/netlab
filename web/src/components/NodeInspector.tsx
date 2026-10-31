@@ -1,14 +1,12 @@
-import { useShallow } from "zustand/react/shallow";
 import { LINK_SELECTED_HINT, linkLabel } from "../constants/links";
 import { MULTI_SELECT_HINT, multiSelectText } from "../constants/palette";
 import { REGION } from "../constants/layout";
 import { NODE_TYPE, NO_SELECTION_HINT } from "../constants/topology";
-import { interfacesOf, useTopologyStore } from "../store/topologyStore";
-import AddInterfaceButton from "./nodes/AddInterfaceButton";
+import { useTopologyStore } from "../store/topologyStore";
+import BridgeForm from "./inspector/BridgeForm";
 import ErrorBanner from "./inspector/ErrorBanner";
 import LabNameField from "./inspector/LabNameField";
 import NamespaceForm from "./inspector/NamespaceForm";
-import { InterfaceLabel, RemoveInterfaceButton } from "./nodes/InterfaceRow";
 
 export default function NodeInspector({
   className = "",
@@ -29,9 +27,6 @@ export default function NodeInspector({
       : "";
   });
   const count = useTopologyStore((s) => s.selectedNodeIds.length);
-  const items = useTopologyStore(
-    useShallow((s) => (node ? interfacesOf(s.document, node.id) : [])),
-  );
 
   return (
     <aside
@@ -46,24 +41,7 @@ export default function NodeInspector({
         {node?.type === NODE_TYPE.NAMESPACE ? (
           <NamespaceForm key={node.id} nodeId={node.id} />
         ) : node ? (
-          <>
-            <div className="px-3 py-2">
-              <div className="truncate font-semibold" title={node.name}>
-                {node.name}
-              </div>
-              <div className="text-xs text-ink-muted">{node.type}</div>
-            </div>
-            {items.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center gap-2 border-t border-rule px-3 py-1 text-xs"
-              >
-                <InterfaceLabel item={item} />
-                <RemoveInterfaceButton nodeName={node.name} item={item} />
-              </div>
-            ))}
-            <AddInterfaceButton node={node} />
-          </>
+          <BridgeForm key={node.id} nodeId={node.id} />
         ) : linkText ? (
           <div className="p-3">
             <p className="font-semibold">{linkText}</p>
