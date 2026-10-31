@@ -1,4 +1,9 @@
 import {
+  STP_ERROR,
+  STP_PRIORITY_MAX,
+  STP_PRIORITY_MIN,
+} from "../constants/inspectorBridgeLink";
+import {
   FIELD_ERROR,
   INTERFACE_NAME_MAX,
   MTU_MAX,
@@ -72,6 +77,13 @@ export function validateRoute(draft: RouteDraft): string | null {
     (draft.gateway || draft.interfaceId ? null : FIELD_ERROR.ROUTE_NEXT_HOP)
   );
 }
+
+export const validateStpPriority = (text: string): string | null =>
+  WHOLE_NUMBER.test(text) &&
+  Number(text) >= STP_PRIORITY_MIN &&
+  Number(text) <= STP_PRIORITY_MAX
+    ? null
+    : STP_ERROR;
 
 export const validateLabName = (text: string): string | null =>
   text.trim() ? null : FIELD_ERROR.LAB_NAME_EMPTY;

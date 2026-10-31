@@ -55,6 +55,7 @@ export const REMOVE_TEXT = {
   ADDRESS: "Remove address",
   INTERFACE: "Remove interface",
   ROUTE: "Remove route",
+  PORT: "Remove port",
 } as const;
 
 export const removeLabel = (text: string, target: string) =>
