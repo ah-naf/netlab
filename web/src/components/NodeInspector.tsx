@@ -1,3 +1,4 @@
+import { BRIDGE_LINK_GROUP_TITLE } from "../constants/inspectorBridgeLink";
 import { MULTI_SELECT_HINT, multiSelectText } from "../constants/palette";
 import { REGION } from "../constants/layout";
 import { NODE_TYPE, NO_SELECTION_HINT } from "../constants/topology";
@@ -5,6 +6,8 @@ import { useTopologyStore } from "../store/topologyStore";
 import BridgeForm from "./inspector/BridgeForm";
 import ErrorBanner from "./inspector/ErrorBanner";
 import LabNameField from "./inspector/LabNameField";
+import LabSummary from "./inspector/LabSummary";
+import Section from "./inspector/Section";
 import LinkForm from "./inspector/LinkForm";
 import NamespaceForm from "./inspector/NamespaceForm";
 
@@ -47,9 +50,18 @@ export default function NodeInspector({
             <p className="text-xs text-ink-muted">{MULTI_SELECT_HINT}</p>
           </div>
         ) : (
-          <div className="space-y-2 p-3">
-            <LabNameField />
-            <p className="text-xs text-ink-muted">{NO_SELECTION_HINT}</p>
+          <div>
+            <Section title={BRIDGE_LINK_GROUP_TITLE.LAB}>
+              <div className="px-3 pb-3">
+                <LabNameField />
+              </div>
+            </Section>
+            <Section title={BRIDGE_LINK_GROUP_TITLE.SUMMARY}>
+              <LabSummary />
+            </Section>
+            <p className="border-t border-rule p-3 text-xs text-ink-muted">
+              {NO_SELECTION_HINT}
+            </p>
           </div>
         )}
       </div>

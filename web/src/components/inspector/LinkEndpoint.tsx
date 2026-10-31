@@ -1,12 +1,9 @@
 import { BRIDGE_LINK_FIELD_LABEL } from "../../constants/inspectorBridgeLink";
-import { validateInterfaceName } from "../../store/fieldRules";
-import { renameInterface } from "../../store/namespaceOps";
 import { useTopologyStore } from "../../store/topologyStore";
-import ValidatedField from "./ValidatedField";
+import InterfaceNameField from "./InterfaceNameField";
 
 export default function LinkEndpoint({ interfaceId }: { interfaceId: string }) {
   const document = useTopologyStore((s) => s.document);
-  const edit = useTopologyStore((s) => s.edit);
   const item = document.interfaces.find((i) => i.id === interfaceId);
   const nodeName = document.nodes.find((n) => n.id === item?.nodeId)?.name;
   if (!item) return null;
@@ -17,12 +14,10 @@ export default function LinkEndpoint({ interfaceId }: { interfaceId: string }) {
         {BRIDGE_LINK_FIELD_LABEL.ENDPOINT_NODE}
         <p className="text-sm text-ink">{nodeName}</p>
       </div>
-      <ValidatedField
+      <InterfaceNameField
+        interfaceId={interfaceId}
         fieldKey={`endpoint-name-${interfaceId}`}
         label={BRIDGE_LINK_FIELD_LABEL.ENDPOINT_INTERFACE}
-        value={item.name}
-        rule={(text) => validateInterfaceName(document, interfaceId, text)}
-        onCommit={(name) => edit((d) => renameInterface(d, interfaceId, name))}
       />
     </div>
   );

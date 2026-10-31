@@ -4,15 +4,13 @@ import {
   STATE_CHOICES,
   removeLabel,
 } from "../../constants/inspector";
-import { validateInterfaceName, validateMtu } from "../../store/fieldRules";
-import {
-  renameInterface,
-  setInterfaceMtu,
-  setInterfaceState,
-} from "../../store/namespaceOps";
+import { setLinkedInterfaceMtu } from "../../store/bridgeLinkOps";
+import { validateMtu } from "../../store/fieldRules";
+import { setInterfaceState } from "../../store/namespaceOps";
 import { useTopologyStore } from "../../store/topologyStore";
 import type { State } from "../../types/topology";
 import AddressList from "./AddressList";
+import InterfaceNameField from "./InterfaceNameField";
 import ObservedLine from "./ObservedLine";
 import RemoveAction from "./RemoveAction";
 import SelectField from "./SelectField";
@@ -46,14 +44,10 @@ export default function InterfaceEditor({
         />
       </div>
       <div className="space-y-2 p-2">
-        <ValidatedField
+        <InterfaceNameField
+          interfaceId={interfaceId}
           fieldKey={`name-${interfaceId}`}
           label={FIELD_LABEL.INTERFACE_NAME}
-          value={item.name}
-          rule={(text) => validateInterfaceName(document, interfaceId, text)}
-          onCommit={(name) =>
-            edit((d) => renameInterface(d, interfaceId, name))
-          }
         />
         <div className="flex gap-2">
           <ValidatedField
@@ -62,7 +56,7 @@ export default function InterfaceEditor({
             value={String(item.mtu)}
             rule={validateMtu}
             onCommit={(mtu) =>
-              edit((d) => setInterfaceMtu(d, interfaceId, Number(mtu)))
+              edit((d) => setLinkedInterfaceMtu(d, interfaceId, Number(mtu)))
             }
           />
           <SelectField

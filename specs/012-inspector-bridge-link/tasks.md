@@ -80,8 +80,8 @@ All paths are under `web/` unless stated otherwise.
 
 **Independent Test**: quickstart.md "Nothing selected", steps 1 to 3.
 
-- [ ] T014 [P] [US3] Create `src/components/inspector/LabSummary.tsx`: read `summarize(s.document)` with `useTopologyStore(useShallow(...))` (an object of numbers); render a definition list with one row per count using `SUMMARY_LABEL`
-- [ ] T015 [US3] Edit `src/components/NodeInspector.tsx`: in the nothing-selected view render two `Section`s: `BRIDGE_LINK_GROUP_TITLE.LAB` with `LabNameField`, and `BRIDGE_LINK_GROUP_TITLE.SUMMARY` with `LabSummary`; keep the existing "select a node" hint below. Depends on T014
+- [X] T014 [P] [US3] Create `src/components/inspector/LabSummary.tsx`: read `summarize(s.document)` with `useTopologyStore(useShallow(...))` (an object of numbers); render a definition list with one row per count using `SUMMARY_LABEL`
+- [X] T015 [US3] Edit `src/components/NodeInspector.tsx`: in the nothing-selected view render two `Section`s: `BRIDGE_LINK_GROUP_TITLE.LAB` with `LabNameField`, and `BRIDGE_LINK_GROUP_TITLE.SUMMARY` with `LabSummary`; keep the existing "select a node" hint below. Depends on T014
 - [ ] T016 [US3] Manual check from quickstart.md "Nothing selected" steps 1 to 3 (counts follow add, delete, undo); `npm run build && npm run lint && npm run format:check` pass
 
 **Checkpoint**: All three stories work together.
@@ -91,7 +91,7 @@ All paths are under `web/` unless stated otherwise.
 ## Phase 6: Polish
 
 - [ ] T017 Run the whole of quickstart.md once on a fresh page load with the console open and use every control once; no console errors, no "Maximum update depth exceeded"
-- [ ] T018 Confirm the crash rule and the constitution across the new files: every array or object selector is wrapped in `useShallow`; no inline strings with meaning; every function under 100 lines; `npm run build && npm run lint && npm run format:check` pass
+- [X] T018 Confirm the crash rule and the constitution across the new files: every array or object selector is wrapped in `useShallow`; no inline strings with meaning; every function under 100 lines; `npm run build && npm run lint && npm run format:check` pass
 
 ---
 
@@ -114,3 +114,8 @@ All paths are under `web/` unless stated otherwise.
 - **MVP**: Phase 1, Phase 2, US1. A bridge can be named and set up from the panel.
 - Then US2 (links), then US3 (lab summary), then polish.
 - Stop and run the manual check after each story; keep the app runnable after each step.
+
+## Phase 7: Convergence
+
+- [X] T019 Keep the link and its two endpoint interfaces on one MTU when an interface MTU is edited in the namespace panel: in `web/src/components/inspector/InterfaceEditor.tsx` (the MTU `onCommit`), when the interface is in a link, apply `setLinkMtu` from `web/src/store/bridgeLinkOps.ts` for that link (using the interface's link id found from the document) instead of `setInterfaceMtu`; an unlinked interface still uses `setInterfaceMtu`. Today editing `ns1 eth0` to 1300 leaves the link and the bridge port at 1400 and the canvas label stale, per FR-008 and 009 "shared by both of its interfaces" (partial)
+- [X] T020 Remove the repeated interface-name field wiring (`ValidatedField` with `validateInterfaceName` and `renameInterface` through `edit`, copied in `web/src/components/inspector/InterfaceEditor.tsx`, `PortRow.tsx`, and `LinkEndpoint.tsx`) by adding one small `web/src/components/inspector/InterfaceNameField.tsx` (props `interfaceId`, `label`, `fieldKey`) and using it in all three, per Constitution III (partial)

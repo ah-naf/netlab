@@ -6,15 +6,12 @@ import {
   peerText,
 } from "../../constants/inspectorBridgeLink";
 import { peerOf } from "../../store/bridgeLinkOps";
-import { validateInterfaceName } from "../../store/fieldRules";
-import { renameInterface } from "../../store/namespaceOps";
 import { useTopologyStore } from "../../store/topologyStore";
+import InterfaceNameField from "./InterfaceNameField";
 import RemoveAction from "./RemoveAction";
-import ValidatedField from "./ValidatedField";
 
 export default function PortRow({ interfaceId }: { interfaceId: string }) {
   const document = useTopologyStore((s) => s.document);
-  const edit = useTopologyStore((s) => s.edit);
   const removeInterface = useTopologyStore((s) => s.removeInterface);
   const port = document.interfaces.find((i) => i.id === interfaceId);
   if (!port) return null;
@@ -37,14 +34,10 @@ export default function PortRow({ interfaceId }: { interfaceId: string }) {
         />
       </div>
       <div className="space-y-2 p-2">
-        <ValidatedField
+        <InterfaceNameField
+          interfaceId={interfaceId}
           fieldKey={`port-name-${interfaceId}`}
           label={BRIDGE_LINK_FIELD_LABEL.PORT_NAME}
-          value={port.name}
-          rule={(text) => validateInterfaceName(document, interfaceId, text)}
-          onCommit={(name) =>
-            edit((d) => renameInterface(d, interfaceId, name))
-          }
         />
         <p className="text-xs text-ink-muted">
           {LEADS_TO_LABEL}{" "}

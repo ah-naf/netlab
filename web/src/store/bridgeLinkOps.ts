@@ -1,4 +1,5 @@
 import { NODE_TYPE } from "../constants/topology";
+import { setInterfaceMtu } from "./namespaceOps";
 import type { BridgeSettings, Document, Link, State } from "../types/topology";
 
 const DEFAULT_BRIDGE: BridgeSettings = { stp: false };
@@ -51,6 +52,20 @@ export function setLinkMtu(
       ends.includes(i.id) ? { ...i, mtu } : i,
     ),
   };
+}
+
+/** An interface in a link changes the whole link, so both ends and the label agree. */
+export function setLinkedInterfaceMtu(
+  document: Document,
+  interfaceId: string,
+  mtu: number,
+): Document {
+  const link = document.links.find(
+    (l) => l.endpointA === interfaceId || l.endpointB === interfaceId,
+  );
+  return link
+    ? setLinkMtu(document, link.id, mtu)
+    : setInterfaceMtu(document, interfaceId, mtu);
 }
 
 export const setLinkState = (
