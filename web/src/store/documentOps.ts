@@ -1,7 +1,6 @@
 import {
   DUPLICATE_OFFSET,
   LINK_ID_PREFIX,
-  NAME_ERROR,
   NAME_RULE,
   NODE_ID_PREFIX,
 } from "../constants/palette";
@@ -24,8 +23,10 @@ import type {
   Node,
   Position,
 } from "../types/topology";
+import { ISSUE_MESSAGE } from "../constants/validation";
 import { nextFreeName } from "./naming";
 import { nodeKindOf } from "./nodeKind";
+import { nodeNameCodes } from "./validation/nameRules";
 
 const withoutRefs = (node: Node, ids: Set<string>): Node => ({
   ...node,
@@ -110,18 +111,14 @@ export function deleteNodes(document: Document, ids: Set<string>): Document {
 }
 
 /** Returns an error text when the name cannot be used, else null. */
-export function validateNodeName(
+export const validateNodeName = (
   document: Document,
   nodeId: string,
   name: string,
-): string | null {
-  const trimmed = name.trim();
-  if (!trimmed) return NAME_ERROR.EMPTY;
-  const taken = document.nodes.some(
-    (n) => n.id !== nodeId && n.name === trimmed,
-  );
-  return taken ? NAME_ERROR.TAKEN : null;
-}
+): string | null => {
+  const [code] = nodeNameCodes(document, nodeId, name);
+  return code ? ISSUE_MESSAGE[code] : null;
+};
 
 export const renameNode = (
   document: Document,
