@@ -133,3 +133,11 @@ func HasErrors(issues []Issue) bool {
 	}
 	return false
 }
+
+// AllCodes lists every code in the order used for sorting.
+func AllCodes() []Code { return append([]Code(nil), codeOrder...) }
+
+// BackendOnly reports whether the editor does not produce the code.
+func BackendOnly(code Code) bool {
+	return code == CodeUnsupportedNodeType || code == CodeNameConflictExisting
+}
