@@ -1,5 +1,5 @@
 import type { PaletteEntry, PaletteKind } from "../types/palette";
-import { NODE_TYPE } from "./topology";
+import { NODE_TYPE } from "./topology.ts";
 
 export const PALETTE_ENTRIES: readonly PaletteEntry[] = [
   {

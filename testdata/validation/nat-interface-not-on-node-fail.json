@@ -1,0 +1,58 @@
+{
+  "description": "NAT rule uses another node's interface",
+  "document": {
+    "schemaVersion": 1,
+    "lab": {
+      "id": "a1b2",
+      "name": "t"
+    },
+    "nodes": [
+      {
+        "id": "n1",
+        "name": "ns1",
+        "type": "namespace",
+        "natRules": [
+          {
+            "id": "r1",
+            "kind": "masquerade",
+            "interfaceId": "if2"
+          }
+        ]
+      },
+      {
+        "id": "n2",
+        "name": "ns2",
+        "type": "namespace"
+      }
+    ],
+    "interfaces": [
+      {
+        "id": "if1",
+        "nodeId": "n1",
+        "name": "eth0",
+        "mtu": 1500,
+        "state": "up"
+      },
+      {
+        "id": "if2",
+        "nodeId": "n2",
+        "name": "eth0",
+        "mtu": 1500,
+        "state": "up"
+      }
+    ],
+    "links": [
+      {
+        "id": "l1",
+        "endpointA": "if1",
+        "endpointB": "if2",
+        "kind": "veth",
+        "mtu": 1500,
+        "state": "up"
+      }
+    ]
+  },
+  "expectedCodes": [
+    "NAT_INTERFACE_NOT_ON_NODE"
+  ]
+}

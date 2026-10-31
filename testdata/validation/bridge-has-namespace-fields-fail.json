@@ -1,0 +1,26 @@
+{
+  "description": "bridge with a role",
+  "document": {
+    "schemaVersion": 1,
+    "lab": {
+      "id": "a1b2",
+      "name": "t"
+    },
+    "nodes": [
+      {
+        "id": "b1",
+        "name": "br0",
+        "type": "bridge",
+        "bridge": {
+          "stp": false
+        },
+        "role": "host"
+      }
+    ],
+    "interfaces": [],
+    "links": []
+  },
+  "expectedCodes": [
+    "BRIDGE_HAS_NAMESPACE_FIELDS"
+  ]
+}

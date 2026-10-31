@@ -1,0 +1,14 @@
+{
+  "description": "an empty lab has no issues",
+  "document": {
+    "schemaVersion": 1,
+    "lab": {
+      "id": "a1b2",
+      "name": "t"
+    },
+    "nodes": [],
+    "interfaces": [],
+    "links": []
+  },
+  "expectedCodes": []
+}
