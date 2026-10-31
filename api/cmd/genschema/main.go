@@ -35,12 +35,9 @@ func run() error {
 	return os.WriteFile(os.Args[1], append(content, '\n'), topology.FileMode)
 }
 
-// documentSchema describes the saved document and also defines the runtime-only CaptureSession.
+// documentSchema describes the saved document.
 func documentSchema() *jsonschema.Schema {
 	schema := (&jsonschema.Reflector{ExpandedStruct: true}).Reflect(&topology.Document{})
 	schema.Title = documentTitle
-	for name, definition := range (&jsonschema.Reflector{}).Reflect(&topology.CaptureSession{}).Definitions {
-		schema.Definitions[name] = definition
-	}
 	return schema
 }

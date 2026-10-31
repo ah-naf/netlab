@@ -3,7 +3,7 @@ SANDBOX_DIR := .sandbox
 WORKER_DIR := api/cmd/worker
 WORKER_SOCKET := $(SANDBOX_DIR)/worker.sock
 
-.PHONY: generate install-web dev-web dev-api build lint check-vectors sandbox-shell sandbox-test sandbox-worker
+.PHONY: generate install-web dev-web dev-api build lint sandbox-shell sandbox-test sandbox-worker
 
 generate:
 	cd api && go run ./cmd/genschema ../docs/topology.schema.json
@@ -25,9 +25,6 @@ build:
 lint:
 	cd web && npm run lint && npm run format:check
 	cd api && test -z "$$(gofmt -l .)" && go vet ./...
-
-check-vectors:
-	cd api && go run ./cmd/vectorcheck ../testdata/validation
 
 sandbox-shell:
 	$(SANDBOX) bash

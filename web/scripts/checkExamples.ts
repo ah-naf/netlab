@@ -43,7 +43,6 @@ function bigLab(): Document {
     id: `i${i}`,
     nodeId: `n${i % NODES}`,
     name: `eth${Math.floor(i / NODES)}`,
-    mtu: 1500,
     state: "up" as const,
   });
   return {
@@ -60,7 +59,6 @@ function bigLab(): Document {
       endpointA: `i${i}`,
       endpointB: `i${i + LINKS}`,
       kind: "veth" as const,
-      mtu: 1500,
       state: "up" as const,
     })),
   };

@@ -13,7 +13,7 @@ func laterDuplicates(ids, names []string) []Issue {
 	return issues
 }
 
-func idRules(doc Document, _ Options) []Issue {
+func idRules(doc Document) []Issue {
 	nodeIDs, nodeNames := make([]string, len(doc.Nodes)), make([]string, len(doc.Nodes))
 	for i, node := range doc.Nodes {
 		nodeIDs[i], nodeNames[i] = node.ID, node.Name

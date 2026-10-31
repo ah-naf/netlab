@@ -8,7 +8,6 @@ All privileged networking code runs in a throwaway sandbox, so it can never chan
 scripts/check-env.sh                # check tools and sandbox support
 scripts/sandbox.sh <command> ...    # run any command in the sandbox
 make sandbox-shell                  # interactive shell in the sandbox
-make sandbox-test                   # run privileged checks in the sandbox
 make sandbox-worker                 # run the worker in the sandbox
 ```
 

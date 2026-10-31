@@ -5,6 +5,8 @@ description: "Task list for Backend Lab Validation"
 
 # Tasks: Backend Lab Validation
 
+> **Trimmed by spec 017.** The shared vector files, `vectorcheck`, the existing-name option (`NAME_CONFLICT_EXISTING`, `Options`), `UNSUPPORTED_NODE_TYPE`, `INTERFACE_NAME_RESERVED`, `NAMESPACE_HAS_BRIDGE_FIELDS`, and the byte counting described below were removed. Names are ASCII only and `NODE_NAME_CHARS` was added. See `specs/017-remove-unused-features/contracts/issue-codes.md`. The text below is the record of what spec 016 first built.
+
 **Input**: Design documents from `/specs/016-go-topology-validation/`
 
 **Prerequisites**: plan.md, spec.md, research.md, data-model.md, contracts/issue-codes-additions.md, contracts/backend-vector-format.md, contracts/refusal-response.md, and the shared contract `specs/013-frontend-validator/contracts/issue-codes.md`

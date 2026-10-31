@@ -128,7 +128,7 @@ func duplicateAddressIssues(doc Document) []Issue {
 	return issues
 }
 
-func addressRules(doc Document, _ Options) []Issue {
+func addressRules(doc Document) []Issue {
 	issues := invalidCIDRIssues(doc)
 	issues = append(issues, unreachableRouteIssues(doc)...)
 	return append(issues, duplicateAddressIssues(doc)...)

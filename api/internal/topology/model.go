@@ -24,14 +24,12 @@ type Node struct {
 	Router   *RouterSettings `json:"router,omitempty"`
 	NatRules []NatRule       `json:"natRules,omitempty"`
 	Routes   []Route         `json:"routes,omitempty"`
-	Bridge   *BridgeSettings `json:"bridge,omitempty"`
 }
 
 type Interface struct {
 	ID        string    `json:"id"`
 	NodeID    string    `json:"nodeId"`
 	Name      string    `json:"name"`
-	MTU       int       `json:"mtu"`
 	State     State     `json:"state"`
 	Addresses []Address `json:"addresses,omitempty"`
 }
@@ -41,7 +39,6 @@ type Link struct {
 	EndpointA string   `json:"endpointA"`
 	EndpointB string   `json:"endpointB"`
 	Kind      LinkKind `json:"kind"`
-	MTU       int      `json:"mtu"`
 	State     State    `json:"state"`
 }
 

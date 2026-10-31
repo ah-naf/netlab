@@ -25,14 +25,6 @@ export const SIZE_RANGE = {
 export const DRAWER_TAB_ID = {
   ISSUES: "issues",
   DEPLOYMENT_LOGS: "deploymentLogs",
-  INTERFACE_STATE: "interfaceState",
-  ADDRESSES: "addresses",
-  ROUTES: "routes",
-  NEIGHBORS: "neighbors",
-  BRIDGE_STATE: "bridgeState",
-  FIREWALL_NAT: "firewallNat",
-  PACKET_CAPTURE: "packetCapture",
-  DIAGNOSTICS: "diagnostics",
 } as const;
 
 export const DRAWER_TABS: readonly DrawerTab[] = [
@@ -45,46 +37,6 @@ export const DRAWER_TABS: readonly DrawerTab[] = [
     id: DRAWER_TAB_ID.DEPLOYMENT_LOGS,
     label: "Deployment logs",
     hint: "Output from each deploy step will stream here.",
-  },
-  {
-    id: DRAWER_TAB_ID.INTERFACE_STATE,
-    label: "Interface state",
-    hint: "Link state and counters for each interface.",
-  },
-  {
-    id: DRAWER_TAB_ID.ADDRESSES,
-    label: "Addresses",
-    hint: "IP addresses on every interface.",
-  },
-  {
-    id: DRAWER_TAB_ID.ROUTES,
-    label: "Routes",
-    hint: "The routing table of each namespace.",
-  },
-  {
-    id: DRAWER_TAB_ID.NEIGHBORS,
-    label: "Neighbors",
-    hint: "ARP and neighbor entries.",
-  },
-  {
-    id: DRAWER_TAB_ID.BRIDGE_STATE,
-    label: "Bridge state",
-    hint: "Bridge ports and forwarding entries.",
-  },
-  {
-    id: DRAWER_TAB_ID.FIREWALL_NAT,
-    label: "Firewall/NAT",
-    hint: "Firewall rules and NAT state.",
-  },
-  {
-    id: DRAWER_TAB_ID.PACKET_CAPTURE,
-    label: "Packet capture",
-    hint: "Packets captured on a link.",
-  },
-  {
-    id: DRAWER_TAB_ID.DIAGNOSTICS,
-    label: "Diagnostics",
-    hint: "Ping and trace results.",
   },
 ];
 

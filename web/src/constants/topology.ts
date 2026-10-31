@@ -8,7 +8,6 @@ export const NODE_STATUS = {
 } as const;
 
 export const INTERFACE_ID_PREFIX = "if-";
-export const DEFAULT_INTERFACE_MTU = 1500;
 export const DEFAULT_INTERFACE_STATE = "up";
 export const DEFAULT_POSITION = { x: 0, y: 0 };
 

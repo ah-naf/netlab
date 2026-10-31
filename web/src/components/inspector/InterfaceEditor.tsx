@@ -4,17 +4,13 @@ import {
   STATE_CHOICES,
   removeLabel,
 } from "../../constants/inspector";
-import { setLinkedInterfaceMtu } from "../../store/bridgeLinkOps";
-import { validateMtu } from "../../store/fieldRules";
 import { setInterfaceState } from "../../store/namespaceOps";
 import { useTopologyStore } from "../../store/topologyStore";
 import type { State } from "../../types/topology";
 import AddressList from "./AddressList";
 import InterfaceNameField from "./InterfaceNameField";
-import ObservedLine from "./ObservedLine";
 import RemoveAction from "./RemoveAction";
 import SelectField from "./SelectField";
-import ValidatedField from "./ValidatedField";
 
 export default function InterfaceEditor({
   interfaceId,
@@ -49,27 +45,15 @@ export default function InterfaceEditor({
           fieldKey={`name-${interfaceId}`}
           label={FIELD_LABEL.INTERFACE_NAME}
         />
-        <div className="flex gap-2">
-          <ValidatedField
-            fieldKey={`mtu-${interfaceId}`}
-            label={FIELD_LABEL.MTU}
-            value={String(item.mtu)}
-            rule={validateMtu}
-            onCommit={(mtu) =>
-              edit((d) => setLinkedInterfaceMtu(d, interfaceId, Number(mtu)))
-            }
-          />
-          <SelectField
-            label={FIELD_LABEL.STATE}
-            value={item.state}
-            options={STATE_CHOICES}
-            onChange={(state) =>
-              edit((d) => setInterfaceState(d, interfaceId, state as State))
-            }
-          />
-        </div>
+        <SelectField
+          label={FIELD_LABEL.STATE}
+          value={item.state}
+          options={STATE_CHOICES}
+          onChange={(state) =>
+            edit((d) => setInterfaceState(d, interfaceId, state as State))
+          }
+        />
         <AddressList interfaceId={interfaceId} />
-        <ObservedLine />
       </div>
     </div>
   );

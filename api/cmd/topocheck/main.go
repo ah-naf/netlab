@@ -1,4 +1,4 @@
-// Command topocheck loads a lab document and prints it back as JSON.
+// Command topocheck loads a lab document, prints its validation issues, then prints it back as JSON.
 package main
 
 import (
@@ -24,6 +24,9 @@ func run() error {
 	doc, err := topology.Load(os.Args[1])
 	if err != nil {
 		return err
+	}
+	for _, issue := range topology.Validate(doc) {
+		fmt.Fprintf(os.Stderr, "%s %s: %s\n", issue.Code, issue.ResourceName, issue.Message)
 	}
 	content, err := topology.Marshal(doc)
 	if err != nil {

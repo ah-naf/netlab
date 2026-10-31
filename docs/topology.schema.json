@@ -13,60 +13,6 @@
         "cidr"
       ]
     },
-    "BridgeSettings": {
-      "properties": {
-        "stp": {
-          "type": "boolean"
-        },
-        "stpPriority": {
-          "type": "integer"
-        },
-        "vlan": {
-          "$ref": "#/$defs/VlanSettings"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "stp"
-      ]
-    },
-    "CaptureSession": {
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "interfaceId": {
-          "type": "string"
-        },
-        "filter": {
-          "type": "string"
-        },
-        "maxPackets": {
-          "type": "integer"
-        },
-        "maxSeconds": {
-          "type": "integer"
-        },
-        "state": {
-          "$ref": "#/$defs/CaptureState"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "id",
-        "interfaceId",
-        "state"
-      ]
-    },
-    "CaptureState": {
-      "type": "string",
-      "enum": [
-        "running",
-        "stopped"
-      ]
-    },
     "Interface": {
       "properties": {
         "id": {
@@ -77,9 +23,6 @@
         },
         "name": {
           "type": "string"
-        },
-        "mtu": {
-          "type": "integer"
         },
         "state": {
           "$ref": "#/$defs/State"
@@ -97,7 +40,6 @@
         "id",
         "nodeId",
         "name",
-        "mtu",
         "state"
       ]
     },
@@ -134,9 +76,6 @@
         "kind": {
           "$ref": "#/$defs/LinkKind"
         },
-        "mtu": {
-          "type": "integer"
-        },
         "state": {
           "$ref": "#/$defs/State"
         }
@@ -148,7 +87,6 @@
         "endpointA",
         "endpointB",
         "kind",
-        "mtu",
         "state"
       ]
     },
@@ -158,42 +96,19 @@
         "veth"
       ]
     },
-    "NatKind": {
-      "type": "string",
-      "enum": [
-        "masquerade",
-        "dnat"
-      ]
-    },
     "NatRule": {
       "properties": {
         "id": {
           "type": "string"
         },
-        "kind": {
-          "$ref": "#/$defs/NatKind"
-        },
         "interfaceId": {
           "type": "string"
-        },
-        "protocol": {
-          "type": "string"
-        },
-        "port": {
-          "type": "integer"
-        },
-        "toAddress": {
-          "type": "string"
-        },
-        "toPort": {
-          "type": "integer"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
         "id",
-        "kind",
         "interfaceId"
       ]
     },
@@ -225,9 +140,6 @@
             "$ref": "#/$defs/Route"
           },
           "type": "array"
-        },
-        "bridge": {
-          "$ref": "#/$defs/BridgeSettings"
         }
       },
       "additionalProperties": false,
@@ -265,8 +177,7 @@
       "type": "string",
       "enum": [
         "host",
-        "router",
-        "nat"
+        "router"
       ]
     },
     "Route": {
@@ -307,21 +218,6 @@
       "enum": [
         "up",
         "down"
-      ]
-    },
-    "VlanSettings": {
-      "properties": {
-        "filtering": {
-          "type": "boolean"
-        },
-        "defaultVlanId": {
-          "type": "integer"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "filtering"
       ]
     }
   },

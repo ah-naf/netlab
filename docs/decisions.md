@@ -1,44 +1,44 @@
 # NetLab Decisions Record
 
 Written: 2026-10-29
-Reviewed: 2026-10-29
+Reviewed: 2026-10-31
 
 ## 1. Authentication for version 1
 **Status**: Approved
-**Decision**: Use one static bearer token read from the `NETLAB_TOKEN` environment variable. Both the API and the worker check it. Lab ownership is keyed by the token owner id.
-**Rationale**: Version 1 targets a single user on one VM, so a full login system adds code without adding safety. A shared token still blocks unauthenticated access to the API and the privileged worker, and the owner id keeps ownership checks in place for a later move to real accounts.
+**Decision**: No login and no token. The worker listens on a Unix socket with mode 0600 inside a directory with mode 0700. That is the only access control.
+**Rationale**: Version 1 targets one user on one machine. The socket permissions already keep other users out of the privileged worker, and a token would add code without adding safety.
 
 ## 2. Data persistence
 **Status**: Approved
-**Decision**: Store labs, jobs, capture metadata, and the audit log in SQLite through the pure Go driver `modernc.org/sqlite` (no cgo). Topology documents can also be exported as JSON files.
-**Rationale**: SQLite needs no separate server and survives restarts, which the job progress and recovery work depend on. The pure Go driver keeps builds simple. JSON export keeps topologies portable and easy to share.
+**Decision**: No database. The API keeps the last deployed lab in memory. The browser saves labs as `.netlab.json` files.
+**Rationale**: Reset deletes lab resources by their `nl-` name prefix, so nothing has to survive an API restart.
 
 ## 3. veth link model
 **Status**: Approved
-**Decision**: A veth pair is an edge with two interface endpoints. The palette entry "veth pair" is a shortcut that creates a link between two chosen interfaces. It is not a node.
+**Decision**: A veth pair is an edge with two interface endpoints. A link is drawn by dragging between two interfaces. It is not a node and has no palette entry.
 **Rationale**: A veth pair is two connected interfaces, not a device on its own. Modeling it as an edge keeps interfaces as separate entities and makes dangling endpoints easy to validate.
 
-## 4. Host, router, and NAT roles
+## 4. Host and router roles
 **Status**: Approved
-**Decision**: Host, router, and NAT gateway are roles of a namespace-backed node, set with a `role` field plus role settings. They are not separate kernel object types. The UI may show them with different icons.
-**Rationale**: In Linux these are all network namespaces with different settings, such as forwarding and firewall rules. One node type with a role avoids inventing kernel concepts that do not exist.
+**Decision**: Host and router are roles of a namespace-backed node, set with a `role` field plus role settings. They are not separate kernel object types. The UI may show them with different icons.
+**Rationale**: In Linux these are all network namespaces with different settings, such as forwarding and NAT rules. One node type with a role avoids inventing kernel concepts that do not exist.
 
 ## 5. Resource naming and ownership
 **Status**: Approved
 **Decision**: Every lab resource name uses the prefix `nl` plus a short lab id, for example `nl-a1b2-ns1` and `nl-a1b2-br0`. Linux interface names are limited to 15 characters, so the plan builder shortens names with a deterministic short hash. The user-facing name lives only in the topology. Interfaces inside a namespace keep the user-facing name, such as `eth0`.
 Every name is editable from the frontend: lab, namespace, bridge, interface, and link names. The editor checks each name as the user types (length, allowed characters, uniqueness) and the Linux names are derived again on the next deploy. Renaming a name on a deployed lab shows as drift until the lab is redeployed.
+Names may contain only ASCII letters, digits, `-`, and `_`, so a length of 15 means 15 bytes.
 **Rationale**: A fixed prefix tells lab-owned resources apart from everything else on the machine, so reset and cleanup can never touch unrelated resources. The hash keeps names inside the length limit while staying the same on every deploy.
 
 ## 6. Kernel control approach
 **Status**: Approved
-**Decision**: Use `vishvananda/netlink` and `netns` for links, addresses, routes, and bridges. Run external programs (`nft`, `tc`, `tcpdump`) only with a fixed absolute path and separate arguments, never through a shell. Namespace operations run on a locked OS thread.
-**Rationale**: Direct netlink calls are more correct and easier to check than parsing command output. The external programs have no good library or are not worth replacing. A locked thread is required because a namespace switch applies to the current thread only.
+**Decision**: The worker runs a fixed set of programs (`ip`, `bridge`, `sysctl`, `nft`, `ping`, `curl`, `tcpdump`) by absolute path, with separate arguments and never through a shell. There is no netlink library.
+**Rationale**: The draft labs are all `ip` commands. Calling the same programs keeps the worker short and easy to check against the draft.
 
 ## 7. Packet capture
 **Status**: Approved
-**Decision**: Capture with the external `tcpdump` program and decode its pcap output in Go. The capture code sits behind an interface so it can be replaced later. `tcpdump` is not installed on the development machine and must be installed before capture work starts.
-**Rationale**: This follows the product draft and uses a well-known tool with proven filter handling.
-**Alternative considered**: Capture in-process in Go with no external program. It needs no install, but it means more code to write and own and a different privilege surface. It was rejected for version 1. The owner confirmed this choice on 2026-10-29.
+**Decision**: No capture screen. A command can run `tcpdump -c N` in a namespace and show the text output (NL-046). `tcpdump` must be installed.
+**Rationale**: The draft only watches packets to explain where traffic stops. Text output is enough for that.
 
 ## 8. Sandboxed development of privileged code
 **Status**: Approved
@@ -47,14 +47,10 @@ Every name is editable from the frontend: lab, namespace, bridge, interface, and
 
 ## 9. Frontend state
 **Status**: Approved
-**Decision**: Use Zustand. The desired topology is the single source for the canvas. Observed kernel state is kept in a separate store.
-**Rationale**: The desired state and the real kernel state can differ, and the interface must show both. Keeping them in separate stores prevents one from silently overwriting the other.
+**Decision**: Use Zustand. The desired topology is the single source for the canvas.
+**Rationale**: The editor shows only the lab being drawn. Kernel state is read as text on request, so no second store is needed.
 
 ## 10. API versioning and error format
 **Status**: Approved
 **Decision**: All routes live under `/api/v1`. Errors use the shape `{ "error": { "code", "message", "resource", "details" } }`.
 **Rationale**: A version prefix allows later changes without breaking clients. One error shape lets the frontend show failures the same way everywhere and name the failed resource.
-
-## Known mismatches
-- NL-012, NL-021, NL-030, NL-031, NL-032, NL-033, NL-034, NL-035, NL-036, NL-044, NL-050, NL-061, NL-066: list tests as acceptance, which disagrees with the constitution's rule that no tests are written. The tickets are not edited yet.
-- NL-060 and NL-000 mentioned an in-process capture fallback. Both were fixed to match decision 7.

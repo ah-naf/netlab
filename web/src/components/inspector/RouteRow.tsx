@@ -12,7 +12,6 @@ import { draftOf, toRoute } from "../../store/routeDraft";
 import { interfacesOf, useTopologyStore } from "../../store/topologyStore";
 import type { RouteDraft } from "../../types/inspector";
 import type { Route } from "../../types/topology";
-import ObservedLine from "./ObservedLine";
 import RemoveAction from "./RemoveAction";
 import SelectField from "./SelectField";
 import ValidatedField from "./ValidatedField";
@@ -78,7 +77,6 @@ export default function RouteRow({ nodeId, index, route }: Props) {
           options={interfaceOptions}
           onChange={(value) => change("interfaceId", value)}
         />
-        <ObservedLine />
       </div>
     </div>
   );

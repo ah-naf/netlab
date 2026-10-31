@@ -6,8 +6,7 @@
  */
 
 export type NodeType = "namespace" | "bridge";
-export type Role = "host" | "router" | "nat";
-export type NatKind = "masquerade" | "dnat";
+export type Role = "host" | "router";
 export type State = "up" | "down";
 export type LinkKind = "veth";
 
@@ -34,19 +33,13 @@ export interface Node {
   router?: RouterSettings;
   natRules?: NatRule[];
   routes?: Route[];
-  bridge?: BridgeSettings;
 }
 export interface RouterSettings {
   forwarding: boolean;
 }
 export interface NatRule {
   id: string;
-  kind: NatKind;
   interfaceId: string;
-  protocol?: string;
-  port?: number;
-  toAddress?: string;
-  toPort?: number;
 }
 export interface Route {
   destination: string;
@@ -54,20 +47,10 @@ export interface Route {
   interfaceId?: string;
   metric?: number;
 }
-export interface BridgeSettings {
-  stp: boolean;
-  stpPriority?: number;
-  vlan?: VlanSettings;
-}
-export interface VlanSettings {
-  filtering: boolean;
-  defaultVlanId?: number;
-}
 export interface Interface {
   id: string;
   nodeId: string;
   name: string;
-  mtu: number;
   state: State;
   addresses?: Address[];
 }
@@ -79,7 +62,6 @@ export interface Link {
   endpointA: string;
   endpointB: string;
   kind: LinkKind;
-  mtu: number;
   state: State;
 }
 export interface Position {

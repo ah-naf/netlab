@@ -41,7 +41,6 @@
       "id": "if-ns1-eth0",
       "nodeId": "node-ns1",
       "name": "eth0",
-      "mtu": 1500,
       "state": "up",
       "addresses": [{ "cidr": "10.0.1.10/24" }]
     },
@@ -49,7 +48,6 @@
       "id": "if-r1-eth0",
       "nodeId": "node-r1",
       "name": "eth0",
-      "mtu": 1500,
       "state": "up",
       "addresses": [{ "cidr": "10.0.1.1/24" }]
     },
@@ -57,7 +55,6 @@
       "id": "if-r1-eth1",
       "nodeId": "node-r1",
       "name": "eth1",
-      "mtu": 1500,
       "state": "up",
       "addresses": [{ "cidr": "10.0.2.1/24" }]
     },
@@ -65,7 +62,6 @@
       "id": "if-ns2-eth0",
       "nodeId": "node-ns2",
       "name": "eth0",
-      "mtu": 1500,
       "state": "up",
       "addresses": [{ "cidr": "10.0.2.10/24" }]
     }
@@ -76,7 +72,6 @@
       "endpointA": "if-ns1-eth0",
       "endpointB": "if-r1-eth0",
       "kind": "veth",
-      "mtu": 1500,
       "state": "up"
     },
     {
@@ -84,7 +79,6 @@
       "endpointA": "if-r1-eth1",
       "endpointB": "if-ns2-eth0",
       "kind": "veth",
-      "mtu": 1500,
       "state": "up"
     }
   ],

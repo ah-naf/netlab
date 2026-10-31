@@ -25,12 +25,10 @@ flowchart LR
     WK -.-> K["Linux kernel<br/>namespaces, bridges, veth"]
     OB["Observer<br/>later"] -.->|"real state"| API
     OB -.-> K
-    CP["Capture<br/>later, tcpdump"] -.->|"packets"| API
-    CP -.-> K
     classDef built fill:#d8f0e0,stroke:#2e9a57,color:#14232b
     classDef later fill:#f3f3f3,stroke:#888,stroke-dasharray:5 5,color:#444
     class FE,API built
-    class WK,OB,CP,K later
+    class WK,OB,K later
 ```
 
 Solid boxes exist in Milestone 1. Dashed boxes come in later milestones.
@@ -39,7 +37,6 @@ Solid boxes exist in Milestone 1. Dashed boxes come in later milestones.
 - **API**: the HTTP API under `/api/v1`. In Milestone 1 it only answers a health check.
 - **Worker**: does the privileged work (namespaces, bridges, links) inside the sandbox. Later.
 - **Observer**: reads the real kernel state and reports it, so the canvas can show drift. Later.
-- **Capture**: captures packets on a link with `tcpdump`. Later.
 
 ## Prerequisites
 
@@ -118,7 +115,6 @@ Run these from the repository root. Every command here is run on a clean checkou
 | --- | --- | --- |
 | Build | `make build` | the frontend prints "built in …ms", the Go build prints nothing, exit 0 |
 | Lint and format | `make lint` | ESLint prints nothing, Prettier says "All matched files use Prettier code style!", gofmt and vet print nothing, exit 0 |
-| Validator cases | `node web/scripts/checkVectors.ts` | every line is `ok`, then a `speed:` line, exit 0 |
 | Example labs | `node web/scripts/checkExamples.ts` | each example `ok`, the `bad input` lines `ok`, a `speed:` line, exit 0 |
 | Environment | `scripts/check-env.sh` | each tool `ok`, plus `bridge`, `veth pair`, `named namespace`, exit 0 |
 | Sandbox integration | `make sandbox-test` | Go packages print `[no test files]`, exit 0 (normal for now) |

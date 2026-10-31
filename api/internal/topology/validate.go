@@ -2,7 +2,7 @@ package topology
 
 import "sort"
 
-type rule func(doc Document, opts Options) []Issue
+type rule func(doc Document) []Issue
 
 // rules run in this order; the order of results is fixed by the sort in Validate.
 var rules = []rule{idRules, nameRules, linkRules, nodeRules, addressRules}
@@ -14,16 +14,6 @@ var codeRank = func() map[Code]int {
 	}
 	return rank
 }()
-
-// runRule keeps one failing rule from hiding the others.
-func runRule(r rule, doc Document, opts Options) (issues []Issue) {
-	defer func() {
-		if recover() != nil {
-			issues = nil
-		}
-	}()
-	return r(doc, opts)
-}
 
 func severityRank(issue Issue) int {
 	if issue.Severity == SeverityError {
@@ -44,10 +34,10 @@ func issueLess(a, b Issue) bool {
 
 // Validate returns every issue in the document: errors first, then by code, then by resource id.
 // It never changes doc and never returns nil.
-func Validate(doc Document, opts Options) []Issue {
+func Validate(doc Document) []Issue {
 	issues := []Issue{}
 	for _, r := range rules {
-		issues = append(issues, runRule(r, doc, opts)...)
+		issues = append(issues, r(doc)...)
 	}
 	sort.SliceStable(issues, func(i, j int) bool { return issueLess(issues[i], issues[j]) })
 	return issues

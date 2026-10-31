@@ -32,7 +32,7 @@ export function toFlowEdges(
         id: link.id,
         source: from.nodeId,
         target: to.nodeId,
-        label: linkLabel(from.name, to.name, link.mtu),
+        label: linkLabel(from.name, to.name),
         className: issues.has(link.id)
           ? LINK_ISSUE_CLASS[issues.get(link.id)!]
           : undefined,

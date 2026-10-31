@@ -14,10 +14,10 @@ const (
 	CodeDuplicateID              Code = "DUPLICATE_ID"
 	CodeNodeNameEmpty            Code = "NODE_NAME_EMPTY"
 	CodeDuplicateNodeName        Code = "DUPLICATE_NODE_NAME"
+	CodeNodeNameChars            Code = "NODE_NAME_CHARS"
 	CodeDuplicateInterfaceName   Code = "DUPLICATE_INTERFACE_NAME"
 	CodeInterfaceNameLength      Code = "INTERFACE_NAME_LENGTH"
 	CodeInterfaceNameChars       Code = "INTERFACE_NAME_CHARS"
-	CodeInterfaceNameReserved    Code = "INTERFACE_NAME_RESERVED"
 	CodeLinuxNameCollision       Code = "LINUX_NAME_COLLISION"
 	CodeInvalidCIDR              Code = "INVALID_CIDR"
 	CodeInterfaceNodeMissing     Code = "INTERFACE_NODE_MISSING"
@@ -26,15 +26,10 @@ const (
 	CodeInterfaceInTwoLinks      Code = "INTERFACE_IN_TWO_LINKS"
 	CodeLinkEndpointKind         Code = "LINK_ENDPOINT_KIND"
 	CodeBridgeHasNamespaceFields Code = "BRIDGE_HAS_NAMESPACE_FIELDS"
-	CodeNamespaceHasBridgeFields Code = "NAMESPACE_HAS_BRIDGE_FIELDS"
 	CodeNATInterfaceNotOnNode    Code = "NAT_INTERFACE_NOT_ON_NODE"
 	CodeRouteInterfaceMissing    Code = "ROUTE_INTERFACE_MISSING"
 	CodeRouteGatewayUnreachable  Code = "ROUTE_GATEWAY_UNREACHABLE"
 	CodeDuplicateIPOnSegment     Code = "DUPLICATE_IP_ON_SEGMENT"
-
-	// Backend only: the editor does not produce these two.
-	CodeUnsupportedNodeType  Code = "UNSUPPORTED_NODE_TYPE"
-	CodeNameConflictExisting Code = "NAME_CONFLICT_EXISTING"
 )
 
 // codeOrder is the tie-break order in the issue list.
@@ -42,10 +37,10 @@ var codeOrder = []Code{
 	CodeDuplicateID,
 	CodeNodeNameEmpty,
 	CodeDuplicateNodeName,
+	CodeNodeNameChars,
 	CodeDuplicateInterfaceName,
 	CodeInterfaceNameLength,
 	CodeInterfaceNameChars,
-	CodeInterfaceNameReserved,
 	CodeLinuxNameCollision,
 	CodeInvalidCIDR,
 	CodeInterfaceNodeMissing,
@@ -54,13 +49,10 @@ var codeOrder = []Code{
 	CodeInterfaceInTwoLinks,
 	CodeLinkEndpointKind,
 	CodeBridgeHasNamespaceFields,
-	CodeNamespaceHasBridgeFields,
 	CodeNATInterfaceNotOnNode,
 	CodeRouteInterfaceMissing,
 	CodeRouteGatewayUnreachable,
 	CodeDuplicateIPOnSegment,
-	CodeUnsupportedNodeType,
-	CodeNameConflictExisting,
 }
 
 // messageOf holds one plain message per code.
@@ -68,10 +60,10 @@ var messageOf = map[Code]string{
 	CodeDuplicateID:              "Two resources of the same kind share an id",
 	CodeNodeNameEmpty:            "Name cannot be empty",
 	CodeDuplicateNodeName:        "Another node already uses this name",
+	CodeNodeNameChars:            "Name can use only letters, digits, - and _",
 	CodeDuplicateInterfaceName:   "Another interface on this node uses this name",
-	CodeInterfaceNameLength:      "Name must be 1 to 15 bytes",
-	CodeInterfaceNameChars:       "Name cannot contain a slash or spaces",
-	CodeInterfaceNameReserved:    "Name cannot be . or ..",
+	CodeInterfaceNameLength:      "Name must be 1 to 15 characters",
+	CodeInterfaceNameChars:       "Name can use only letters, digits, - and _",
 	CodeLinuxNameCollision:       "Another node would get the same deploy-time name",
 	CodeInvalidCIDR:              "Enter an address like 10.0.0.5/24 or fd00::1/64",
 	CodeInterfaceNodeMissing:     "The interface belongs to a node that does not exist",
@@ -80,13 +72,10 @@ var messageOf = map[Code]string{
 	CodeInterfaceInTwoLinks:      "This interface is used by more than one link",
 	CodeLinkEndpointKind:         "A link end or the link type is not supported",
 	CodeBridgeHasNamespaceFields: "A bridge cannot have a role, routes, or NAT rules",
-	CodeNamespaceHasBridgeFields: "A namespace cannot have bridge settings",
 	CodeNATInterfaceNotOnNode:    "A NAT rule uses an interface of another node",
 	CodeRouteInterfaceMissing:    "A route uses an interface that is not on this node",
 	CodeRouteGatewayUnreachable:  "A route gateway is not inside a directly connected network",
 	CodeDuplicateIPOnSegment:     "Two interfaces on one segment share an address",
-	CodeUnsupportedNodeType:      "This node type is not supported",
-	CodeNameConflictExisting:     "A resource with the same deploy-time name already exists",
 }
 
 // Issue is one finding. RelatedIDs is never nil, so it marshals as [].
@@ -132,12 +121,4 @@ func HasErrors(issues []Issue) bool {
 		}
 	}
 	return false
-}
-
-// AllCodes lists every code in the order used for sorting.
-func AllCodes() []Code { return append([]Code(nil), codeOrder...) }
-
-// BackendOnly reports whether the editor does not produce the code.
-func BackendOnly(code Code) bool {
-	return code == CodeUnsupportedNodeType || code == CodeNameConflictExisting
 }

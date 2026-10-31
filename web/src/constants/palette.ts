@@ -7,42 +7,24 @@ export const PALETTE_ENTRIES: readonly PaletteEntry[] = [
     label: "Namespace",
     description: "Isolated network stack with its own interfaces and routes",
     create: { type: NODE_TYPE.NAMESPACE },
-    available: true,
   },
   {
     id: "host",
     label: "Host",
     description: "A computer on the lab network",
     create: { type: NODE_TYPE.NAMESPACE, role: "host" },
-    available: true,
-  },
-  {
-    id: "veth",
-    label: "veth pair",
-    description: "A virtual cable between two interfaces",
-    create: null,
-    available: false,
   },
   {
     id: "bridge",
     label: "Linux bridge",
     description: "Connects interfaces like a switch",
     create: { type: NODE_TYPE.BRIDGE },
-    available: true,
   },
   {
     id: "router",
     label: "Router",
     description: "Forwards traffic between networks",
     create: { type: NODE_TYPE.NAMESPACE, role: "router" },
-    available: true,
-  },
-  {
-    id: "nat",
-    label: "NAT gateway",
-    description: "Translates addresses between inside and outside",
-    create: { type: NODE_TYPE.NAMESPACE, role: "nat" },
-    available: true,
   },
 ];
 
@@ -55,7 +37,6 @@ export const NAME_RULE: Partial<
   namespace: { prefix: "ns", start: 1 },
   host: { prefix: "ns", start: 1 },
   router: { prefix: "r", start: 1 },
-  nat: { prefix: "nat", start: 1 },
   bridge: { prefix: "br", start: 0 },
 };
 

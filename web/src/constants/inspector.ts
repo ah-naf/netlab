@@ -1,14 +1,9 @@
 import type { Role, State } from "../types/topology";
 
-export const MTU_MIN = 68;
-export const MTU_MAX = 65535;
 export const INTERFACE_NAME_MAX = 15;
-export const PATH_SEPARATOR = "/";
+export const PLAIN_NAME = /^[A-Za-z0-9_-]+$/;
 
 export const DEFAULT_DESTINATION = { IPV4: "0.0.0.0/0", IPV6: "::/0" } as const;
-export const OBSERVED_LABEL = "Observed state";
-export const OBSERVED_TEXT = "Not deployed";
-export const OBSERVED_HELP = "Shows the live state once the lab is deployed";
 
 export const ROLE_CHOICES: { value: Role; label: string }[] = [
   { value: "host", label: "Host" },
@@ -24,7 +19,6 @@ export const FIELD_LABEL = {
   NODE_NAME: "Namespace name",
   ROLE: "Role",
   INTERFACE_NAME: "Interface name",
-  MTU: "MTU",
   STATE: "State",
   ADDRESS: "Add address",
   GATEWAY_ADDRESS: "Gateway address",
@@ -79,15 +73,12 @@ export const NO_ROUTES_TEXT = "No static routes";
 export const ROLE_NAME = {
   host: "Host",
   router: "Router",
-  nat: "NAT gateway",
 } as const;
 export const NO_ROLE_TEXT = "Namespace (no role)";
 
 export const FIELD_ERROR = {
-  NAME_CHARS: "Name cannot contain a slash or spaces",
-  NAME_DOT: "Name cannot be . or ..",
+  NAME_CHARS: "Name can use only letters, digits, - and _",
   NAME_TAKEN: "Another interface on this node uses this name",
-  MTU_RANGE: `MTU must be a whole number from ${MTU_MIN} to ${MTU_MAX}`,
   CIDR_INVALID: "Enter an address like 10.0.0.5/24 or fd00::1/64",
   ADDRESS_DUPLICATE: "This interface already has this address",
   GATEWAY_INVALID: "Enter an IPv4 or IPv6 address like 10.0.0.1",

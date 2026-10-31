@@ -1,28 +1,18 @@
 package topology
 
-import (
-	"strings"
-	"unicode"
-)
+import "strings"
 
-const (
-	maxInterfaceNameBytes = 15
-	pathSeparator         = "/"
-)
+const maxInterfaceNameLength = 15
 
-var reservedNames = []string{".", ".."}
-
-func hasSpace(name string) bool {
-	return strings.IndexFunc(name, unicode.IsSpace) >= 0
-}
-
-func isReserved(name string) bool {
-	for _, reserved := range reservedNames {
-		if name == reserved {
-			return true
+func isPlainName(name string) bool {
+	for i := 0; i < len(name); i++ {
+		c := name[i]
+		isLetterOrDigit := c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9'
+		if !isLetterOrDigit && c != '-' && c != '_' {
+			return false
 		}
 	}
-	return false
+	return true
 }
 
 // nodeNameIssues checks one node against the nodes before it; the later node is the one reported.
@@ -30,6 +20,9 @@ func nodeNameIssues(node Node, earlier []Node) []Issue {
 	name := strings.TrimSpace(node.Name)
 	if name == "" {
 		return []Issue{newIssue(CodeNodeNameEmpty, node.ID, node.Name)}
+	}
+	if !isPlainName(name) {
+		return []Issue{newIssue(CodeNodeNameChars, node.ID, node.Name)}
 	}
 	for _, other := range earlier {
 		if other.Name == name {
@@ -45,14 +38,11 @@ func interfaceNameIssues(iface Interface, earlier []Interface) []Issue {
 	add := func(code Code, related ...string) {
 		issues = append(issues, newIssue(code, iface.ID, iface.Name, related...))
 	}
-	if iface.Name == "" || len(iface.Name) > maxInterfaceNameBytes {
+	if iface.Name == "" || len(iface.Name) > maxInterfaceNameLength {
 		add(CodeInterfaceNameLength)
 	}
-	if strings.Contains(iface.Name, pathSeparator) || hasSpace(iface.Name) {
+	if !isPlainName(iface.Name) {
 		add(CodeInterfaceNameChars)
-	}
-	if isReserved(iface.Name) {
-		add(CodeInterfaceNameReserved)
 	}
 	for _, other := range earlier {
 		if other.NodeID == iface.NodeID && other.Name == iface.Name {
@@ -63,7 +53,7 @@ func interfaceNameIssues(iface Interface, earlier []Interface) []Issue {
 	return issues
 }
 
-func nameRules(doc Document, _ Options) []Issue {
+func nameRules(doc Document) []Issue {
 	var issues []Issue
 	for i, node := range doc.Nodes {
 		issues = append(issues, nodeNameIssues(node, doc.Nodes[:i])...)

@@ -11,9 +11,6 @@ func nodeIssues(doc Document, node Node) []Issue {
 	if node.Type == NodeTypeBridge && hasNamespaceFields(node) {
 		add(CodeBridgeHasNamespaceFields)
 	}
-	if node.Type == NodeTypeNamespace && node.Bridge != nil {
-		add(CodeNamespaceHasBridgeFields)
-	}
 	for _, rule := range node.NatRules {
 		if !ownedBy(doc, node, rule.InterfaceID) {
 			add(CodeNATInterfaceNotOnNode)
@@ -29,7 +26,7 @@ func nodeIssues(doc Document, node Node) []Issue {
 	return issues
 }
 
-func nodeRules(doc Document, _ Options) []Issue {
+func nodeRules(doc Document) []Issue {
 	nodes := nodeIndex(doc)
 	var issues []Issue
 	for _, iface := range doc.Interfaces {

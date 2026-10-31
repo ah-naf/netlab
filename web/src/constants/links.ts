@@ -9,8 +9,8 @@ export const LINK_REASON = {
   UNSUPPORTED: "These two node types cannot be linked.",
 } as const;
 
-export const linkLabel = (nameA: string, nameB: string, mtu: number) =>
-  `${nameA} ↔ ${nameB} · MTU ${mtu}`;
+export const linkLabel = (nameA: string, nameB: string) =>
+  `${nameA} ↔ ${nameB}`;
 
 export const LINK_LABEL_STYLE = { fill: "var(--ink)", fontSize: 11 };
 export const LINK_LABEL_BG = { fill: "var(--panel)" };

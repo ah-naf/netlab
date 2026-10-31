@@ -1,5 +1,7 @@
 # Contract: Additions to the shared issue codes
 
+> **Trimmed by spec 017.** The shared vector files, `vectorcheck`, the existing-name option (`NAME_CONFLICT_EXISTING`, `Options`), `UNSUPPORTED_NODE_TYPE`, `INTERFACE_NAME_RESERVED`, `NAMESPACE_HAS_BRIDGE_FIELDS`, and the byte counting described below were removed. Names are ASCII only and `NODE_NAME_CHARS` was added. See `specs/017-remove-unused-features/contracts/issue-codes.md`. The text below is the record of what spec 016 first built.
+
 These extend `specs/013-frontend-validator/contracts/issue-codes.md` (one task edits that file to add them). The 20 existing codes and their meanings do not change.
 
 | Code | Severity | Resource | Fires when | Produced by |

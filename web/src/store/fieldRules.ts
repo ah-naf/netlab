@@ -1,10 +1,6 @@
-import {
-  STP_ERROR,
-  STP_PRIORITY_MAX,
-  STP_PRIORITY_MIN,
-} from "../constants/inspectorBridgeLink";
+import {} from "../constants/inspectorBridgeLink";
 import { ISSUE_MESSAGE } from "../constants/validation";
-import { FIELD_ERROR, MTU_MAX, MTU_MIN } from "../constants/inspector";
+import { FIELD_ERROR } from "../constants/inspector";
 import type { RouteDraft } from "../types/inspector";
 import type { Document } from "../types/topology";
 import { isCidr, isIpAddress } from "./ipAddress";
@@ -22,14 +18,6 @@ export function validateInterfaceName(
 ): string | null {
   const [code] = interfaceNameCodes(document, interfaceId, name);
   return code ? ISSUE_MESSAGE[code] : null;
-}
-
-export function validateMtu(text: string): string | null {
-  const valid =
-    WHOLE_NUMBER.test(text) &&
-    Number(text) >= MTU_MIN &&
-    Number(text) <= MTU_MAX;
-  return valid ? null : FIELD_ERROR.MTU_RANGE;
 }
 
 export function validateAddress(
@@ -63,13 +51,6 @@ export function validateRoute(draft: RouteDraft): string | null {
     (draft.gateway || draft.interfaceId ? null : FIELD_ERROR.ROUTE_NEXT_HOP)
   );
 }
-
-export const validateStpPriority = (text: string): string | null =>
-  WHOLE_NUMBER.test(text) &&
-  Number(text) >= STP_PRIORITY_MIN &&
-  Number(text) <= STP_PRIORITY_MAX
-    ? null
-    : STP_ERROR;
 
 export const validateLabName = (text: string): string | null =>
   text.trim() ? null : FIELD_ERROR.LAB_NAME_EMPTY;

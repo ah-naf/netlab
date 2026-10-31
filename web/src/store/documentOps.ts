@@ -5,7 +5,6 @@ import {
   NODE_ID_PREFIX,
 } from "../constants/palette";
 import {
-  DEFAULT_INTERFACE_MTU,
   DEFAULT_INTERFACE_STATE,
   DEFAULT_POSITION,
   INTERFACE_ID_PREFIX,
@@ -82,7 +81,6 @@ export function createNode(
     ),
     type: create.type,
     ...(create.role && { role: create.role }),
-    ...(create.type === NODE_TYPE.BRIDGE && { bridge: { stp: false } }),
   };
   return {
     document: {
@@ -213,7 +211,6 @@ const newPort = (document: Document, nodeId: string): Interface => ({
     INTERFACE_NAME_START[NODE_TYPE.BRIDGE],
     document.interfaces.filter((i) => i.nodeId === nodeId).map((i) => i.name),
   ),
-  mtu: DEFAULT_INTERFACE_MTU,
   state: DEFAULT_INTERFACE_STATE,
 });
 
@@ -233,20 +230,11 @@ export function createLink(
   const endpointA = endpointOf(from);
   const endpointB = endpointOf(to);
   const linkId = newId(LINK_ID_PREFIX);
-  next = {
-    ...next,
-    interfaces: next.interfaces.map((i) =>
-      [endpointA, endpointB].includes(i.id)
-        ? { ...i, mtu: DEFAULT_INTERFACE_MTU }
-        : i,
-    ),
-  };
   const link: Link = {
     id: linkId,
     endpointA,
     endpointB,
     kind: LINK_KIND.VETH,
-    mtu: DEFAULT_INTERFACE_MTU,
     state: DEFAULT_INTERFACE_STATE,
   };
   return { document: { ...next, links: [...next.links, link] }, linkId };

@@ -43,12 +43,6 @@ export const renameInterface = (
   name: string,
 ) => mapInterface(document, interfaceId, (i) => ({ ...i, name: name.trim() }));
 
-export const setInterfaceMtu = (
-  document: Document,
-  interfaceId: string,
-  mtu: number,
-) => mapInterface(document, interfaceId, (i) => ({ ...i, mtu }));
-
 export const setInterfaceState = (
   document: Document,
   interfaceId: string,

@@ -49,7 +49,7 @@ func sharedInterfaceIssues(doc Document) []Issue {
 	return issues
 }
 
-func linkRules(doc Document, _ Options) []Issue {
+func linkRules(doc Document) []Issue {
 	ifaces, nodes := interfaceIndex(doc), nodeIndex(doc)
 	var issues []Issue
 	for _, link := range doc.Links {

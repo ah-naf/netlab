@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { HISTORY_LIMIT, PALETTE_ENTRIES } from "../constants/palette";
 import {
-  DEFAULT_INTERFACE_MTU,
   DEFAULT_INTERFACE_STATE,
   INTERFACE_ID_PREFIX,
   INTERFACE_NAME_PREFIX,
@@ -128,7 +127,7 @@ export const useTopologyStore = create<TopologyState>()((set, get) => ({
   createNode: (entryId, position) =>
     set((state) => {
       const entry = PALETTE_ENTRIES.find((e) => e.id === entryId);
-      if (!entry?.available) return {};
+      if (!entry) return {};
       const created = createNode(state.document, entry, position);
       return {
         ...withHistory(state, created.document),
@@ -177,7 +176,6 @@ export const useTopologyStore = create<TopologyState>()((set, get) => ({
           INTERFACE_NAME_START[node.type],
           interfacesOf(document, nodeId).map((i) => i.name),
         ),
-        mtu: DEFAULT_INTERFACE_MTU,
         state: DEFAULT_INTERFACE_STATE,
       };
       return withHistory(state, {

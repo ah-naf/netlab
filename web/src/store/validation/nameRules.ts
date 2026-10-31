@@ -1,15 +1,9 @@
-import {
-  INTERFACE_NAME_MAX,
-  PATH_SEPARATOR,
-} from "../../constants/inspector.ts";
+import { INTERFACE_NAME_MAX, PLAIN_NAME } from "../../constants/inspector.ts";
 import { ISSUE_CODE } from "../../constants/validation.ts";
 import type { Document, Interface, Node } from "../../types/topology.ts";
 import type { Issue, IssueCode } from "../../types/validation.ts";
 import { linuxName } from "./linuxName.ts";
 import { makeIssue } from "./makeIssue.ts";
-
-const WHITESPACE = /\s/;
-const RESERVED_NAMES = [".", ".."];
 
 interface Finding {
   code: IssueCode;
@@ -25,6 +19,7 @@ function nodeNameFindings(
 ): Finding[] {
   const trimmed = name.trim();
   if (!trimmed) return [{ code: ISSUE_CODE.NODE_NAME_EMPTY }];
+  if (!PLAIN_NAME.test(trimmed)) return [{ code: ISSUE_CODE.NODE_NAME_CHARS }];
   const others = scope.filter((n) => n !== node);
   const same = others.find((n) => n.name === trimmed);
   if (same)
@@ -46,10 +41,8 @@ function interfaceNameFindings(
   const found: Finding[] = [];
   if (!name || name.length > INTERFACE_NAME_MAX)
     found.push({ code: ISSUE_CODE.INTERFACE_NAME_LENGTH });
-  if (name.includes(PATH_SEPARATOR) || WHITESPACE.test(name))
+  if (name && !PLAIN_NAME.test(name))
     found.push({ code: ISSUE_CODE.INTERFACE_NAME_CHARS });
-  if (RESERVED_NAMES.includes(name))
-    found.push({ code: ISSUE_CODE.INTERFACE_NAME_RESERVED });
   const same = scope.find(
     (i) => i !== iface && i.nodeId === iface?.nodeId && i.name === name,
   );

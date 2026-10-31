@@ -19,8 +19,6 @@ function nodeIssues(document: Document, node: Node): Issue[] {
   const found: Issue[] = [];
   if (node.type === NODE_TYPE.BRIDGE && hasNamespaceFields(node))
     found.push(issue(ISSUE_CODE.BRIDGE_HAS_NAMESPACE_FIELDS));
-  if (node.type === NODE_TYPE.NAMESPACE && node.bridge !== undefined)
-    found.push(issue(ISSUE_CODE.NAMESPACE_HAS_BRIDGE_FIELDS));
   if (node.natRules?.some((rule) => !onNode(rule.interfaceId)))
     found.push(issue(ISSUE_CODE.NAT_INTERFACE_NOT_ON_NODE));
   if (node.routes?.some((r) => r.interfaceId && !onNode(r.interfaceId)))

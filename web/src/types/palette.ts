@@ -1,6 +1,6 @@
 import type { NodeType, Role } from "./topology";
 
-export type PaletteKind = Role | "namespace" | "veth" | "bridge";
+export type PaletteKind = Role | "namespace" | "bridge";
 
 export interface PaletteCreate {
   type: NodeType;
@@ -11,6 +11,5 @@ export interface PaletteEntry {
   id: PaletteKind;
   label: string;
   description: string;
-  create: PaletteCreate | null;
-  available: boolean;
+  create: PaletteCreate;
 }

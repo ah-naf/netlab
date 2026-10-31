@@ -2,14 +2,12 @@ import { useShallow } from "zustand/react/shallow";
 import {
   BRIDGE_LINK_FIELD_LABEL,
   BRIDGE_LINK_GROUP_TITLE,
-  VLAN_NOTE,
 } from "../../constants/inspectorBridgeLink";
 import { renameNode, validateNodeName } from "../../store/documentOps";
 import { interfacesOf, useTopologyStore } from "../../store/topologyStore";
 import AddInterfaceButton from "../nodes/AddInterfaceButton";
 import PortRow from "./PortRow";
 import Section from "./Section";
-import StpFields from "./StpFields";
 import ValidatedField from "./ValidatedField";
 
 export default function BridgeForm({ nodeId }: { nodeId: string }) {
@@ -41,12 +39,6 @@ export default function BridgeForm({ nodeId }: { nodeId: string }) {
           ))}
         </div>
         <AddInterfaceButton node={node} />
-      </Section>
-      <Section title={BRIDGE_LINK_GROUP_TITLE.STP}>
-        <StpFields nodeId={nodeId} />
-      </Section>
-      <Section title={BRIDGE_LINK_GROUP_TITLE.VLAN}>
-        <p className="px-3 pb-3 text-xs text-ink-muted">{VLAN_NOTE}</p>
       </Section>
     </div>
   );
