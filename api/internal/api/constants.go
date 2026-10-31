@@ -1,11 +1,7 @@
 package api
 
 const (
-	HealthPath      = "/api/v1/health"
-	RequestIDHeader = "X-Request-ID"
-
-	maxRequestIDLength = 64
-	requestIDBytes     = 16
+	HealthPath = "/api/v1/health"
 
 	contentTypeHeader = "Content-Type"
 	contentTypeJSON   = "application/json"

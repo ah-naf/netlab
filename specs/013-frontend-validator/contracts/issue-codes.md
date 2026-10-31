@@ -40,3 +40,7 @@ derived = len(base + name) <= 15
 ## Known differences
 - IPv4 parts with leading zeros (`10.0.0.01`): invalid in Go (`netip`), accepted by the editor.
 - Whitespace at U+0085 and U+FEFF: whitespace for exactly one side (Go for U+0085, JavaScript for U+FEFF).
+
+## Backend omits two checks
+
+The Go validator no longer produces `ROUTE_GATEWAY_UNREACHABLE` or `DUPLICATE_IP_ON_SEGMENT`. The editor still shows both, so the editor can warn about a lab the backend accepts. Deploy or ping shows those mistakes anyway. If a future ticket needs them back, restore them in `api/internal/topology/address_rules.go`.

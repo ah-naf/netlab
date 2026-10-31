@@ -3,8 +3,7 @@ package topology
 type Severity string
 
 const (
-	SeverityError   Severity = "error"
-	SeverityWarning Severity = "warning"
+	SeverityError Severity = "error"
 )
 
 // Code is a stable issue code. The values are shared with the editor's validator.
@@ -28,8 +27,6 @@ const (
 	CodeBridgeHasNamespaceFields Code = "BRIDGE_HAS_NAMESPACE_FIELDS"
 	CodeNATInterfaceNotOnNode    Code = "NAT_INTERFACE_NOT_ON_NODE"
 	CodeRouteInterfaceMissing    Code = "ROUTE_INTERFACE_MISSING"
-	CodeRouteGatewayUnreachable  Code = "ROUTE_GATEWAY_UNREACHABLE"
-	CodeDuplicateIPOnSegment     Code = "DUPLICATE_IP_ON_SEGMENT"
 )
 
 // codeOrder is the tie-break order in the issue list.
@@ -51,8 +48,6 @@ var codeOrder = []Code{
 	CodeBridgeHasNamespaceFields,
 	CodeNATInterfaceNotOnNode,
 	CodeRouteInterfaceMissing,
-	CodeRouteGatewayUnreachable,
-	CodeDuplicateIPOnSegment,
 }
 
 // messageOf holds one plain message per code.
@@ -74,8 +69,6 @@ var messageOf = map[Code]string{
 	CodeBridgeHasNamespaceFields: "A bridge cannot have a role, routes, or NAT rules",
 	CodeNATInterfaceNotOnNode:    "A NAT rule uses an interface of another node",
 	CodeRouteInterfaceMissing:    "A route uses an interface that is not on this node",
-	CodeRouteGatewayUnreachable:  "A route gateway is not inside a directly connected network",
-	CodeDuplicateIPOnSegment:     "Two interfaces on one segment share an address",
 }
 
 // Issue is one finding. RelatedIDs is never nil, so it marshals as [].
@@ -88,13 +81,6 @@ type Issue struct {
 	RelatedIDs   []string `json:"relatedIds"`
 }
 
-func severityOf(code Code) Severity {
-	if code == CodeDuplicateIPOnSegment {
-		return SeverityWarning
-	}
-	return SeverityError
-}
-
 // newIssue fills severity and message; an empty name falls back to the id.
 func newIssue(code Code, id, name string, related ...string) Issue {
 	if name == "" {
@@ -104,7 +90,7 @@ func newIssue(code Code, id, name string, related ...string) Issue {
 		related = []string{}
 	}
 	return Issue{
-		Severity:     severityOf(code),
+		Severity:     SeverityError,
 		Code:         code,
 		ResourceID:   id,
 		ResourceName: name,
@@ -113,7 +99,7 @@ func newIssue(code Code, id, name string, related ...string) Issue {
 	}
 }
 
-// HasErrors reports whether any issue is an error; warnings alone never refuse a lab.
+// HasErrors reports whether any issue is an error.
 func HasErrors(issues []Issue) bool {
 	for _, issue := range issues {
 		if issue.Severity == SeverityError {

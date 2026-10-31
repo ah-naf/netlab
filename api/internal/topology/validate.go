@@ -15,24 +15,14 @@ var codeRank = func() map[Code]int {
 	return rank
 }()
 
-func severityRank(issue Issue) int {
-	if issue.Severity == SeverityError {
-		return 0
-	}
-	return 1
-}
-
 func issueLess(a, b Issue) bool {
-	if severityRank(a) != severityRank(b) {
-		return severityRank(a) < severityRank(b)
-	}
 	if codeRank[a.Code] != codeRank[b.Code] {
 		return codeRank[a.Code] < codeRank[b.Code]
 	}
 	return a.ResourceID < b.ResourceID
 }
 
-// Validate returns every issue in the document: errors first, then by code, then by resource id.
+// Validate returns every issue in the document: by code, then by resource id.
 // It never changes doc and never returns nil.
 func Validate(doc Document) []Issue {
 	issues := []Issue{}

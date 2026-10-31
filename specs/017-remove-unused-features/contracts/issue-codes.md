@@ -28,3 +28,7 @@ Both validators (editor and backend) return the same codes. Changes from `specs/
 ## Entry point
 
 `Validate(doc)` takes only the document. `BackendOnly` and `AllCodes` are removed with the vector checker.
+
+## Backend omits two checks
+
+The Go validator no longer produces `ROUTE_GATEWAY_UNREACHABLE` or `DUPLICATE_IP_ON_SEGMENT`. The editor still shows both, so the editor can warn about a lab the backend accepts. Deploy or ping shows those mistakes anyway. If a future ticket needs them back, restore them in `api/internal/topology/address_rules.go`.

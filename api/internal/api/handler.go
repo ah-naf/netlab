@@ -2,12 +2,12 @@ package api
 
 import "net/http"
 
-// NewHandler returns the API routes wrapped with request id and request log.
+// NewHandler returns the API routes.
 func NewHandler(version string, workerReachable func() bool) http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc(HealthPath, healthHandler(version, workerReachable))
 	mux.HandleFunc("/", notFound)
-	return withRequestID(withRequestLog(mux))
+	return mux
 }
 
 func notFound(w http.ResponseWriter, r *http.Request) {
