@@ -4,7 +4,11 @@ import {
   FILE_ACTIONS,
   TOOLBAR_HEIGHT,
   LAB_ACTIONS,
+  DRAWER_TAB_ID,
+  VALIDATE_ACTION_ID,
 } from "../constants/layout";
+import { useLayoutStore } from "../store/layoutStore";
+import { useValidationStore } from "../store/validationStore";
 import type { ToolbarAction } from "../types/layout";
 import ConnectionIndicator from "./ConnectionIndicator";
 import ThemeToggle from "./ThemeToggle";
@@ -14,11 +18,26 @@ function Divider() {
   return <span className="h-5 w-px bg-rule" />;
 }
 
+function showIssues() {
+  const layout = useLayoutStore.getState();
+  useValidationStore.getState().setOpen(true);
+  if (layout.drawerCollapsed) layout.toggleDrawer();
+  layout.setActiveTab(DRAWER_TAB_ID.ISSUES);
+}
+
+const ACTION_HANDLERS: Record<string, () => void> = {
+  [VALIDATE_ACTION_ID]: showIssues,
+};
+
 function ActionGroup({ actions }: { actions: readonly ToolbarAction[] }) {
   return (
     <div className="flex items-center gap-1.5">
       {actions.map((action) => (
-        <DisabledButton key={action.id} action={action} />
+        <DisabledButton
+          key={action.id}
+          action={action}
+          onClick={ACTION_HANDLERS[action.id]}
+        />
       ))}
     </div>
   );

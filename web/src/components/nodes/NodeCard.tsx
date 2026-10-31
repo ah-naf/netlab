@@ -1,5 +1,12 @@
 import type { ReactNode } from "react";
 import { STATUS_STYLE } from "../../constants/topology";
+import {
+  SEVERITY_GLYPH,
+  SEVERITY_LABEL,
+  SEVERITY_RING,
+  SEVERITY_TEXT,
+} from "../../constants/validation";
+import type { Severity } from "../../types/validation";
 import type { NodeStatus } from "../../types/flow";
 import NodeTitle from "./NodeTitle";
 
@@ -9,6 +16,7 @@ interface Props {
   icon?: ReactNode;
   status: NodeStatus;
   selected?: boolean;
+  issue?: Severity;
   children: ReactNode;
 }
 
@@ -19,15 +27,24 @@ export default function NodeCard({
   icon,
   status,
   selected = false,
+  issue,
   children,
 }: Props) {
   return (
     <div
-      className={`min-w-44 border-2 bg-panel text-ink ${STATUS_STYLE[status].borderClass} ${selected ? "ring-2 ring-signal" : ""}`}
+      className={`min-w-44 border-2 bg-panel text-ink ${STATUS_STYLE[status].borderClass} ${selected ? "ring-2 ring-signal" : ""} ${issue ? SEVERITY_RING[issue] : ""}`}
     >
       <div className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold">
         {icon && <span className="text-signal">{icon}</span>}
         <NodeTitle nodeId={nodeId} name={title} />
+        {issue && (
+          <span
+            className={`shrink-0 text-xs ${SEVERITY_TEXT[issue]}`}
+            title={SEVERITY_LABEL[issue]}
+          >
+            {SEVERITY_GLYPH[issue]}
+          </span>
+        )}
         <span
           className="shrink-0 text-xs font-normal text-ink-muted"
           title={STATUS_STYLE[status].label}

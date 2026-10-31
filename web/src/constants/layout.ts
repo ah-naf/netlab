@@ -4,6 +4,7 @@ import type {
   SizeRange,
   ToolbarAction,
 } from "../types/layout";
+import { ISSUES_TAB_HINT, ISSUES_TAB_LABEL } from "./validation";
 
 export const APP_NAME = "NetLab";
 export const DEFAULT_PROJECT_NAME = "Untitled lab";
@@ -21,6 +22,7 @@ export const SIZE_RANGE = {
 } as const satisfies Record<string, SizeRange>;
 
 export const DRAWER_TAB_ID = {
+  ISSUES: "issues",
   DEPLOYMENT_LOGS: "deploymentLogs",
   INTERFACE_STATE: "interfaceState",
   ADDRESSES: "addresses",
@@ -33,6 +35,11 @@ export const DRAWER_TAB_ID = {
 } as const;
 
 export const DRAWER_TABS: readonly DrawerTab[] = [
+  {
+    id: DRAWER_TAB_ID.ISSUES,
+    label: ISSUES_TAB_LABEL,
+    hint: ISSUES_TAB_HINT,
+  },
   {
     id: DRAWER_TAB_ID.DEPLOYMENT_LOGS,
     label: "Deployment logs",
@@ -88,6 +95,8 @@ export const DEFAULT_LAYOUT: LayoutState = {
   activeTab: DRAWER_TAB_ID.DEPLOYMENT_LOGS,
 };
 
+export const VALIDATE_ACTION_ID = "validate";
+
 const disabledAction = (id: string, label: string): ToolbarAction => ({
   id,
   label,
@@ -97,7 +106,12 @@ const disabledAction = (id: string, label: string): ToolbarAction => ({
 
 export const FILE_ACTIONS: readonly ToolbarAction[] = [
   disabledAction("save", "Save"),
-  disabledAction("validate", "Validate"),
+  {
+    id: VALIDATE_ACTION_ID,
+    label: "Validate",
+    enabled: true,
+    disabledReason: "",
+  },
 ];
 
 export const LAB_ACTIONS: readonly ToolbarAction[] = [

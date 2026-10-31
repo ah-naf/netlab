@@ -31,6 +31,7 @@ export default function BridgeNode({
       icon={<NodeIcon kind={nodeKindOf(node)} />}
       status={data.status}
       selected={selected}
+      issue={data.issue}
     >
       {portIds.map((portId) => (
         <InterfaceRow key={portId} nodeName={node.name} interfaceId={portId} />

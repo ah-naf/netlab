@@ -3,12 +3,14 @@ import {
   DRAWER_HEADER_HEIGHT,
   DRAWER_LABEL,
   DRAWER_PANEL_ID,
+  DRAWER_TAB_ID,
   DRAWER_TABS,
   EXPAND_LABEL,
   tabDomId,
 } from "../constants/layout";
 import { useLayoutStore } from "../store/layoutStore";
 import DrawerTabs from "./DrawerTabs";
+import IssuesPanel from "./IssuesPanel";
 import NotAvailable from "./NotAvailable";
 
 interface Props {
@@ -57,7 +59,11 @@ export default function BottomDrawer({ className = "" }: Props) {
           aria-labelledby={tabDomId(tab.id)}
           className="min-h-0 flex-1 overflow-hidden"
         >
-          <NotAvailable name={tab.label} hint={tab.hint} />
+          {tab.id === DRAWER_TAB_ID.ISSUES ? (
+            <IssuesPanel />
+          ) : (
+            <NotAvailable name={tab.label} hint={tab.hint} />
+          )}
         </div>
       )}
     </section>
