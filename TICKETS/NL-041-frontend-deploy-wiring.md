@@ -1,11 +1,14 @@
 # NL-041: Frontend deploy wiring
 
-- Milestone: 2
-- Depends on: NL-040, NL-037
-- Size: M
+- Milestone: Deploy
+- Depends on: NL-037
+- Size: S
 
 ## Scope
-Validate calls the server validator and merges issues with local ones. Deploy saves the topology then starts the job and follows progress. Stop and Reset work with confirmation dialogs that name the resources affected. Node and link status styles (desired, deploying, deployed, failed) come from job and observed data only. Failure shows the failed operation and rollback outcome in the logs tab with an actionable message. Never show "deployed" from local state alone.
+- Enable the Deploy button: send the document to `POST /deploy`. Show the issue list on 400, a clear message on 503, and the operation list (with command output) in a Logs tab.
+- Add a Reset button with a confirmation that says all `nl-` resources in the sandbox will be removed.
+- A banner says "deployed" only after a successful response, and clears on any edit to the lab ("changed since deploy").
+- No WebSocket, no progress stream, no per-node deploy status styling.
 
 ## Acceptance
-End-to-end manual run in the sandbox: draw the bridge lab, Deploy, watch operations complete, Reset, Deploy again. Playwright test against API plus sandboxed worker (opt-in task `make e2e-sandbox`).
+Manual, in the sandbox: draw the bridge lab, Deploy, read the operation list, Reset, Deploy again. A lab with a validation error shows the issues and creates nothing.

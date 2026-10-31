@@ -1,14 +1,15 @@
-# NL-036: Executor with verification and rollback
+# NL-036: Executor and reset
 
-- Milestone: 2
-- Depends on: NL-031, NL-035
-- Size: L
+- Milestone: Deploy
+- Depends on: NL-031, NL-033
+- Size: S
 
 ## Scope
-`internal/engine/executor`: runs a plan through the worker client. Per-operation timeout, overall deployment timeout, cancellation through context, progress callbacks (OperationStarted, OperationCompleted, OperationFailed). After the last operation, read back kernel state and run connectivity checks (ping between the namespaces that the topology says should reach each other).
-- Partial failure: stop, then run compensating actions in reverse order for resources created by this deployment only (tracked in the job record). Best effort, record each rollback step result. Do not claim transactional behavior.
-- Failure result includes the failed operation, the underlying error, and the rollback outcome.
-- Idempotent redeploy: deploying an already deployed identical lab becomes a no-op plus verification.
+`internal/engine/executor`: run a plan through the worker client, one operation after another.
+- Before the first operation, run `DeleteOwned` so a redeploy starts clean.
+- On the first failure, stop, run `DeleteOwned`, and return the failed operation with its error. No partial-state tracking and no claim of transactions.
+- Return the result of every operation (kind, ok, output) in order.
+- `Reset` is `DeleteOwned` alone.
 
 ## Acceptance
-Sandbox tests: successful bridge-lab deploy ends with a working ping; injected failure at operation N (fault-injection hook in the worker fake) rolls back everything created and leaves a pre-existing unrelated namespace untouched; cancel mid-deploy rolls back; redeploy twice behaves the same.
+In the sandbox: the bridge lab deploys and the namespaces ping each other. Deploying twice gives the same result. A lab with an address on a missing interface fails on that operation and leaves no `nl-` resources behind.

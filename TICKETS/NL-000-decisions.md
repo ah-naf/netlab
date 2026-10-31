@@ -7,6 +7,8 @@
 ## Goal
 Settle the open choices in DRAFT.md so later tickets do not stall. Output is `docs/decisions.md`, one short entry per decision.
 
+> Decisions 1, 2, 5 (ASCII line), 6, 7, and 9 were changed by NL-cleanup. `docs/decisions.md` is the current text; the list below is the original record.
+
 ## Decisions to record
 1. Auth for v1: one static bearer token from `NETLAB_TOKEN`, checked by the API and by the worker. Lab ownership is keyed by token owner id.
 2. Persistence: SQLite (pure Go driver `modernc.org/sqlite`, no cgo) for labs, jobs, captures metadata, audit log. Topology documents are also exportable as JSON files.
