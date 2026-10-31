@@ -72,6 +72,7 @@ export const LINUX_NAME = {
 export const ISSUES_TAB_LABEL = "Issues";
 export const ISSUES_TAB_HINT = "Problems found in the lab.";
 export const ISSUES_EMPTY_TEXT = "No issues found";
+export const ISSUES_PROMPT_TEXT = "Press Validate to check the lab";
 export const ISSUES_CLOSE_LABEL = "Close";
 export const issuesCountText = (errors: number, warnings: number) =>
   `${errors} ${errors === 1 ? "error" : "errors"}, ${warnings} ${warnings === 1 ? "warning" : "warnings"}`;
@@ -82,6 +83,9 @@ export const SEVERITY_TEXT = {
   error: "text-led-fault",
   warning: "text-led-warn",
 } as const;
+export const SELECTED_RING = "ring-2 ring-signal";
+export const SELECTED_WITH_ISSUE_OUTLINE =
+  "outline outline-2 outline-offset-2 outline-signal";
 export const SEVERITY_RING = {
   error: "ring-2 ring-led-fault",
   warning: "ring-2 ring-led-warn",

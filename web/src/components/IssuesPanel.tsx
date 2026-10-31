@@ -1,6 +1,7 @@
 import {
   ISSUES_CLOSE_LABEL,
   ISSUES_EMPTY_TEXT,
+  ISSUES_PROMPT_TEXT,
   SEVERITY,
   issuesCountText,
 } from "../constants/validation";
@@ -51,7 +52,7 @@ export default function IssuesPanel() {
           </ul>
         ) : (
           <p className="px-3 py-3 text-sm text-ink-muted">
-            {open ? ISSUES_EMPTY_TEXT : ""}
+            {open ? ISSUES_EMPTY_TEXT : ISSUES_PROMPT_TEXT}
           </p>
         )}
       </div>

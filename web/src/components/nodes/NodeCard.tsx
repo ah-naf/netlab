@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import { STATUS_STYLE } from "../../constants/topology";
 import {
+  SELECTED_RING,
+  SELECTED_WITH_ISSUE_OUTLINE,
   SEVERITY_GLYPH,
   SEVERITY_LABEL,
   SEVERITY_RING,
@@ -30,9 +32,14 @@ export default function NodeCard({
   issue,
   children,
 }: Props) {
+  const emphasis = issue
+    ? `${SEVERITY_RING[issue]} ${selected ? SELECTED_WITH_ISSUE_OUTLINE : ""}`
+    : selected
+      ? SELECTED_RING
+      : "";
   return (
     <div
-      className={`min-w-44 border-2 bg-panel text-ink ${STATUS_STYLE[status].borderClass} ${selected ? "ring-2 ring-signal" : ""} ${issue ? SEVERITY_RING[issue] : ""}`}
+      className={`min-w-44 border-2 bg-panel text-ink ${STATUS_STYLE[status].borderClass} ${emphasis}`}
     >
       <div className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold">
         {icon && <span className="text-signal">{icon}</span>}

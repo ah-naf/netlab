@@ -40,6 +40,7 @@ const IPV4_BITS = 32;
 const IPV6_BITS = 128;
 const IPV4_PART_BITS = 8n;
 const IPV6_GROUP_BITS = 16n;
+const IPV6_GROUP_MASK = 0xffffn;
 const IPV6_GROUPS = 8;
 const HEX = 16;
 
@@ -56,7 +57,7 @@ const v6Groups = (part: string): bigint[] =>
     ? part.split(":").flatMap((g) => {
         if (!g.includes(".")) return [BigInt(parseInt(g, HEX))];
         const v4 = v4Value(g);
-        return [v4 >> IPV6_GROUP_BITS, v4 & 0xffffn];
+        return [v4 >> IPV6_GROUP_BITS, v4 & IPV6_GROUP_MASK];
       })
     : [];
 
