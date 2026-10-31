@@ -20,7 +20,7 @@ The lab document keeps its shape. These fields and values go away. Schema versio
 
 ## Issue codes
 
-See [contracts/issue-codes.md](contracts/issue-codes.md). 19 codes remain.
+See [contracts/issue-codes.md](contracts/issue-codes.md). 17 codes remain.
 
 ## Reading an old file
 

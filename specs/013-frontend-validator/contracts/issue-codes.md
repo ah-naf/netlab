@@ -21,8 +21,6 @@ Single source of truth for rule meaning. The frontend constant `ISSUE_CODE` and 
 | `BRIDGE_HAS_NAMESPACE_FIELDS` | error | node | a bridge has `role`, `router`, `natRules`, or `routes` |
 | `NAT_INTERFACE_NOT_ON_NODE` | error | node | a NAT rule `interfaceId` is not an interface of that node |
 | `ROUTE_INTERFACE_MISSING` | error | node | a route `interfaceId` is not an interface of that node |
-| `ROUTE_GATEWAY_UNREACHABLE` | error | node | gateway is in no prefix directly connected on the output interface (any interface of the node if none is set); a route without gateway is not checked for this |
-| `DUPLICATE_IP_ON_SEGMENT` | warning | the later interface | same address (prefix length ignored) on two interfaces of one layer-2 segment; `relatedIds` has the other interface |
 
 Sort order of the table is the tie-break order in the issue list.
 
@@ -40,7 +38,3 @@ derived = len(base + name) <= 15
 ## Known differences
 - IPv4 parts with leading zeros (`10.0.0.01`): invalid in Go (`netip`), accepted by the editor.
 - Whitespace at U+0085 and U+FEFF: whitespace for exactly one side (Go for U+0085, JavaScript for U+FEFF).
-
-## Backend omits two checks
-
-The Go validator no longer produces `ROUTE_GATEWAY_UNREACHABLE` or `DUPLICATE_IP_ON_SEGMENT`. The editor still shows both, so the editor can warn about a lab the backend accepts. Deploy or ping shows those mistakes anyway. If a future ticket needs them back, restore them in `api/internal/topology/address_rules.go`.

@@ -17,5 +17,3 @@ export const useFieldErrorStore = create<FieldErrorState>()((set) => ({
       return { errors };
     }),
 }));
-
-export const hasFieldErrors = (state: FieldErrorState) => state.errors.size > 0;

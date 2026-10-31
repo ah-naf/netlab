@@ -103,9 +103,3 @@ body[data-resizing] .shell-grid {
   stroke: var(--led-fault);
   stroke-width: 2.5;
 }
-
-.link-issue-warning path.react-flow__edge-path {
-  stroke: var(--led-warn);
-  stroke-width: 2.5;
-  stroke-dasharray: 6 4;
-}

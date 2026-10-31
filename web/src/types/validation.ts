@@ -1,6 +1,6 @@
 import type { ISSUE_CODE } from "../constants/validation.ts";
 
-export type Severity = "error" | "warning";
+export type Severity = "error";
 export type IssueCode = keyof typeof ISSUE_CODE;
 
 export interface Issue {

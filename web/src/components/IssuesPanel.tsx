@@ -2,7 +2,6 @@ import {
   ISSUES_CLOSE_LABEL,
   ISSUES_EMPTY_TEXT,
   ISSUES_PROMPT_TEXT,
-  SEVERITY,
   issuesCountText,
 } from "../constants/validation";
 import { useIssues } from "../hooks/useIssues";
@@ -23,13 +22,12 @@ function selectTarget(issue: Issue) {
 export default function IssuesPanel() {
   const issues = useIssues();
   const open = useValidationStore((s) => s.open);
-  const errors = issues.filter((i) => i.severity === SEVERITY.ERROR).length;
 
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex shrink-0 items-center justify-between border-b border-rule px-3 py-1 text-[13px]">
         <span className="font-semibold">
-          {open ? issuesCountText(errors, issues.length - errors) : ""}
+          {open ? issuesCountText(issues.length) : ""}
         </span>
         <button
           type="button"
