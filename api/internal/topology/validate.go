@@ -5,7 +5,7 @@ import "sort"
 type rule func(doc Document, opts Options) []Issue
 
 // rules run in this order; the order of results is fixed by the sort in Validate.
-var rules = []rule{}
+var rules = []rule{idRules, nameRules, linkRules, nodeRules, addressRules}
 
 var codeRank = func() map[Code]int {
 	rank := make(map[Code]int, len(codeOrder))

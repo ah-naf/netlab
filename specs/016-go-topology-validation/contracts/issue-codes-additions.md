@@ -18,3 +18,5 @@ Both sides MUST implement this exactly; shared vectors with non-ASCII names prov
 ## Known differences (not covered by shared vectors)
 - IPv4 parts with leading zeros (`10.0.0.01`): invalid in Go (`netip`), accepted by the editor.
 - Whitespace at U+0085 and U+FEFF: whitespace for exactly one side (Go for U+0085, JavaScript for U+FEFF). No shared vector may contain either character.
+- CIDR prefix length with leading zeros (`10.0.0.1/024`): invalid in Go (`netip`), accepted by the editor.
+- A lab that has both an invalid CIDR address and a route with a gateway on that interface can give different `ROUTE_GATEWAY_UNREACHABLE` results: Go ignores the invalid address, the editor's containment check is not defined for it.
