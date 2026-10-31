@@ -14,5 +14,3 @@ export const linkLabel = (nameA: string, nameB: string, mtu: number) =>
 
 export const LINK_LABEL_STYLE = { fill: "var(--ink)", fontSize: 11 };
 export const LINK_LABEL_BG = { fill: "var(--panel)" };
-export const LINK_SELECTED_HINT =
-  "Link properties arrive with the link inspector.";

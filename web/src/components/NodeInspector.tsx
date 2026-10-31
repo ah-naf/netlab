@@ -1,4 +1,3 @@
-import { LINK_SELECTED_HINT, linkLabel } from "../constants/links";
 import { MULTI_SELECT_HINT, multiSelectText } from "../constants/palette";
 import { REGION } from "../constants/layout";
 import { NODE_TYPE, NO_SELECTION_HINT } from "../constants/topology";
@@ -6,6 +5,7 @@ import { useTopologyStore } from "../store/topologyStore";
 import BridgeForm from "./inspector/BridgeForm";
 import ErrorBanner from "./inspector/ErrorBanner";
 import LabNameField from "./inspector/LabNameField";
+import LinkForm from "./inspector/LinkForm";
 import NamespaceForm from "./inspector/NamespaceForm";
 
 export default function NodeInspector({
@@ -18,14 +18,11 @@ export default function NodeInspector({
       ? s.document.nodes.find((n) => n.id === s.selectedNodeIds[0])
       : undefined,
   );
-  const linkText = useTopologyStore((s) => {
-    const link = s.document.links.find((l) => l.id === s.selectedLinkId);
-    const name = (id: string) =>
-      s.document.interfaces.find((i) => i.id === id)?.name ?? "";
-    return link
-      ? linkLabel(name(link.endpointA), name(link.endpointB), link.mtu)
-      : "";
-  });
+  const linkId = useTopologyStore((s) =>
+    s.document.links.some((l) => l.id === s.selectedLinkId)
+      ? s.selectedLinkId
+      : null,
+  );
   const count = useTopologyStore((s) => s.selectedNodeIds.length);
 
   return (
@@ -42,11 +39,8 @@ export default function NodeInspector({
           <NamespaceForm key={node.id} nodeId={node.id} />
         ) : node ? (
           <BridgeForm key={node.id} nodeId={node.id} />
-        ) : linkText ? (
-          <div className="p-3">
-            <p className="font-semibold">{linkText}</p>
-            <p className="text-xs text-ink-muted">{LINK_SELECTED_HINT}</p>
-          </div>
+        ) : linkId ? (
+          <LinkForm key={linkId} linkId={linkId} />
         ) : count > 1 ? (
           <div className="p-3">
             <p className="font-semibold">{multiSelectText(count)}</p>
